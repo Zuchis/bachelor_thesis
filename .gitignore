@@ -1,0 +1,8 @@
+target
+*.swp
+*.log
+*.pdf
+*.out
+*.bbl
+*.aux
+*.blg
