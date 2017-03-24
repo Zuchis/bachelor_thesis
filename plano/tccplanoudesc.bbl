@@ -1,0 +1,45 @@
+\begin{thebibliography}{}
+
+\bibitem[Akenine-M{\"o}ller et~al., 2008]{akenine2008real}
+Akenine-M{\"o}ller, T., Haines, E., and Hoffman, N. (2008).
+\newblock {\em Real-Time Rendering, Third Edition}.
+\newblock CRC Press.
+
+\bibitem[Clements, 2006]{Clements:2006:PCH:1214951}
+Clements, A. (2006).
+\newblock {\em Principles of Computer Hardware}.
+\newblock Oxford University Press, Inc., New York, NY, USA.
+
+\bibitem[Fabian, 2013]{fabiandod}
+Fabian, R. (2013).
+\newblock {\em Data-Oriented Design}.
+\newblock DataOrientedDesign.com.
+
+\bibitem[Gregory, 2009]{gregory2009game}
+Gregory, J. (2009).
+\newblock {\em Game Engine Architecture}.
+\newblock Taylor \& Francis.
+
+\bibitem[Mahapatra and Venkatrao, 1999]{Mahapatra:1999:PBP:357783.331677}
+Mahapatra, N.~R. and Venkatrao, B. (1999).
+\newblock The processor-memory bottleneck: Problems and solutions.
+\newblock {\em Crossroads}, 5(3es).
+
+\bibitem[Matsakis and Klock, 2014]{Matsakis:2014:RL:2692956.2663188}
+Matsakis, N.~D. and Klock, II, F.~S. (2014).
+\newblock The rust language.
+\newblock {\em Ada Lett.}, 34(3):103--104.
+
+\bibitem[Patterson et~al., 1997]{Patterson:1997:CIR:623274.624083}
+Patterson, D., Anderson, T., Cardwell, N., Fromm, R., Keeton, K., Kozyrakis,
+  C., Thomas, R., and Yelick, K. (1997).
+\newblock A case for intelligent ram.
+\newblock {\em IEEE Micro}, 17(2):34--44.
+
+\bibitem[Shreiner et~al., 2013]{shreiner2013opengl}
+Shreiner, D., Sellers, G., Kessenich, J., and Licea-Kane, B. (2013).
+\newblock {\em OpenGL Programming Guide: The Official Guide to Learning OpenGL,
+  Version 4.3}.
+\newblock OpenGL. Pearson Education.
+
+\end{thebibliography}
