@@ -85,7 +85,7 @@ Turma 2013/2 -- Joinville/SC
 }
 
 
-\date{17 de Março de 2017}
+\date{3 de Abril de 2017}
 
 \maketitle
 
@@ -101,18 +101,18 @@ Turma 2013/2 -- Joinville/SC
 %------------------------------------------------
 \begin{abstract}
 
-    Devido à grande diferença de performance entre os microprocessadores e a velocidade de acesso à memória principal, 
+    Devido à grande diferença de desempenho entre os microprocessadores e a velocidade de acesso à memória principal, 
     muitas aplicações de computador modernas têm sofrido com um problema conhecido como gargalo do processador-memória, 
     no qual o processador fica ocioso aguardando dados serem buscados na memória. Aplicações gráficas, 
     principalmente jogos eletrônicos, são notórias por sofrerem deste problema pela grande quantidade de elementos 
-    diferentes que as constituem. Este trabalho propõe a implementação de um motor de jogo (uma engine), utilizando um 
-    conceito relativamente novo de programação, o design orientado a dados, com a finalidade de amenizar este problema de 
+    diferentes que as constituem. Este trabalho propõe a implementação de um motor de jogo (uma \textit{engine}), utilizando um 
+    conceito relativamente novo de programação, a modelagem orientada a dados, com a finalidade de amenizar este problema de 
     acesso constante à memória, escrita na linguagem Rust, linguagem a qual visa velocidade e uso eficiente e seguro da 
     memória.
 
 
 %------------------------------------------------
-    \textbf{Palavras-chave:} \textit{\textit{Design Orientado a Dados (DOD). Engine. Rust} }
+    \textbf{Palavras-chave:} \textit{\textit{Modelagem Orientada a Dados (MOD). Engine. Rust} }
 \end{abstract}
 
 %------------------------------------------------
@@ -138,6 +138,7 @@ figura~\ref{memhier} demonstra essa hierarquia em ordem decrescente de velocidad
     \centering
     \includegraphics[width =.6\textwidth]{figuras/memoryhierarchy}
     \caption{A hierarquia do sistema de memória.}
+    Fonte: Autoria própria.
     \label{memhier}
 \end{figure}
 
@@ -146,7 +147,7 @@ As camadas do sistema de memória estão descritas a seguir:
 \begin{itemize}
     \item Registradores: são as porções da memória com o acesso mais rápido, porém em menor quantidade e com 
         pouca capacidade de armazenamento. São localizadas dentro do processador, e os compiladores são os responsáveis 
-        pelo seu uso~\cite{Clements:2006:PCH:1214951}.
+        por administrar os dados que ficam armazenados nos registradores~\cite{Clements:2006:PCH:1214951}.
     \item Cache: localizado próximo ao processador, fornece velocidade de acesso rápida e armazena código e dados utilizados 
         recentemente. Quando o processador tenta acessar algum dado presente no cache, ocorre um acerto do cache 
         (\textit{cache hit}), quando o dado não se encontra no cache, ocorre um erro do cache (\textit{cache miss}), e o dado 
@@ -156,12 +157,16 @@ As camadas do sistema de memória estão descritas a seguir:
         maior, é responsável por lidar com as operações de entrada e saída. Apesar de ser muito mais lenta do que o cache, sua 
         estrutura simplificada e relativamente baixo custo fez com que a DRAM se tornasse a memória principal dos sistemas 
         modernos~\cite{Mahapatra:1999:PBP:357783.331677}.
+    \item Disco Rígido: possui a maior quantidade de armazenamento porém a custo de um tempo de leitura substancialmente maior, 
+        quando um programa é executado os seus dados são carregados para a memória principal e a comunicação com o disco rígido 
+        não é frequente, portanto essa unidade de memória não será objeto de estudo deste trabalho.
 \end{itemize}
 
 Como citado anteriormente, os processadores obtiveram um enorme avanço nos últimos tempos. Porém, a memória DRAM não foi 
-capaz de acompanhar esse crescimento dos processadores na mesma velocidade. Desde a década de 1980 até a última década, os 
+capaz de acompanhar esse crescimento dos processadores na mesma velocidade. Desde a década de 1980 até a década de 1990, os 
 processadores têm aprimorado a uma taxa de 60 porcento ao ano, enquanto que o tempo de acesso à DRAM tem aprimorado a uma 
-taxa de menos de 10 porcento ao ano~\cite{Patterson:1997:CIR:623274.624083}.
+taxa de menos de 10 porcento ao ano~\cite{Patterson:1997:CIR:623274.624083}. Mesmo com o rápido crescimento tecnológico, essas 
+estatísticas de crescimento não sofreram alterações nas décadas de 2000 e 2010.
 
 Essa disparidade de crescimento tem aumentado a lacuna de performance entre processador-memória, pois 
 a latência de acesso a memória pelo processador está cada vez maior. Sempre que ocorre um \textit{cache miss}, o processador 
@@ -174,7 +179,7 @@ necessidade de boas práticas de programação para que ocorra a menor quantidad
 Com esse problema em mente, ao analisar o design de programação orientado objetos, percebe-se que essa abordagem, enquanto que 
 mais legível e com código mais reutilizável, sofre muitas vezes em termos de eficiência de memória, pois seu design é centrado 
 em torno do problema e suas possíveis soluções, e não em torno dos dados, fornecendo abstração dos dados porém a 
-custo de performance.
+custo de desempenho.
 
 Quando uma classe de objetos possui dados, chamados de atributos, isto significa que essa classe está fornecendo um contexto 
 aos dados, e este pode comprometer o uso desses dados, pois ao adicionar métodos ao contexto, pode-se criar a necessidade 
@@ -186,18 +191,18 @@ objeto. Essa organização de dados não é benéfica ao processador, ao buscar 
 atributos específicos destes, todos os outros dados pertencentes à classe também precisam ser carregados, deixando os caches 
 poluídos com dados desnecessários e aumentando a incoerência de cache.
 
-Com a premissa de amenizar o máximo possível estes problemas, o design orientado a dados, como o nome sugere, encoraja a 
+Com a premissa de amenizar o máximo possível estes problemas, a modelagem orientada a dados, como o nome sugere, encoraja a 
 mudança da perspectiva da programação dos objetos para os dados, seus tipos, como está armazenado na memória e como será lido 
 e processado~\cite{fabiandod}. Para alcançar esses objetivos, essa técnica sugere dividir cada objeto em diferentes 
 componentes, e agrupar componentes do mesmo tipo na memória, sem se importar de qual objeto vieram. Isso resulta em largos 
 blocos de dados homogêneos, permitindo o processamento sequencial dos dados, e garantindo um aprimoramento significativo 
-na performance~\cite{fabiandod}.
+no desempenho~\cite{fabiandod}.
 
-Esta abordagem de design é mais condizente com a realidade de muitos programas complexos, raramente há apenas um ou uma pequena 
+Esta abordagem de modelagem é mais condizente com a realidade de muitos programas complexos, pois raramente há apenas um ou uma pequena 
 quantidade de objetos de um determinado tipo, sendo necessário o processamento de todos eles. Mas esta abordagem não traz a 
 solução para todos os problemas, e também possui suas desvantagens, uma delas é a falta de intuitividade para codificação 
-orientada a dados, uma das vantagens da orientação a objetos é a similaridade do pensamento com o mundo real e os seus 
-problemas, deixando o código mais legível para os humanos. O design orientado a dados requer que o programador raciocine com 
+orientada a dados. Uma das vantagens da orientação a objetos é a similaridade do pensamento com o mundo real e os seus 
+problemas, deixando o código mais legível para os humanos. A modelagem orientada a dados requer que o programador raciocine com 
 uma mentalidade muito diferente da qual a maioria está acostumada, e conceber código não intuitivo pode trazer complicações 
 futuras para a adição de novas funcionalidades ou correções.
 
@@ -205,9 +210,9 @@ Para as aplicações na área de computação gráfica, esses problemas não ser
 consideração que uma grande parte dos trabalhos nessa área utilizam a programação orientada a objetos. Essas aplicações, 
 principalmente jogos eletrônicos modernos, utilizam um complexo sistema o qual possui muitos componentes diferentes que 
 contém dados que constantemente transitam entre a memória, o processador e a GPU. Esse sistema é comumente conhecido 
-como motor de jogo (do inglês \textit{Game Engine}), ou simplesmente como engine.
+como motor de jogo (do inglês \textit{Game Engine}), ou simplesmente como \textit{engine}.
 
-Uma engine, apesar de não possuir uma definição absoluta, é geralmente entendida como o software responsável por lidar com 
+Uma \textit{engine}, apesar de não possuir uma definição absoluta, é geralmente entendida como o software responsável por lidar com 
 todos os módulos que juntos compõem um jogo eletrônico, como por exemplo, bibliotecas matemáticas (contendo operações de vetores, 
 matrizes, quaternions, métodos trigonométricos, etc.), gerência de memória, 
 estruturas de dados personalizadas, o motor de renderização, gerenciador de recursos, ferramentas para depuração e análise de performance, sistemas 
@@ -242,50 +247,52 @@ dada uma câmera virtual, objetos tridimensionais, fontes de luz, equações de 
 outros~\cite{akenine2008real}.
 
 Considerando os problemas supracitados a respeito do gargalo de performance do processador-memória, e das desvantagens da 
-programação orientada a objetos, este trabalho propõe a implementação de uma engine desde o princípio com o objetivo de 
-explorar o potencial do design orientado a dados, um conceito pouco difundido entre a comunidade de programadores, 
+programação orientada a objetos, este trabalho propõe a implementação de uma \textit{engine} desde o princípio com o objetivo de 
+explorar o potencial da modelagem orientada a dados, um conceito pouco difundido entre a comunidade de programadores, 
 e seus benefícios para aplicações gráficas, uma área na qual a orientação a objetos está fortemente impregnada. Uma vez
-que uma engine completa é uma aplicação consideravelmente grande e complexa, este trabalho irá se concentrar na implementação
-do motor gráfico e suas otimizações. Para a implementação da engine, foi escolhida a linguagem de programação Rust.
+que uma \textit{engine} completa é uma aplicação consideravelmente grande e complexa, este trabalho irá se concentrar na implementação
+do motor gráfico e suas otimizações. Para a implementação da \textit{engine}, foi escolhida a linguagem de programação Rust.
 
 Rust é uma linguagem de programação de baixo nível, com tipagem estática e forte. A linguagem foi projetada com os objetivos 
 de ser rápida, fácil de ser paralelizada e ter segurança de memória, prevenindo a ocorrência de condições de corrida, estouros 
 de pilha, e acessos a posições de memória não inicializadas ou desalocadas~\cite{Matsakis:2014:RL:2692956.2663188}. Além disso, 
 como a linguagem é relativamente nova e grande parte das aplicações gráficas são escritas em C ou C++, esse trabalho pode ser 
-considerado um bom meio para testar a performance da linguagem.
+considerado um bom meio para testar o desempenho da linguagem.
 
 %------------------------------------------------
 \section{Objetivos}
 \label{obj}
 
-\textbf{Objetivo geral}: Implementar uma engine na linguagem de programação Rust e analisar sua eficiência e performance.\\
+\textbf{Objetivo geral}: Implementar uma \textit{engine} na linguagem de programação Rust e analisar sua eficiência e performance.\\
 
 \noindent\textbf{Objetivos específicos}: 
-Abaixo encontra-se uma lista dos principais objetivos a serem alcançados com este trabalho prático.
+Abaixo encontra-se uma lista dos principais objetivos a serem alcançados com este trabalho.
 \begin{itemize}
-    \item Verificar o estado atual no que diz respeito às implementações das engines modernas;
+    \item Verificar o estado atual no que diz respeito às implementações das \textit{engine}s modernas;
     \item Explorar o potencial e limitações da linguagem de programação Rust para aplicações gráficas;
     \item Utilizar o conceito relativamente novo de design orientado a dados para proporcionar uma melhora
         na performance dos motores gráficos através da coerência de cache.
-    \item Comparar a performance da engine implementada com outras que fornecem funcionalidades semelhantes mas
+    \item Comparar a performance da \textit{engine} implementada com outras que fornecem funcionalidades semelhantes mas
         que possuem um design orientado a objetos;
-    \item Analisar a performance da engine, calculando uma média do total de \textit{cache miss} ao longo de sua 
-        execução.
+    \item Analisar o desempenho da \textit{engine}, calculando uma média do total de \textit{cache miss} ao longo de sua 
+        execução, essa métrica será comparada com outras \textit{engines} já existentes na literatura que não possuem 
+        modelagem orientada a dados.
 \end{itemize}
 
 %------------------------------------------------
 \section{Metodologia}
 \label{met}
 
-Este trabalho de conclusão de curso é essencialmente prático. Após a etapa de revisão bibliográfica sobre 
-os conceitos necessários para a implementação da engine e o estudo aprofundado da linguagem Rust e suas 
+Após a etapa de revisão bibliográfica sobre 
+os conceitos necessários para a implementação da \textit{engine} e o estudo aprofundado da linguagem Rust e suas 
 características avançadas, a aplicação será desenvolvida em etapas e o método utilizado será a implementação
-dos componentes da engine sequencialmente, no qual estes serão testados individualmente.
+dos componentes da \textit{engine} sequencialmente, no qual estes serão testados individualmente.
 
-A próxima etapa será a integração dos componentes para a construção do pipeline gráfico e implementação 
-das outras funcionalidades. Com a engine tendo todos os seus componentes e características funcionando devidamente,
-será por fim feito análises e comparações de sua performance e eficiência. Um \textit{postmortem} será escrito no 
-TCC, explicando o que foi e o que não foi bem sucedido.
+A etapa seguinte será a integração dos componentes para a construção do pipeline gráfico e implementação 
+das outras funcionalidades. Com a \textit{engine} tendo todos os seus componentes e características funcionando devidamente,
+serão feitas análises e comparações de seu desempenho e eficiência, não somente da \textit{engine} implementada, mas será 
+também pesquisado na literatura outras \textit{engines} já implementadas e quais foram as medidas utilizadas para medir seus 
+desempenhos. Por fim será feito um \textit{postmortem} será escrito no TCC, explicando o que foi e o que não foi bem sucedido.
 
 Para a realização deste trabalho, as seguintes etapas deverão ser cumpridas:
 
@@ -297,15 +304,15 @@ Para a realização deste trabalho, as seguintes etapas deverão ser cumpridas:
     \item Implementação e teste de uma biblioteca matemática minimalista, contendo operações para vetores, 
         matrizes, quaternions e métodos trigonométricos.
     \item Revisão da biblioteca OpenGL, sua integração com a linguagem Rust, o fluxo base de uma 
-        engine e também da linguagem de alto nível para shaders GLSL;
+        \textit{engine} e também da linguagem de alto nível para shaders GLSL;
     \item Implementação e teste de uma estrutura para manipulação da câmera e do pipeline gráfico;
     \item Implementação e teste do grafo de cena e do leitor de malhas externas.
     \item Projetar o sistema de iluminação;
     \item Integrar possíveis funcionalidades adicionais necessárias;
     \item Escrita da monografia da primeira parte;
-    \item Desenvolvimento de uma aplicação através da engine para realização de \textit{benchmarks};
-    \item Análise e comparação da performance da engine;
-    \item Escrita da monografia da segunda parte, juntamente com o \textit{postmortem} da engine.
+    \item Desenvolvimento de uma aplicação através da \textit{engine} para realização de \textit{benchmarks};
+    \item Análise e comparação da performance da \textit{engine};
+    \item Escrita da monografia da segunda parte, juntamente com o \textit{postmortem} da \textit{engine}.
 \end{enumerate}
 
 %------------------------------------------------
@@ -353,7 +360,7 @@ Para a realização deste trabalho, as seguintes etapas deverão ser cumpridas:
 \section{Linha e Grupo de Pesquisa}
 
 Este trabalho pertence a área de Computação Gráfica. O trabalho foca
-em rendering em tempo real para motores de jogos (game engine) e
+em rendering em tempo real para motores de jogos (game \textit{engine}) e
 programação para GPU. Está associado ao grupo de pesquisa LARVA
 (\textit{LAboratory for Research on Visual Applications}).
 
