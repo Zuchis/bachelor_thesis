@@ -17,6 +17,20 @@ uma forma de codificar os programas que propõe uma mudança no foco da
 implementação, ao invés de se focar no código, o foco deve estar nos 
 dados.
 
+Apesar do termo "orientação a dados"  ter sido usado apenas recentemente, a utilização dos 
+conceitos dessa técnica já têm sido usados há muito mais tempo do que a introdução do termo.
+
+Um exemplo é o trabalho de Chellappa, Franchetti e Püschel~\cite{chellappa2008write}, no qual é 
+reconhecido o problema da velocidade de acesso à memória principal pelo processador, e para 
+solucionar esse problema é dito que os dados de uma aplicação devem ser lidos na ordem 
+apropriada. Pois as otimizações feitas pelos compiladores são limitadas para o caso da 
+leitura da memória já que para realizar esse tipo de otimização seria necessário 
+conhecimento do domínio do problema e dos algoritmos utilizados, algo que os compiladores 
+não possuem. 
+
+Além disso é citado ... (falar sobre a parte do artigo que menciona o cache miss, logo no 
+inicio...) 
+
 \section{Linguagem de Programação Rust}
 
 \section{Biblioteca Matemática}
@@ -44,7 +58,7 @@ dados.
 
 \subsection{Otimizações de Renderização}
 
-\section{Administrador de Recursos}
+\section{Gerenciador de Recursos}
 
 \chapter{Trabalhos Relacionados}
 \label{cap3}
