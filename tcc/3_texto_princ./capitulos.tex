@@ -2,7 +2,7 @@
 \setlength\abovedisplayshortskip{0pt} \setlength\belowdisplayshortskip{0pt}
 
 \chapter{Fundamenta\c{c}\~ao Te\'orica}
-\label{cap1}
+\label{cap2}
 
 Neste capítulo serão discutidos e explicados todos os conceitos e 
 fundamentação teórica necessários para a compreensão da proposta 
@@ -10,7 +10,40 @@ feita nesse trabalho, assim como a abordagem que será utilizada
 para a implementação de todos os componentes que juntos vão compor 
 o motor de jogos que será o objeto de estudo deste trabalho.
 
+\section{Motor de Jogos}
+\label{secgameengine}
+
+\section{Conceitos Matemáticos}
+\label{secmathconcepts}
+
+Qualquer motor de jogos necessita de uma biblioteca matemática, uma vez que 
+jogos são aplicações as quais são extremamente dependentes de operações e 
+conceitos matemáticos. 
+
+Essas bibliotecas fornecem diversas utilidades, algoritmos e funções 
+matemáticas, tais como: estruturas de dados personalizadas de vetores, 
+matrizes e quaternions; operações matriciais e vetoriais; rotações e 
+interpolações de quaternions; trigonometria; operações geométricas com 
+linhas, raios, esferas, etc., manipulação de \textit{splines}, integração 
+numérica, e quaisquer outras utilidades que os desenvolvedores 
+necessitarem~\cite{gregory2009game}.
+
+A área da computação gráfica está intimamente ligada às áreas da matemática de 
+álgebra linear e geometria analítica, a maior parte dos conceitos matemáticos empregados 
+neste trabalho pertencem a uma destas áreas. Visto que ambas estas áreas são vastas e vão 
+muito além do escopo deste trabalho, o restante desta seção tratará dos conceitos e 
+propriedades que são relevantes para a computação gráfica apenas.
+
+\subsection{Vetores}
+
+\subsection{Matrizes}
+
+\subsection{Quaternions}
+
+\subsection{Transformações Afim}
+
 \section{Modelagem Orientada a Dados}
+\label{secdataorienteddesign}
 
 A modelagem orientada a dados (do ingles: \textit{Data Oriented Design}) é 
 uma forma de codificar os programas que propõe uma mudança no foco da 
@@ -28,16 +61,26 @@ leitura da memória já que para realizar esse tipo de otimização seria necessário
 conhecimento do domínio do problema e dos algoritmos utilizados, algo que os compiladores 
 não possuem. 
 
-Além disso é citado ... (falar sobre a parte do artigo que menciona o cache miss, logo no 
-inicio...) 
+Além disso é reconhecido pelos autores o fato de um \textit{cache miss} causar a perda de 
+ciclos e consequentemente a perda de operações de ponto flutuante. Para demonstração do 
+problema e sua solução através da reestruturação de código, são mostrados no artigo 
+dois algoritmos diferentes. Um deles é de particular interesse para esse trabalho, que 
+é a multiplicação entre matrizes pois conforme visto na seção~\ref{secmathconcepts}, operações 
+de álgebra linear são extensivamente utilizadas em aplicações gráficas.
 
 \section{Linguagem de Programação Rust}
 
-\section{Biblioteca Matemática}
-
-\subsection{Outros Conceitos Matemáticos}
-
 \section{Renderizador Gráfico de Baixo Nível}
+
+\section{Matriz de Transformação}
+
+\section{Matriz de Visualização}
+
+\section{Matriz de Projeção}
+
+\section{O \textit{Pipeline} de Visualização}
+
+\section{O \textit{Pipeline} de Renderização}
 
 \section{Malhas de Polígono}
 
@@ -47,8 +90,36 @@ inicio...)
 
 \section{Iluminação}
 
+\section{O Loop de Jogo}
+
 \chapter{Trabalho Proposto}
-\label{cap2}
+\label{cap3}
+
+Neste capítulo será explicado a proposta deste trabalho, um motor de jogos escrito em Rust 
+com modelagem orientada a dados visando à otimização da comunicação entre o processador e 
+a memória.
+
+Além de utilizar os conceitos da modelagem orientada a dados, também fora necessário utilizar 
+conceitos de computação gráfica, álgebra linear e geometria analítica, teoria de grafos, 
+processamento de imagens, física, entre outros.
+
+Conforme explicado na seção~\ref{secgameengine}, um motor de jogos é uma combinação de 
+diversos componentes diferentes que juntos compõem a parte lógica de um jogo digital. As 
+seções seguintes discutirão sobre os componentes implementados que foram julgados necessários 
+para o desenvolvimento do motor de jogos que é o objeto de estudo deste trabalho.
+
+Além dos componentes, também serão explicadas as estratégias empregadas para a implementação 
+de outros elementos importantes discutidos previamente no capítulo~\ref{cap2}
+que fazem parte da estrutura de um motor de jogos, como o \textit{pipeline} de renderização 
+e o loop de jogo.
+
+\section{Biblioteca Matemática}
+
+Utilizando algumas das utilidades mencionadas na seção~\ref{secmathconcepts}, foi implementada 
+uma biblioteca matemática o mais minimalista o possível, contendo somente as estruturas 
+necessárias para se realizar os testes e obter os resultados desejados deste trabalho. 
+
+\subsection{Outras Utilidades Matemáticas}
 
 \section{Componente Gráfico}
 
@@ -61,7 +132,4 @@ inicio...)
 \section{Gerenciador de Recursos}
 
 \chapter{Trabalhos Relacionados}
-\label{cap3}
-
-\chapter{Testes e Resultados Parciais}
 \label{cap4}
