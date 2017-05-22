@@ -34,7 +34,147 @@ neste trabalho pertencem a uma destas áreas. Visto que ambas estas áreas são vas
 muito além do escopo deste trabalho, o restante desta seção tratará dos conceitos e 
 propriedades que são relevantes para a computação gráfica apenas.
 
-\subsection{Vetores}
+Verth e Bishop~\cite{Verth:2008} fizeram uma excelente cobertura de toda a matemática 
+essencial utilizada em motores de jogos. O restante da seção cobrirá os tópicos mais 
+importantes do trabalho deles cujos conceitos são utilizados para a elaboração da 
+biblioteca matemática presente neste trabalho.
+
+\subsection{Vetores e Pontos}
+
+Vetores e pontos são as estruturas essenciais de todos os objetos presentes em 
+aplicações gráficas. 
+
+Os pontos representam posições do espaço, podem ser utilizados para determinar os 
+vértices da superfície de um objeto, que consequentemente determinará seu formato 
+(chamado de modelo), e também podem representar a posição de um objeto no espaço, 
+essa posição geralmente se refere ao centro do objeto. Se os pontos de um objeto 
+forem alterados, o modelo desse objeto também será alterado.
+
+Vetores (no campo da geometria) são entidades que possuem uma direção e um comprimento, 
+chamado de magnitude e representam a diferença entre dois pontos. São utilizados para 
+armazenar grandezas (como velocidade, gravidade, aceleração, atrito, etc.) e direções.
+
+Há alguns casos específicos de vetores que recebem nomeações 
+diferentes, por exemplo vetores cuja magnitude é igual a 1 são chamados de vetores 
+unitários ou vetores normalizados. Um vetor cuja magnitude é igual a 0 é chamado de 
+vetor zero, e não possui nenhuma direção. 
+
+Para representar um vetor no computador, utiliza-se a chamada "base Euclidiana padrão", 
+composta pelos três vetores unitários linearmente independentes $i$, $j$ e $k$ que são 
+perpendiculares entre si para o caso do espaço tridimensional $\mathbb{R}^3$, para o 
+espaço bidimensional $\mathbb{R}^2$, utiliza-se somente os vetores $i$ e $j$. 
+
+Utilizando essa base, pode-se representar unicamente qualquer vetor no espaço através 
+de uma combinação linear dos três vetores base da seguinte maneira: 
+
+\begin{equation}
+    \centering
+    v = xi + yj + zk
+\end{equation}
+
+Os coeficientes $x$, $y$ e $z$ representam o deslocamento em cada um dos eixos. A 
+figura~\ref{3dbasisvector} demonstra como um vetor é representado utilizando a base 
+Euclidiana padrão. Esses coeficientes são utilizados para representar um vetor 
+algebricamente através de uma tripla $(x,y,z)$, ou uma dupla para o caso dos vetores 
+2D, e são conhecidos como componentes do vetor.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width =.6\textwidth]{../figuras/3dbasisvector}
+    \caption{Representação de um Vetor na Base Tridimensional.}
+    Fonte: \cite{Verth:2008}.
+    \label{3dbasisvector}
+\end{figure}
+
+Com essa representação algébrica, pode-se definir as operações sobre vetores tão 
+utilizadas na computação gráfica 
+
+\subsection{Operações Sobre Vetores}
+
+Nesta seção serão apresentadas operações que podem ser feitas sobre vetores e entre 
+vetores. Para todas as operações serão utilizados como exemplo vetores no espaço 3D, 
+e serão representados por $v$, $v1$ e $v2$.
+
+\subsubsection{Adição}
+
+A adição entre dois vetores é feita através da soma de cada um dos componentes de um 
+vetor com os componentes correspondentes do outro vetor.
+
+\begin{equation}
+    \begin{aligned}
+        v1 + v2 = (x_1, y_1, z_1) + (x_2, y_2, z_2) \\
+        v1 + v2 = (x_1 + x_2, y_1 + y_2 , z_1 + z_2)
+    \end{aligned}
+\end{equation}
+
+\subsubsection{Subtração}
+
+A subtração entre dois vetores é semelhante à adição, porém são feitas operações de 
+substrações entre os componentes dos operandos.
+
+\begin{equation}
+    \begin{aligned}
+        v1 - v2 = (x_1, y_1, z_1) - (x_2, y_2, z_2) \\
+        v1 - v2 = (x_1 - x_2, y_1 - y_2, z_1 - z_2)
+    \end{aligned}
+\end{equation}
+
+Observa-se que assim como a subtração entre escalares, a subtração entre vetores também 
+não é comutativa.
+
+\subsubsection{Multiplicação por Escalar}
+
+Dado um certo coeficiente $k$, a multiplicação de um vetor $v$ pelo escalar $k$ é dada 
+pela multiplicação do escalar por cada um dos componentes do vetor:
+
+\begin{equation}
+    \begin{aligned}
+        kv = k(x, y, z)\\
+        kv = (kx, ky, kz)
+    \end{aligned}
+\end{equation}
+
+\subsubsection{Igualdade Entre Vetores}
+
+Um vetor $v1$ é igual a um vetor $v2$, se todos os componentes de $v1$ forem iguais aos 
+componentes correspondentes de $v2$. 
+
+\begin{equation}
+    \begin{aligned}
+        v1 = v2\\
+        (x_1, y_1, z_1) = (x_2, y_2, z_2)\\
+        x_1 = x_2, y_1 = y_2, z_1 = z_2
+    \end{aligned}
+\end{equation}
+
+\subsubsection{Magnitude}
+
+O operador de magnitude serve para calcular o comprimento de um vetor. Para o fazê-lo, 
+a norma utilizada é a norma Euclidiana, cujo cálculo consiste na raiz quadrada da soma  
+dos quadrados dos componentes. O operador de norma é denotado por: $||v||$. Dado um 
+vetor $v$, o tamanho do vetor $d$ é dado por:
+
+\begin{equation}
+    \begin{aligned}
+        ||v|| = d = \sqrt{x^2 + y^2 + z^2}
+    \end{aligned}
+\end{equation}
+
+\subsubsection{Normalização}
+
+A normalização de um vetor cria um vetor unitário $v'$ a partir de um vetor $v$, 
+mudando sua magnitude para 1, porém mantendo sua direção. Isso é feito a partir da
+divisão de um vetor pela sua norma:
+
+\begin{equation}
+    \begin{aligned}
+        v' = \frac{v}{||v||}
+    \end{aligned}
+\end{equation}
+
+\subsubsection{Produto Escalar}
+
+\subsubsection{Produto Vetorial}
 
 \subsection{Matrizes}
 
@@ -65,8 +205,8 @@ Além disso é reconhecido pelos autores o fato de um \textit{cache miss} causar a
 ciclos e consequentemente a perda de operações de ponto flutuante. Para demonstração do 
 problema e sua solução através da reestruturação de código, são mostrados no artigo 
 dois algoritmos diferentes. Um deles é de particular interesse para esse trabalho, que 
-é a multiplicação entre matrizes pois conforme visto na seção~\ref{secmathconcepts}, operações 
-de álgebra linear são extensivamente utilizadas em aplicações gráficas.
+é a multiplicação entre matrizes pois conforme visto na seção~\ref{secmathconcepts}, 
+operações de álgebra linear são extensivamente utilizadas em aplicações gráficas.
 
 \section{Linguagem de Programação Rust}
 
