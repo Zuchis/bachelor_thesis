@@ -13,6 +13,31 @@ o motor de jogos que será o objeto de estudo deste trabalho.
 \section{Motor de Jogos}
 \label{secgameengine}
 
+O termo e o conceito de motor de jogos surgiram no início da década de 1990, quando a 
+empresa \textit{Id Software} lançou o jogo \textit{DOOM} e, juntamente com ele, seu 
+motor de jogos conhecido como \textit{DOOM Engine}, que depois foi nomeado como 
+\textit{Id Tech 1}~\cite{gregory2009game}.
+
+O jogo \textit{DOOM}, através da \textit{Id Tech 1}, é considerado o primeiro jogo da 
+indústria de jogos digitais que possui uma clara separação entre os componentes núcleo 
+do jogo, chamada de parte lógica, dos componentes criativos, tais como animações, 
+modelos geométricos, sons, imagens, planos de fundo, música, etc.
+
+A \textit{Id Software}, além de ter criado um novo conceito de \textit{software} 
+na indústria de jogos que atualmente é considerado padrão em grandes empresas e ter 
+gerado uma vasta família de motores de jogos que partiram da \textit{Id Tech 1}, também 
+conceberam um novo paradigma para se desenvolver jogos digitais, onde a produção de todo 
+o conteúdo lógico é independentemente e separadamente feita dos componentes criativos.
+
+A maior vantagem da utilização de motores de jogos consiste na reutilização de código. 
+Isso significa que, para rotinas parecidas, ou até mesmo para outros projetos, um mesmo 
+código pode ser utilizado mudando-se apenas alguns parâmetros. Além disso, motores de 
+jogos mais completos geralmente permitem uma rápida prototipagem de novos projetos,
+requer uma habilidade menor por parte dos programadores e minimiza seus esforços 
+através de abstrações.
+
+[WORK IN PROGRESS]
+
 \section{Conceitos Matemáticos}
 \label{secmathconcepts}
 
@@ -178,6 +203,68 @@ divisão de um vetor pela sua norma:
 
 \subsection{Matrizes}
 
+Matrizes são \textit{arrays} bidimensionais nas quais cada valor individual é chamado de 
+elemento. A descrição de uma matriz é feita especificando o seu número de linhas e número 
+de colunas, sendo $m$ o número de linhas e $n$ o número de colunas, é dito que é uma matriz 
+$m$ por $n$, denotado por $m\ x\ n$. A relação da quantidade de linhas e colunas é também 
+conhecida como o tamanho da matriz.
+
+Uma linha é uma sequência de elementos na horizontal da esquerda para a direita, enquanto 
+que uma coluna é uma sequência de elementos na vertical de cima para baixo. Para 
+referenciar um elemento específico de uma matriz $A$, usa-se a notação: $a_{i,j}$, onde 
+$i$ referencia uma linha e $j$ uma coluna. Dessa maneira, o elemento $a_{1,2}$ é o elemento 
+que está na primeira linha e na segunda coluna na matriz A.
+
+Alguns casos específicos de matrizes recebem denotações especiais. Por exemplo, uma matriz 
+cujo número de linhas é igual ao número de colunas é chamada de matriz quadrada. Uma matriz 
+na qual todos os elementos são iguais a zero é chamada de matriz zero. Existem outros casos 
+específicos de matrizes, como matrizes triangulares,  mas não são tão importantes quanto
+estas.
+
+O conjunto de elementos os quais o número da linha é igual ao número da coluna (ex: 
+$a_{1,1}$) é chamado de diagonal principal.
+
+\subsection{Operações Sobre Matrizes}
+
+Nesta seção serão apresentadas operações feitas sobre matrizes, entre matrizes e também 
+entre matrizes e vetores.
+
+\subsubsection{Adição e Subtração}
+
+Dadas duas matrizes $A$ e $B$, a soma entre elas é feita de maneira semelhante à soma de 
+vetores, soma-se componente-a-componente. Sendo $S$ a soma de $A$ e $B$, teremos:
+
+\begin{equation}
+    \begin{aligned}
+        S = A + B\\
+        s_{i,j} = a_{i,j} + b_{i,j}
+    \end{aligned}
+\end{equation}
+
+A subtração é feita de maneira semelhante, subtraindo-se os componentes ao invés de 
+somá-los. Assim como números reais e vetores, a subtração não é comutativa para matrizes.
+
+Nota-se que para realizar essas operações, os tamanhos de $A$, $B$ e $S$ devem ser 
+iguais. 
+
+\subsubsection{Multiplicação por Escalar}
+
+De maneira similar à multiplicação de um vetor por um escalar, dado um escalar $k$, 
+cada elemento da matriz é multiplicado por $k$. Sendo $P$, a multiplicação da matrix $A$ 
+pelo escalar $k$, esta é dada por:
+
+\begin{equation}
+    \begin{aligned}
+        P = kA\\
+        p_{i,j} = k \dot a_{i,j}
+    \end{aligned}
+\end{equation}
+
+\subsubsection{Multiplicação por Escalar}
+
+A transposta de uma matriz $A$, denotada por $A^T$, troca as linhas pelas colunas de $A$ 
+e vice-versa. Isso é feito trocando os elementos ao longo da diagon 
+
 \subsection{Quaternions}
 
 \subsection{Transformações Afim}
@@ -190,7 +277,7 @@ uma forma de codificar os programas que propõe uma mudança no foco da
 implementação, ao invés de se focar no código, o foco deve estar nos 
 dados.
 
-Apesar do termo "orientação a dados"  ter sido usado apenas recentemente, a utilização dos 
+Apesar do termo "orientação a dados" ter sido usado apenas recentemente, a utilização dos 
 conceitos dessa técnica já têm sido usados há muito mais tempo do que a introdução do termo.
 
 Um exemplo é o trabalho de Chellappa, Franchetti e Püschel~\cite{chellappa2008write}, no qual é 
