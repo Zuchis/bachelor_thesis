@@ -10,6 +10,10 @@ feita nesse trabalho, assim como a abordagem que será utilizada
 para a implementação de todos os componentes que juntos vão compor 
 o motor de jogos que será o objeto de estudo deste trabalho.
 
+\section{Comunicação Entre o Processador e a Memória}
+
+\subsection{Gargalo do Processador-Memória}
+
 \section{Motor de Jogos}
 \label{secgameengine}
 
@@ -35,8 +39,6 @@ código pode ser utilizado mudando-se apenas alguns parâmetros. Além disso, motor
 jogos mais completos geralmente permitem uma rápida prototipagem de novos projetos,
 requer uma habilidade menor por parte dos programadores e minimiza seus esforços 
 através de abstrações.
-
-[WORK IN PROGRESS]
 
 \section{Conceitos Matemáticos}
 \label{secmathconcepts}
@@ -260,7 +262,7 @@ pelo escalar $k$, esta é dada por:
     \end{aligned}
 \end{equation}
 
-\subsubsection{Multiplicação por Escalar}
+\subsubsection{Matriz Transposta}
 
 A transposta de uma matriz $A$, denotada por $A^T$, troca as linhas pelas colunas de $A$ 
 e vice-versa. Isso é feito trocando os elementos ao longo da diagon 
@@ -296,6 +298,61 @@ dois algoritmos diferentes. Um deles é de particular interesse para esse trabalh
 operações de álgebra linear são extensivamente utilizadas em aplicações gráficas.
 
 \section{Linguagem de Programação Rust}
+
+Rust é uma linguagem de programação nova, seu primeira versão estável foi lançada em 2015.
+É desenvolvida pelo grupo de pesquisa \textit{Mozilla}~\cite{rustdocs}. Foi projetada 
+para ser uma linguagem de sistemas de propósito geral e multiparadigma, tomando influências 
+tanto de linguagens imperativas quanto de linguagens funcionais, por exemplo algumas das 
+funcionalidades de linguagens funcionais como Haskell ou ML: tipos de dados algébricos, 
+casamento de padrões e polimorfismo restringido. A diferença é que Rust é capaz de oferecer 
+essas funcionalidades com um completo controle do \textit{layout} da memória e de sua 
+alocação, assim como C e C++~\cite{holk2013}.
+
+Os objetivos nos quais a linguagem foca são: segurança, velocidade e concorrência, sem a 
+utilização de um \textit{garbage collector}, permitindo a escrita de código de baixo 
+nível eficiente com diversas verificações de segurança em tempo de compilação que não causam 
+sobrecargas e ainda elimina todas as condições de concorrência~\cite{rustdocs}. 
+
+Um dos motivos pelo qual a linguagem foi desenvolvida foi uma resposta ao fato de que C e 
+C++, mesmo sendo rápidas, não são seguras nem ergonômicas, e particularmente ineficiente para 
+concorrência. Apesar de ter sido estabilizada apenas há pouco tempo, seus objetivos são 
+ambiciosos e a linguagem tem apresentado excelente desempenho. Seu código tem segurança de 
+memória por padrão, mais rápido que C++, mais fácil de manter e excelente em 
+concorrência~\cite{Beingessner2016}.
+
+A linguagem atinge seus objetivos de velocidade e segurança de memória através de dois 
+conceitos: abstrações sem custo e \textit{posse}. Esses dois conceitos serão explicados 
+a seguir.
+
+\subsection{Abstrações Sem Custo}
+
+Rust é capaz de fazer otimizações agressivas na compilação para permitir a construção de 
+abstrações de alto nível que são transformadas em código de nível mais baixo. Além disso 
+a linguagem possui um sistema de traços, o qual possui um alto poder de expressividade 
+que permite a construção de abstrações. O sistema de traços é utilizado para escrever 
+funções genéricas que podem ser utilizadas para inúmeros tipos de dados diferentes. Quando 
+uma dessas funções é chamada para algum tipo de dado específico, o compilador gera uma 
+variante daquela função a qual terá ligação estática total, permitindo a aplicação de 
+otimizações~\cite{holk2013}.
+
+\subsection{Posse}
+
+O modelo de posse da linguagem possui dois aspectos principais: controlar onde e quando os 
+dados vivem, e controlar onde e quando uma mudança pode ocorrer. Esses aspectos são 
+garantidos por três funcionalidades principais: tipos afins, escopo e 
+privacidade~\cite{Beingessner2016}.
+
+Tipos afins representa valores que são de propriedade exclusiva. Se uma variável que possui 
+uma coleção for passado por valor a uma função, ou se sua coleção for atribuída a outra 
+variável, a variável original perde a posse da coleção e o seu acesso.
+
+Escopos e privacidade são dois conceitos mais presentes em outras linguagens. Os escopos 
+definem uma região na qual os ponteiros que estão nela são validos somente nesta região e 
+o compilador garante que os ponteiros não vão extender seu ciclo de vida para além dela. No 
+Rust essas regiões são definias por escopos léxicos. Por fim a privacidade é um conceito 
+presente em muitas outras linguagens, campos e funções podem ser marcados como sendo públicos 
+ou privados, e apenas o código que está dentro de certos limites pode ter acesso a qualquer 
+coisa que esteja marcada como privada.
 
 \section{Renderizador Gráfico de Baixo Nível}
 
