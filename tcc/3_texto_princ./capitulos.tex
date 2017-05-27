@@ -40,6 +40,43 @@ jogos mais completos geralmente permitem uma rápida prototipagem de novos projet
 requer uma habilidade menor por parte dos programadores e minimiza seus esforços 
 através de abstrações.
 
+A implementação de um motor de jogos é feito através do desenvolvimento separado de 
+diversos componentes. Cada componente é responsável por uma parte específica da parte 
+lógica do jogo, ao oposto do que era feito na programação de jogos tradicional, cujo 
+objetivo primário era maximizar o desempenho para o hardware utilizado. Essa preocupação 
+com o desempenho, juntamente com o curto intervalo de tempo que os desenvolvedores tinham 
+para terminar os projetos geralmente resultava em códigos que não ficavam conforme os 
+preceitos de boa engenharia de software segundo Kruchten~\cite{Kruchten2006}.
+
+Dada a complexidade que é desenvolver um motor de jogos, considerando todos os aspectos que 
+esta deve abranger, desenvolver um código monolítico sem estrutura arquitetural e sem se 
+preocupar com o design geral do sistema, implica em um \textit{software} cujos componentes 
+são todos dependentes entre si. O resultado dessa dependência é um sistema frágil, no qual 
+pequenas mudanças em alguma parte do código pode afetar outras partes de maneiras não 
+óbvias, além de desencorajar os programadores de alterar o código ou refatorá-lo para 
+aumentar sua qualidade~\cite{Keenan2011}.
+
+Por esse motivo, é importante que um motor de jogos esteja devidamente modularizado para 
+evitar um sistema frágil, e facilitar a adição de novos componentes. É importante lembrar 
+que, apesar de ser desejável que os componentes estejam o mais independentes o possível 
+entre si, estes devem estar funcionando perfeitamente em sinergia, isto é, um motor de 
+jogos não funciona com vários componentes executando separadamente, mas sim com a 
+comunicação entre eles de maneira clara e eficiente.
+
+A comunicação e integração entre os diferentes componentes de um motor de jogos faz parte 
+da modelagem da arquitetura deste. Conforme apontado por Anderson et 
+al.~\cite{Anderson2008}, um problema que ainda persiste atualmente é a falta de material 
+na literatura a respeito da modelagem da arquitetura de motores de jogos, sendo que a 
+maior parte da pesquisa disponível foca somente nos componentes separados, como 
+renderização, inteligência artificial (IA) ou rede. Ainda é salientado pelo autor que 
+ainda não há um consenso sobre os limites que separam um jogo do seu motor, portanto 
+há espaço a ser explorado nessa área.
+
+A quantidade de componentes presentes em um motor de jogos é altamente dependente da 
+complexidade desejada para o jogo sendo desenvolvido, alguns dos componentes mais 
+presentes são: componente gráfico, colisões, física, inteligência artificial, rede, som 
+e animação.
+
 \section{Conceitos Matemáticos}
 \label{secmathconcepts}
 
@@ -61,10 +98,10 @@ neste trabalho pertencem a uma destas áreas. Visto que ambas estas áreas são vas
 muito além do escopo deste trabalho, o restante desta seção tratará dos conceitos e 
 propriedades que são relevantes para a computação gráfica apenas.
 
-Verth e Bishop~\cite{Verth:2008} fizeram uma excelente cobertura de toda a matemática 
-essencial utilizada em motores de jogos. O restante da seção cobrirá os tópicos mais 
-importantes do trabalho deles cujos conceitos são utilizados para a elaboração da 
-biblioteca matemática presente neste trabalho.
+Verth e Bishop~\cite{Verth:2008} e Mortenson~\cite{mortenson1999mathematics} fizeram uma 
+excelente cobertura de toda a matemática essencial utilizada em motores de jogos. O restante 
+da seção cobrirá os tópicos mais importantes desses trabalhos cujos conceitos são utilizados 
+para a elaboração da biblioteca matemática presente neste trabalho.
 
 \subsection{Vetores e Pontos}
 
@@ -119,9 +156,7 @@ utilizadas na computação gráfica
 \subsection{Operações Sobre Vetores}
 
 Nesta seção serão apresentadas operações que podem ser feitas sobre vetores e entre 
-vetores. Para todas as operações serão utilizados como exemplo vetores no espaço 3D, 
-e serão representados por $v$, $v1$ e $v2$.
-
+vetores. Para todas as operações serão utilizados como exemplo vetores no espaço 3D.
 \subsubsection{Adição}
 
 A adição entre dois vetores é feita através da soma de cada um dos componentes de um 
@@ -201,7 +236,52 @@ divisão de um vetor pela sua norma:
 
 \subsubsection{Produto Escalar}
 
+O produto escalar entre dois vetores, como o nome sugere, resulta em um escalar a partir 
+dos operandos, a operação é feita multiplicando-se os dois vetores 
+componente-a-componente e depois somando os resultados:
+
+\begin{equation}
+    \begin{aligned}
+        v1 \cdotp v2 = v1_xv2_x + v1_yv2_y + v1_zv2_z
+    \end{aligned}
+\end{equation}
+
+Se os vetores $v1$ e $v2$ formarem um ângulo de 90 graus entre si, então o produto 
+escalar entre eles será zero. Então pode-se dizer que dois vetores serão 
+perpendiculares, ou ortogonais, quando $v1 \cdotp v2 = 0$.
+
+Além de verificar a ortogonalidade entre dois vetores, o produto escalar pode fornecer 
+outras informações, por exemplo, se $v1 \cdotp v2 > 0$, então o ângulo entre eles é 
+menor do que 90 graus, se $v1 \cdotp v2 < 0$, então o ângulo entre eles é maior do que 
+90 graus, esse teste não requer que os vetores estejam normalizados.
+
 \subsubsection{Produto Vetorial}
+
+O produto vetorial, opostamente ao produto escalar, tem como resultado da operação um 
+vetor. O vetor resultante $w$ do produto vetorial entre $v1$ e $v2$ será sempre 
+ortogonal a estes. Como essa operação não é comutativa, a direção do vetor resultante 
+dependerá da ordem dos operandos, ou seja, há duas saídas possíveis dessa operação, uma 
+é a negação da outra. O produto vetorial é determinado pela fórmula:
+
+\begin{equation}
+    \begin{aligned}
+        v1 \times v2 = (v1_yv2_z - v2_yv1_z, v1_zv2_x - v2_zv1_x, v1_xv2_y - v2_xv1_y)
+    \end{aligned}
+\end{equation}
+
+A figura~\ref{piccrossproduct} demonstra geometricamente um produto vetorial. Os usos mais 
+comuns para o produto vetorial é para gerar um vetor ortogonal a outros dois e para 
+verificar se dois vetores são paralelos entre si.
+
+Diferentemente do produto escalar, o produto vetorial não é definido para vetores 2D.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width =.4\textwidth]{../figuras/crossproduct}
+    \caption{Produto vetorial com os dois possíveis resultados representados.}
+    Disponível em: <https://en.wikipedia.org/wiki/Cross\_product>. Acesso em: 27/05/2017.
+    \label{piccrossproduct}
+\end{figure}
 
 \subsection{Matrizes}
 
@@ -217,11 +297,19 @@ referenciar um elemento específico de uma matriz $A$, usa-se a notação: $a_{i,j}
 $i$ referencia uma linha e $j$ uma coluna. Dessa maneira, o elemento $a_{1,2}$ é o elemento 
 que está na primeira linha e na segunda coluna na matriz A.
 
-Alguns casos específicos de matrizes recebem denotações especiais. Por exemplo, uma matriz 
-cujo número de linhas é igual ao número de colunas é chamada de matriz quadrada. Uma matriz 
-na qual todos os elementos são iguais a zero é chamada de matriz zero. Existem outros casos 
-específicos de matrizes, como matrizes triangulares,  mas não são tão importantes quanto
-estas.
+Alguns casos específicos de matrizes recebem denotações especiais. A seguir serão listados 
+alguns caso específicos de matrizes:
+\begin{itemize}
+    \item Matriz quadrada: matriz cujo número de linhas é igual ao número de colunas 
+    \item Matriz zero: matriz na qual todos os elementos são iguais a zero
+    \item Matriz Identidade: matriz na qual todos os elementos da diagonal principal são 
+        iguais a um, e o restante igual a zero
+    \item Matriz coluna: matriz que só possui uma coluna de elementos
+    \item Matriz linha: matriz que só possui uma linha de elementos
+\end{itemize}
+
+Existem outros casos específicos de matrizes, como matrizes triangulares,  mas não são tão 
+importantes quanto estas.
 
 O conjunto de elementos os quais o número da linha é igual ao número da coluna (ex: 
 $a_{1,1}$) é chamado de diagonal principal.
@@ -269,7 +357,7 @@ e vice-versa. Isso é feito trocando os elementos ao longo da diagon
 
 \subsection{Quaternions}
 
-\subsection{Transformações Afim}
+\subsection{Transformações}
 
 \section{Modelagem Orientada a Dados}
 \label{secdataorienteddesign}
