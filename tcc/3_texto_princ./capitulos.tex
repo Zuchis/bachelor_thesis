@@ -100,8 +100,9 @@ propriedades que são relevantes para a computação gráfica apenas.
 
 Verth e Bishop~\cite{Verth:2008} e Mortenson~\cite{mortenson1999mathematics} fizeram uma 
 excelente cobertura de toda a matemática essencial utilizada em motores de jogos. O restante 
-da seção cobrirá os tópicos mais importantes desses trabalhos cujos conceitos são utilizados 
-para a elaboração da biblioteca matemática presente neste trabalho.
+da seção cobrirá apenas os tópicos mais essenciais e para uma abordagem mais completa do 
+assunto, esses trabalhos deverão ser consultados. Todos os conceitos apresentados aqui 
+são utilizados para a elaboração da biblioteca matemática presente neste trabalho.
 
 \subsection{Vetores e Pontos}
 
@@ -284,6 +285,7 @@ Diferentemente do produto escalar, o produto vetorial não é definido para vetore
 \end{figure}
 
 \subsection{Matrizes}
+\label{matrices}
 
 Matrizes são \textit{arrays} bidimensionais nas quais cada valor individual é chamado de 
 elemento. A descrição de uma matriz é feita especificando o seu número de linhas e número 
@@ -297,27 +299,43 @@ referenciar um elemento específico de uma matriz $A$, usa-se a notação: $a_{i,j}
 $i$ referencia uma linha e $j$ uma coluna. Dessa maneira, o elemento $a_{1,2}$ é o elemento 
 que está na primeira linha e na segunda coluna na matriz A.
 
-Alguns casos específicos de matrizes recebem denotações especiais. A seguir serão listados 
-alguns caso específicos de matrizes:
+O conjunto de elementos os quais o número da linha é igual ao número da coluna (ex: 
+$a_{1,1}$) é chamado de diagonal principal.
+
+Alguns casos específicos de matrizes recebem denotações especiais. A seguir serão 
+listadas algumas dessas matrizes específicas:
 \begin{itemize}
     \item Matriz quadrada: matriz cujo número de linhas é igual ao número de colunas 
-    \item Matriz zero: matriz na qual todos os elementos são iguais a zero
+    \item Matriz zero ou nula: matriz na qual todos os elementos são iguais a zero
+    \item Matriz diagonal: matriz cujos únicos elementos que não são zero são os da 
+        diagonal principal
     \item Matriz Identidade: matriz na qual todos os elementos da diagonal principal são 
-        iguais a um, e o restante igual a zero
+        iguais a um, e o restante igual a zero. A matriz identidade é denotada por $I$.
     \item Matriz coluna: matriz que só possui uma coluna de elementos
     \item Matriz linha: matriz que só possui uma linha de elementos
 \end{itemize}
 
 Existem outros casos específicos de matrizes, como matrizes triangulares,  mas não são tão 
-importantes quanto estas.
-
-O conjunto de elementos os quais o número da linha é igual ao número da coluna (ex: 
-$a_{1,1}$) é chamado de diagonal principal.
+importantes quanto estas. Uma característica importante das matrizes linha e coluna é 
+que elas podem ser utilizadas para representar vetores matricialmente.
 
 \subsection{Operações Sobre Matrizes}
 
 Nesta seção serão apresentadas operações feitas sobre matrizes, entre matrizes e também 
 entre matrizes e vetores.
+
+\subsubsection{Igualdade entre Matrizes}
+
+Duas matrizes são iguais se elas possuem a mesma dimensão e todos os seus elementos 
+correspondentes são iguais. Ou seja, para duas matrizes de dimensão $m \times n$:
+
+\begin{equation}
+    \begin{aligned}
+        A = B\\
+        a_{i,j} = b_{i,j}\\
+        \forall i \in {1..m} \land \forall j \in {1..n}
+    \end{aligned}
+\end{equation}
 
 \subsubsection{Adição e Subtração}
 
@@ -353,30 +371,455 @@ pelo escalar $k$, esta é dada por:
 \subsubsection{Matriz Transposta}
 
 A transposta de uma matriz $A$, denotada por $A^T$, troca as linhas pelas colunas de $A$ 
-e vice-versa. Isso é feito trocando os elementos ao longo da diagon 
+e vice-versa. Isso é feito trocando os elementos ao longo da diagonal principal, de 
+tal forma que: $(A^T)_{i.j} = (A)_{j,i}$
+
+\subsubsection{Blocos de Matrizes}
+
+Uma convenção para a representação de matrizes é representá-las como blocos de 
+submatrizes, ao invés de representá-las com todos os elementos, por exemplo: \\
+
+$
+    \begin{bmatrix}
+        1 & 2 & 0 \\
+    -4 & 5 & 0 \\
+        0 & 0 & 1 \\
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        A & 0 \\
+        0^T & 1 \\
+    \end{bmatrix}
+$
+
+\vspace{1cm}
+
+Onde $0^T$ é uma linha de zeros e A:\\ 
+
+$A =  \begin{bmatrix}
+        1 & 2 \\
+       -4 & 5 \\
+      \end{bmatrix}$
+
+\subsubsection{Multiplicação Entre Matrizes}
+
+Essa é a operação de matrizes mais utilizada em aplicações gráficas, também conhecida 
+como produto de matrizes. Com essa operação é possível fazer duas coisas extensivamente 
+usadas: a primeira é a transformação de um vetor multiplicando-o por uma matriz. A 
+segunda é multiplicar duas matrizes juntas para formar uma única matriz que realiza as 
+transformações combinadas daquelas.
+
+O produto $C$ das matrizes $A$ e $B$ é denotado da mesma maneira que números reais: 
+$C = AB$. Para calcular os elementos do produto $c_{i,j}$, realiza-se um produto 
+escalar da linha $i$ de $A$ com a coluna $j$ de B, isso pode ser representado da 
+seguinte maneira:
+
+\begin{equation}
+    \begin{aligned}
+        c_{i,j} = \displaystyle\sum_{k=0}^{n-1} a_{i,k}b{k,j}
+    \end{aligned}
+\end{equation}
+
+Para se realizar o produto escalar entre as linhas e as colunas, elas devem possuir a 
+mesma dimensão, ou seja, a multiplicação entre duas matrizes somente é possível se o 
+número de colunas de uma for igual ao número de linhas da outra. Isso também implica 
+que apenas matrizes quadradas podem ser multiplicadas por si mesmas. 
+
+Conforme mencionado na seção~\ref{matrices}, vetores podem ser representados 
+matricialmente através de uma matriz linha ou matriz coluna, essas representações são 
+utilizadas para realizar transformações sobre vetores, através de uma multiplicação 
+entre matriz e vetor, para o caso de um vetor representado por uma matriz coluna, a 
+multiplicação de um vetor $v$ por uma matriz $A$ é dada por: 
+
+\begin{equation}
+    \begin{bmatrix}
+        a_{1,1} & a_{1,2} & a_{1,3}\\
+        a_{2,1} & a_{2,2} & a_{2,3}\\
+        a_{3,1} & a_{3,2} & a_{3,3}\\
+    \end{bmatrix}
+    \begin{bmatrix}
+        v_x \\
+        v_y \\
+        v_z \\
+    \end{bmatrix}
+\end{equation}
+
+Para que a multiplicação possa ser realizada nesse caso, o número de colunas da matriz 
+deve corresponder ao número de elementos do vetor, o resultado dessa multiplicação 
+será:
+
+$
+Av = (v \cdotp a_{1}^{T}, v \cdotp a_{2}^{T}, v \cdotp a_{3}^{T})
+$
+
+Onde $a_{1}^{T}$, $a_{2}^{T}$ e $a_{3}^{T}$ são as linhas 1, 2 e 3 da matriz $A$, 
+respectivamente. 
+
+Caso uma matriz linha seja utilizada para representar o vetor, o número de linhas da 
+matriz deve corresponder ao número de elementos do vetor, e o vetor deverá ser colocado 
+à esquerda da operação.
+
+É importante salientar que a multiplicação entre matrizes não é comutativa, apesar de 
+ainda ser associativa como vetores e números reais.
+
+A matriz identidade (seção~\ref{matrices}), é o elemento neutro da multiplicação de 
+matrizes, isto é, para qualquer matriz $A$, a multiplicação pela matriz identidade $I$ 
+resultará em $A$:
+
+\begin{equation}
+    \begin{aligned}
+        A \cdotp I = I \cdotp A = A
+    \end{aligned}
+\end{equation}
+
+\subsubsection{Matriz Inversa}
+
+A inversa de uma matriz $A$, definida como $A^-1$, é uma matriz a qual multiplicada por 
+$A$ resulta na matriz identidade $I$:
+
+\begin{equation}
+    \begin{aligned}
+        A \cdotp A^-1 = I
+    \end{aligned}
+\end{equation}
+
+E: 
+
+\begin{equation}
+    \begin{aligned}
+        A^-1 \cdotp A = I
+    \end{aligned}
+\end{equation}
+
+Para que essa multiplicação possa ocorrer, o número de colunas da matriz inversa 
+precisa ser igual ao número de linhas da original, e a recíproca também deve ser 
+verdadeira. Por isso, uma matriz e sua inversa devem ser quadradas e de mesma dimensão, 
+portanto nem todas as matrizes possuem uma inversa, já nem todas as matrizes são 
+quadradas. A inversa da inversa retorna a matriz original. 
+
+Uma das utilidades da matriz inversa é que ela pode reverter a transformação feita 
+pela sua matriz original, multiplicando o vetor transformado pela inversa da matriz 
+que realizou a transformação.
+
+Existem várias maneiras de se computar a matriz inversa, o método utilizado neste 
+trabalho é o método de Cramer~\cite{cramer1750introduction}.
+
+\subsubsection{Determinante}
+
+O determinante é uma quantidade escalar criada a partir da avaliação dos elementos de 
+uma matriz quadrada. Para o caso de uma matriz $2 \times 2$, se utilizarmos as colunas 
+dela como os lados de um paralelogramo, então o valor absoluto do determinante é igual 
+a área do paralelogramo. Já uma matrix $3 \times 3$, o valor absoluto do determinate 
+é igual ao volume de um paralelepípedo. 
+
+O determinante pode ser representado de duas maneiras, por det$(A)$ ou $|A|$. A segunda 
+é mais comum ao se mostrar os elementos da matriz. 
+
+O cálculo do determinante é dependente da dimensão da matriz. No escopo de aplicações 
+gráficas, apenas o cálculo dos determinantes de matrizes $2 \times 2$ e $3 \times 3$ 
+são necessários.
+
+O determinante de uma matriz $2 \times 2$ é dado por:
+
+\begin{equation}
+    \begin{aligned}
+        \begin{vmatrix}
+            a & b \\
+            c & d
+        \end{vmatrix}
+        = 
+        ad - bc
+    \end{aligned}
+\end{equation}
+
+E o determinante de uma matriz $3 \times 3$ é dado por:
+
+\begin{equation}
+    \begin{aligned}
+        \begin{vmatrix}
+            a & b & c\\
+            d & e & f\\
+            g & h & i\\
+        \end{vmatrix}
+        = 
+        a(ei - fh) -b(di - fg) + c(dh - eg)
+    \end{aligned}
+\end{equation}
+
+\subsection{Transformações Afins}
+
+As transformações afins mapeiam pontos e vetores de um espaço afim para outro, e elas 
+podem ser aplicadas utilizando-se operações matriciais.
+
+De uma maneira simples, uma transformação afim pode ser representada por uma 
+multiplicação de matriz seguida por uma adição de vetor:
+
+\begin{equation}
+    \begin{aligned}
+        Ax + y
+    \end{aligned}
+\end{equation}
+
+Onde $A$ é uma matrix $m \times n$, $y$ é um vetor de tamanho $m$, e $x$ consiste nas 
+coordenadas $(x_0,\ldots,x_{n-1})$. Essa transformação pode ser representada utilizando 
+blocos de matrizes: 
+
+\begin{equation}
+    \begin{bmatrix}
+        A & y\\
+        0^T & 1\\
+    \end{bmatrix}
+    \begin{bmatrix}
+        x \\
+        1 \\
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        Ax + y\\
+        1\\
+    \end{bmatrix}
+\end{equation}
+
+\vspace{.5cm}
+
+Para que essa multiplicação possa ocorrer, é preciso representar $x$ com um componente 
+adicional cujo valor é $1$. Computacionalmente essa abordagem não é atrativa, pois 
+armazenar um vetor de zeros $0^T$, o $1$ no canto inferior direito e a dimensão extra 
+de $x$ consomem memória desnecessariamente. Por isso, geralmente utiliza-se uma 
+representação para transformações afins na qual esses termos são implícitos, como 
+por exemplo uma matriz de $m \times (n + 1)$ dimensões. Portanto, ao se trabalhar com 
+transformações no espaço $\mathbb{R}^3$, uma transformação afim será representada por 
+uma matriz $4 \times 4$. De maneira análoga, uma transformação afim no espaço 
+$\mathbb{R}^2$ será representada por uma matriz $3 \times 3$.
+
+Em aplicações gráficas, essas transformações são utilizadas para a manipulação dos 
+objetos em um espaço virtual, também chamado de cena. As transformações afins mais 
+utilizadas são para alterar a posição, a orientação e o tamanho de um objeto, essas 
+transformações são a translação, a rotação e a escala, respectivamente.
+
+\subsubsection{Translação}
+
+A translação move um ponto, ou um conjunto de pontos para o caso de um objeto, 
+através do espaço. Já que todos os pontos de um objeto são transladados, a sua forma e 
+tamanho não são alterados.
+
+Para o caso de uma translação de um ponto no $\mathbb{R}^3$ com um deslocamento 
+representado por um ponto $t$, a matriz de translação será definida por uma matriz 
+$4 \times 4$ da seguinte forma:
+
+\begin{equation}
+    \begin{bmatrix}
+        1 & 0 & 0 & t_x\\
+        0 & 1 & 0 & t_y\\
+        0 & 0 & 1 & t_z\\
+        0 & 0 & 0 & 1\\
+    \end{bmatrix}
+\end{equation}
+
+\vspace{.5cm}
+
+Onde $t_x$, $t_y$ e $t_z$ representam os deslocamentos nos eixos $x$, $y$ e $z$ 
+respectivamente.
+
+\subsubsection{Rotação}
+
+A rotação altera a orientação de um vetor em torno de algum eixo. Para um 
+certo ponto, sua rotação é feita movendo-o ao longo de um arco planar uma distância 
+constante de um outro ponto, chamado de centro da rotação. Existem dois tipo de 
+rotações, as rotações puras que são feitas em torno dos três eixos que constituem a 
+base Euclidiana padrão ($i$, $j$ e $k$), e as rotações que são feitas em torno de um 
+eixo arbitrário qualquer. 
+
+As rotações puras, apesar de serem mais simples, não são muito úteis, pois são 
+limitadas, principalmente se se quer realizar uma rotação em torno de um eixo que é 
+a combinação de outros, ou passar o eixo de rotação como argumento. Por esses motivos, 
+as rotações puras não serão utilizadas nesse trabalho, ao invés disso, uma técnica de 
+rotação mais eficiente será utilizada, que é a fórmula de rotação de Rodrigues, que 
+permite rotacionar um vetor em torno de qualquer eixo arbitrário.
+
+A fórmula de rotação de Rodrigues é definida por: 
+
+\begin{equation}
+    \begin{aligned}
+        R = I + (\sin \theta)K + (1 - \cos \theta)K^2
+    \end{aligned}
+\end{equation}
+
+\vspace{.5cm}
+
+Onde $I$ é a matriz identidade, $\theta$ é o quanto quer-se rotacionar e $K$ é uma 
+matriz dada por:
+
+\begin{equation}
+    \begin{bmatrix}
+        0 & -k_z & k_y\\
+        k_z & 0 & -k_x\\
+        -k_y & k_x & 0\\
+    \end{bmatrix}
+\end{equation}
+
+\vspace{.5cm}
+
+Na qual $k_x$, $k_y$ e $k_z$ são os componentes do eixo em torno do qual se deseja 
+rotacionar.
+
+\subsubsection{Escala}
+
+A escala modifica o tamanho de um vetor multiplicando cada um de seus componentes por 
+um fator escolhido. As diferenças da transformação de escala da multiplicação por 
+escalar dos vetores é que na escala, o coeficiente é sempre positivo e pode usar um 
+fator de escala diferente para cada um dos componentes do vetor. Se todos os fatores 
+forem iguais, a transformação é chamada de escala uniforme, caso contrário, é chamada 
+de escala não uniforme. Uma escala não uniforme pode ser utilizada para deixar um 
+objeto com o dobro da altura porém com metade da largura, por isso a escala é 
+considerada uma transformação de deformação. 
+
+Como um ponto por si só não possui um comprimento, o que a escala efetivamente faz é 
+alterar a distância relativa desse ponto de um outro ponto $C_s$, conhecido como o 
+centro da escala, geralmente coincidindo com o centro de um objeto. Para um conjunto 
+de pontos, a escala irá alterar a distância relativa entre eles, porém irá manter a 
+mesma forma relativa. 
+
+A transformação de escala é representada por uma matriz da seguinte maneira:
+
+\begin{equation}
+    \begin{bmatrix}
+        a & 0 & 0 & 0\\
+        0 & b & 0 & 0\\
+        0 & 0 & c & 0\\
+        0 & 0 & 0 & 1\\
+    \end{bmatrix}
+\end{equation}
+
+\vspace{.5cm}
+
+Onde $a$, $b$ e $c$ são os fatores de escala nas direções $x$, $y$ e $z$, 
+respectivamente.
 
 \subsection{Quaternions}
 
-\subsection{Transformações}
+Quaternions, aparte de sua definição matemática, são estruturas que possuem quatro 
+elementos, e são utilizados em aplicações gráficas pois são capazes de realizar 
+rotações em objetos sem o problema do \textit{Gimbal Lock}, no qual uma certa sequência 
+de rotações faz com que dois eixos se alinhem, resultando na perda de um grau de 
+liberdade. 
+
+Os quaternions são definidos pelos seguintes quatro elementos: 
+
+\begin{equation}
+    q = w + xi + yj + zk
+\end{equation}
+
+\vspace{.5cm}
+
+Os componentes $i$, $j$ e $k$ podem ser considerados a base padrão para todos os 
+quaternions, então essa representação pode ser simplificada como: 
+
+\begin{equation}
+    \begin{aligned}
+        q = (w, x, y, z)\\
+        ou\\
+        q = (w,v)
+    \end{aligned}
+\end{equation}
+
+\vspace{.5cm}
+
+Onde $w$ é a parte escalar, e $v$ a parte vetorial. 
+
+Além de evitar o \textit{Gimbal Lock}, os quaternions podem realizar rotações em torno 
+de eixos arbitrários pois podem ser construídos a partir de um ângulo e um eixo. A 
+partir de um ângulo $\theta$ e um eixo $k$, um quaternion é construído da seguinte 
+forma:
+
+\begin{equation}
+    \begin{aligned}
+        w = \cos (\theta / 2)\\
+        x = k_x \cdotp \sin (\theta / 2)\\
+        y = k_y \cdotp \sin (\theta / 2)\\
+        z = k_z \cdotp \sin (\theta / 2)\\
+    \end{aligned}
+\end{equation}
+
+\vspace{.5cm}
+
+De maneira análoga aos vetores, quaternions também podem ser somados entre si e 
+multiplicados por um escalar. 
+
+Sua fórmula de norma também é semelhante:
+
+\begin{equation}
+    \begin{aligned}
+        ||q|| = \sqrt{(w^2 + x^2 + y^2 + z^2)}
+    \end{aligned}
+\end{equation}
+
+\vspace{.5cm}
+
+Um quaternion normalizado $q'$ é igual a:
+
+\begin{equation}
+    \begin{aligned}
+        q' = \frac{q}{||q||}
+    \end{aligned}
+\end{equation}
+
+\vspace{.5cm}
+
+O seu produto escalar também é semelhante ao dos vetores: 
+
+\begin{equation}
+    \begin{aligned}
+        q_1 \cdotp q_2 = w_1w_2 + x_1x_2 + y_1y_2 + z_1z_2
+    \end{aligned}
+\end{equation}
+
+Uma característica importante dos quaternions é que estes podem ser convertidos para 
+uma matriz, sendo possível combiná-los com outras transformações, a versão matricial 
+toma a seguinte forma: 
+
+\begin{equation}
+    M_q = 
+    \begin{bmatrix}
+        1 - 2y^2 - 2z^2 & 2xy - 2wz & 2xz + 2wy\\
+        2xy + 2wz & 1 - 2x^2 - 2z^2 & 2yz - 2wx\\
+        2xz - 2wy & 2yz + 2wx & 1 - 2x^2 - 2y^2\\
+    \end{bmatrix}
+\end{equation}
+
+\vspace{.5cm}
+
+Para transformá-lo em matriz, o quaternion deve estar normalizado.
+
+Assim como matrizes, quaternions também podem ser concatenados multiplicando-os, 
+permitindo dessa maneira combinações de transformações sucessivas. A concatenação é 
+dada por:
+
+\begin{equation}
+    \begin{aligned}
+        q_2 \times q_1 = (w_1w_2 - v_1 \cdotp v_2, w_1v_2 + w_2v_1 + v_2 \times v_1)
+    \end{aligned}
+\end{equation}
 
 \section{Modelagem Orientada a Dados}
 \label{secdataorienteddesign}
 
-A modelagem orientada a dados (do ingles: \textit{Data Oriented Design}) é 
+A modelagem orientada a dados (do inglês: \textit{Data Oriented Design}) é 
 uma forma de codificar os programas que propõe uma mudança no foco da 
 implementação, ao invés de se focar no código, o foco deve estar nos 
 dados.
 
-Apesar do termo "orientação a dados" ter sido usado apenas recentemente, a utilização dos 
-conceitos dessa técnica já têm sido usados há muito mais tempo do que a introdução do termo.
+Apesar do termo "orientação a dados" ter sido usado apenas recentemente, a utilização 
+dos conceitos dessa técnica já têm sido usados há muito mais tempo do que a introdução 
+do termo.
 
-Um exemplo é o trabalho de Chellappa, Franchetti e Püschel~\cite{chellappa2008write}, no qual é 
-reconhecido o problema da velocidade de acesso à memória principal pelo processador, e para 
-solucionar esse problema é dito que os dados de uma aplicação devem ser lidos na ordem 
-apropriada. Pois as otimizações feitas pelos compiladores são limitadas para o caso da 
-leitura da memória já que para realizar esse tipo de otimização seria necessário 
-conhecimento do domínio do problema e dos algoritmos utilizados, algo que os compiladores 
-não possuem. 
+Um exemplo é o trabalho de Chellappa et al.~\cite{chellappa2008write}, no 
+qual é reconhecido o problema da velocidade de acesso à memória principal pelo 
+processador, e para solucionar esse problema é dito que os dados de uma aplicação devem 
+ser lidos na ordem apropriada. Pois as otimizações feitas pelos compiladores são 
+limitadas para o caso da leitura da memória já que para realizar esse tipo de 
+otimização seria necessário conhecimento do domínio do problema e dos algoritmos 
+utilizados, algo que os compiladores não possuem. 
 
 Além disso é reconhecido pelos autores o fato de um \textit{cache miss} causar a perda de 
 ciclos e consequentemente a perda de operações de ponto flutuante. Para demonstração do 
@@ -384,6 +827,52 @@ problema e sua solução através da reestruturação de código, são mostrados no art
 dois algoritmos diferentes. Um deles é de particular interesse para esse trabalho, que 
 é a multiplicação entre matrizes pois conforme visto na seção~\ref{secmathconcepts}, 
 operações de álgebra linear são extensivamente utilizadas em aplicações gráficas.
+
+Como as otimizações feitas pelo compilador são limitadas, é necessário estruturar o 
+código de maneira inteligente para que o acesso à memória seja o menos frequente o 
+possível e para aprimorar a coerência de cache, e é para esse aspecto que a MOD serve.
+
+Ao se modelar o código através de uma abordagem orientada a objetos, esta modelagem 
+é centrada em volta do problema e da sua solução. Os objetos, que não são coisas reais, 
+mas sim o resultado das soluções para o problema apresentado, manipulam apenas os dados 
+necessários para representá-los sem nenhuma consideração pelo hardware, pelos 
+padrões de dados reais ou de quantidades, por isso essa abordagem permite uma rápida 
+prototipagem dos programas pois essas soluções podem ser escritas diretamente da 
+modelagem para o código~\cite{fabiandod}.
+
+A MOD utiliza uma abordagem diferente, ao invés de assumir conhecimento nenhum sobre 
+o hardware, assume conhecimento nenhum sobre o problema, deixando-a para a 
+documentação. Prevendo onde os dados são mais vistos ou esperados, utiliza o input 
+mais provável para direcionar a escolha do algoritmo. Com isso, ao se utilizar essa 
+abordagem pode-se separar os dados mais utilizados dos menos utilizados de tal forma 
+que estes não sejam desnecessariamente carregados da memória.
+
+\begin{figure}[h]
+\centering
+    \begin{minipage}[b]{0.35\textwidth}
+        \includegraphics[width=\textwidth]{../figuras/objectreadingorder}
+    \end{minipage}
+    \begin{minipage}[b]{0.35\textwidth}
+        \includegraphics[width=\textwidth]{../figuras/dodreadingorder}
+    \end{minipage}
+    \caption{Orientação a objetos vs. Orientação a Dados. Duas maneiras diferentes de 
+    se ler os dados da memória.}
+    Disponível em: <http://gamesfromwithin.com/data-oriented-design>. Acesso em: 27/05/2017.
+    \label{oodvsdod}
+\end{figure}
+
+A figura~\ref{oodvsdod} apresenta duas maneiras diferentes de se ler dados da memória, 
+a primeira ocorre com a programação orientada a objetos, na qual os dados não são lidos 
+de maneira contígua, a sequência de chamadas da figura ocorre para todos os objetos 
+caso uma função ou uma rotina chame todos os objetos daquele tipo, o que não é uma 
+situação incomum de se acontecer. É preciso passar por todas as referências caso seja 
+necessário acessar os dados nos níveis mais baixos da árvore, e se uma função usar
+somente alguns desses elementos, essa leitura de dados não é muito eficiente. 
+
+Na segunda figura há uma separação do objeto em componentes diferentes, e componentes 
+do mesmo tipo são agrupados juntos na memória, independentemente do objeto de qual 
+vieram. Essa organização resulta em blocos largos de dados homogêneos, permitindo o 
+uso eficiente de memória através processamento contíguo de dados. 
 
 \section{Linguagem de Programação Rust}
 
@@ -455,8 +944,6 @@ coisa que esteja marcada como privada.
 \section{O \textit{Pipeline} de Renderização}
 
 \section{Malhas de Polígono}
-
-\section{Texturas}
 
 \section{Shaders}
 
