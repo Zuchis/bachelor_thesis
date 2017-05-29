@@ -931,17 +931,17 @@ presente em muitas outras linguagens, campos e funções podem ser marcados como s
 ou privados, e apenas o código que está dentro de certos limites pode ter acesso a qualquer 
 coisa que esteja marcada como privada.
 
-\section{Renderizador Gráfico de Baixo Nível}
-
-\section{Matriz de Transformação}
-
-\section{Matriz de Visualização}
-
-\section{Matriz de Projeção}
-
 \section{O \textit{Pipeline} de Visualização}
 
-\section{O \textit{Pipeline} de Renderização}
+\subsection{Coordenadas do Objeto}
+
+\subsection{Coordenadas do Mundo}
+
+\subsection{Clip Coordinates}
+
+\subsection{Coordenadas Normalizadas do Dispositivo}
+
+\subsection{Coordenadas da Tela}
 
 \section{Malhas de Polígono}
 
@@ -949,7 +949,77 @@ coisa que esteja marcada como privada.
 
 \section{Iluminação}
 
+\section{Renderizador Gráfico de Baixo Nível}
+
+\section{O \textit{Pipeline} de Renderização}
+
 \section{O Loop de Jogo}
+
+O loop do jogo é onde os componentes funcionam em conjunto para proporcionar o que 
+define um jogo: uma aplicação interativa em tempo real. 
+
+Sistemas em tempo real, como jogos, possuem restrições de tempo para realizar todas as 
+suas rotinas, se o sistema não for capaz de fazer seu trabalho dentro do limite de 
+tempo irá falhar. Uma vez que sistemas em tempo real são supostos a fazer suas tarefas 
+em tempo real, se um jogo não for capaz de fazer isso, o usuário (nesse caso o 
+jogador) não receberá um \textit{feedback} contínuo, e o jogo não fornecerá a 
+interatividade que deveria. Um loop de jogo pode ser implementado com a finalidade 
+de satisfazer essas restrições~\cite{Joselli2010}.
+
+Sistemas interativos em tempo real podem ser divididos em três módulos principais: 
+recebimento de inputs, processamento e apresentação dos 
+resultados~\cite{dalmau2004core}.
+
+Nos jogos eletrônicos, o sistema de inputs corresponde ao gerenciamento do dispositivo 
+de inputs, como mouse, teclado ou controlador de jogo, o processamento é responsável 
+por tomar as decisões que afetam o estado do jogo, e a apresentação é responsável por 
+mostrar os resultados desses dois outros estágios, através de áudio e 
+vídeo~\cite{valente2005real}. 
+
+Elaborar um loop de jogo significa organizar esses três módulos, e seus submódulos na 
+certa para deixar a simulação o mais fiel o possível da experiência desejada. 
+Considerando os módulos citados, o loop do jogo pode ser dividido da seguinte maneira, 
+na seguinte ordem:
+
+\begin{itemize}
+    \item Detecção e gerenciamento de inputs
+    \item Estágio de processamento
+    \item Estágio de apresentação
+\end{itemize}
+
+O estágio de processamento é ainda subdividido em outras partes, onde cada uma 
+corresponde a um aspecto diferente do estado do jogo, como detecção de colisões, 
+simulações físicas, a IA do jogo, aplicações das regras do jogo, etc. Estas portanto, 
+também devem ser organizadas na ordem correta. No estágio de apresentação são 
+reproduzidos todos os áudios necessários e a cena é renderizada na tela com os 
+resultados dos estágios anteriores.
+
+Uma medida de desempenho de aplicações gráficas que também é utilizada para medir a 
+frequência com a qual esses loops são executados é a quantidade de quadros por 
+segundo (\textit{Frames per Second}) que são renderizados na tela, conhecido como 
+FPS. Cada quadro que aparece na tela representa uma imagem construída e apresentada 
+pela aplicação.
+
+O desempenho de um jogo, além de ser dependente das otimizações feitas a nível de 
+software, é também dependente da configuração de hardware da plataforma na qual será 
+executado. Portanto, um mesmo jogo pode rodar com um FPS diferente dependendo da 
+plataforma utilizada, visto que a atualização do estado do jogo é dependente da 
+quantidade de quadros construídos, uma mesma sequência de eventos podem ter um 
+resultado diferente dependendo do pode computacional do hardware. 
+
+Para evitar esse problema, é necessário tornar o estágio de processamento independente 
+da taxa de FPS. Isso pode ser feito adicionando um parâmetro de tempo ao estágio de 
+processamento. Esse parâmetro corresponde ao tempo decorrido entre a atualização 
+atual e a última atualização do processamento feita~\cite{valente2005real}, e é 
+conhecido como \textit{delta time}, indicando uma diferença de tempo.
+
+Além da separação do estágio de processamento em sub-tarefas, é importante salientar 
+que nem todas possuem a mesma necessidade de atualização que outras. Por exemplo, a IA 
+não precisa ser atualizada com a mesma frequência do que a simulação das físicas, 
+é necessário somente quando um agente precisa tomar uma decisão. A renderização por 
+outro lado, proporcionará um resultado melhor quanto mais atualizada esta for, desde 
+que não comprometa o desempenho geral do sistema. Por isso, uma forma de otimizar o 
+desempenho é atualizar cada um dos componentes somente quando necessário.
 
 \chapter{Trabalho Proposto}
 \label{cap3}
