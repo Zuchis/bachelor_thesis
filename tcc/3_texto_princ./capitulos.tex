@@ -2,7 +2,7 @@
 \setlength\abovedisplayshortskip{0pt} \setlength\belowdisplayshortskip{0pt}
 
 \chapter{Fundamenta\c{c}\~ao Te\'orica}
-\label{cap2}
+\label{theorycap}
 
 Neste capítulo serão discutidos e explicados todos os conceitos e 
 fundamentação teórica necessários para a compreensão da proposta 
@@ -808,23 +808,23 @@ dada por:
 
 A modelagem orientada a dados (do inglês: \textit{Data Oriented Design}) é 
 uma forma de codificar os programas que propõe uma mudança no foco da 
-implementação, ao invés de se focar no código, o foco deve estar nos 
+implementação: ao invés de se focar no código, o foco deve estar nos 
 dados.
 
-Apesar do termo "orientação a dados" ter sido usado apenas recentemente, a utilização 
+Apesar do termo "orientação a dados"\ ter sido usado apenas recentemente, a utilização 
 dos conceitos dessa técnica já têm sido usados há muito mais tempo do que a introdução 
 do termo.
 
 Um exemplo é o trabalho de Chellappa et al.~\cite{chellappa2008write}, no 
 qual é reconhecido o problema da velocidade de acesso à memória principal pelo 
 processador, e para solucionar esse problema é dito que os dados de uma aplicação devem 
-ser lidos na ordem apropriada. Pois as otimizações feitas pelos compiladores são 
-limitadas para o caso da leitura da memória já que para realizar esse tipo de 
+ser lidos na ordem apropriada. Otimizações feitas pelos compiladores são 
+limitadas para o caso da leitura da memória, para realizar esse tipo de 
 otimização seria necessário conhecimento do domínio do problema e dos algoritmos 
 utilizados, algo que os compiladores não possuem. 
 
 Além disso é reconhecido pelos autores o fato de um \textit{cache miss} causar a perda de 
-ciclos e consequentemente a perda de operações de ponto flutuante. Para demonstração do 
+ciclos e, consequentemente, a perda de operações de ponto flutuante. Para demonstração do 
 problema e sua solução através da reestruturação de código, são mostrados no artigo 
 dois algoritmos diferentes. Um deles é de particular interesse para esse trabalho, que 
 é a multiplicação entre matrizes pois conforme visto na seção~\ref{secmathconcepts}, 
@@ -881,10 +881,10 @@ uso eficiente de memória através processamento contíguo de dados.
 
 \section{Linguagem de Programação Rust}
 
-Rust é uma linguagem de programação nova, seu primeira versão estável foi lançada em 2015.
-É desenvolvida pelo grupo de pesquisa \textit{Mozilla}~\cite{rustdocs}. Foi projetada 
+Rust é uma linguagem de programação nova cuja primeira versão estável foi lançada em 2015.
+É desenvolvida pelo grupo de pesquisa \textit{Mozilla}~\cite{rustdocs}, foi projetada 
 para ser uma linguagem de sistemas de propósito geral e multiparadigma, tomando influências 
-tanto de linguagens imperativas quanto de linguagens funcionais, por exemplo algumas das 
+tanto de linguagens imperativas quanto de linguagens funcionais. Exemplos de 
 funcionalidades de linguagens funcionais como Haskell ou ML: tipos de dados algébricos, 
 casamento de padrões e polimorfismo restringido. A diferença é que Rust é capaz de oferecer 
 essas funcionalidades com um completo controle do \textit{layout} da memória e de sua 
@@ -914,6 +914,7 @@ a linguagem possui um sistema de traços, o qual possui um alto poder de expressi
 que permite a construção de abstrações.
 
 [DESCREVER MELHOR O SISTEMA DE TRAÇOS]
+
 O sistema de traços é utilizado para escrever 
 funções genéricas que podem ser utilizadas para inúmeros tipos de dados diferentes. Quando 
 uma dessas funções é chamada para algum tipo de dado específico, o compilador gera uma 
@@ -1356,19 +1357,122 @@ relação à taxa de quadros por segundo com a qual a aplicação está rodando, e com
 problema podia ser solucionado adicionando um parâmetro que indicasse o tempo decorrido 
 entre o último quadro e o atual.
 
+Interpolação é um dos recursos utilizados na solução deste problema, e é utilizada para 
+qualquer caso em que se queira passar uma noção de locomoção ou movimento entre os 
+diversos quadros, seja através de animações, aplicação de forças, rotações, etc.
+
+Caso se queira adicionar um vetor de velocidade a um objeto, esse objeto passará a ter 
+duas velocidades: a velocidade inicial, a qual ele já possui, e a velocidade alvo, a qual 
+é uma combinação de sua velocidade inicial com a nova velocidade aplicada. Se a alteração 
+da velocidade inicial para a velocidade alvo fosse feita de um quadro para o outro, o 
+objeto teria uma aceleração instantânea (ou desaceleração) completamente não natural e 
+não realista. A interpolação serve para calcular os pontos intermediários entre esses 
+dois extremos a partir de um parâmetro que determinará quantos pontos intermediários 
+serão gerados. No exemplo da velocidade, esse parâmetro pode ser uma combinação entre 
+uma aceleração e o tempo decorrido entre um quadro e outro (\textit{delta time}). Dessa 
+maneira, a alteração da velocidade será feita de uma maneira gradual e independente da 
+taxa de quadros por segundo.
+
+A classe geral de funções utilizadas para interpolações são chamadas de curvas 
+paramétricas. Dado os dois pontos sendo interpolados, uma interpolação entre estes 
+pode ser entendida como uma curva formada entre suas posições, onde o parâmetro 
+supracitado determinará em que posição se está nessa curva. O exemplo mais simples de uma 
+curva paramétrica é dado por:
+
+\begin{equation}
+    \begin{aligned}
+        L(t) = 1 - t \cdotp P_0 + t \cdotp P_1
+    \end{aligned}
+\end{equation}
+
+\vspace{1cm}
+
+Esta é uma interpolação linear, onde $L(t)$ é um ponto intermediário, $P_0$ é o ponto 
+inicial, $P_1$ é o ponto alvo e $t$ é o parâmetro utilizado para controlar a posição em 
+que se está na linha relativa a $P_0$ e $P_1$. Nota-se que $t$ varia em um intervalo 
+entre $[0,1]$, quanto mais próximo de $0$, mais próximo de $P_0\ $ se estará e quanto 
+mais próximo de $1$ mais próximo de $P_1\ $ se estará. 
+
+Esse conceito de interpolação linear pode ser estendida para vetores e quaternions por 
+exemplo, permitindo a aplicação gradual de forças e de rotações.
+
+Na área de computação gráfica, é popular a utilização do jargão "lerp"\ para se referir 
+à interpolação linear, uma abreviação de \textit{Linear Interpolation}.
+
+\subsection{Interpolação Entre Vetores}
+
+A interpolação linear entre dois vetores é semelhante à interpolação entre dois pontos 
+vista anteriormente. A diferença é que o cálculo da interpolação é feito componente a 
+componente, semelhante às outras operações entre dois vetores:
+
+\begin{equation}
+    \begin{aligned}
+        Lerp(u,v,t) = (1 - t \cdotp u_x + t \cdotp v_x, \\
+                      1 - t \cdotp u_y + t \cdotp v_y, \\
+                      1 - t \cdotp u_z + t \cdotp v_z)
+    \end{aligned}
+\end{equation}
+
+\vspace{1cm}
+
+\subsection{Interpolação Entre Quaternions}
+
+Para interpolar dois quaternions, é necessário calcular o menor caminho do ângulo formado 
+entre os dois, visto$\ $ que a interpolação é feita de maneira circular. Para realizar este 
+cálculo, utiliza-se o produto escalar entre os dois quaternions, que retornará o cosseno 
+do ângulo e dependendo do seu valor, parâmetros diferentes são utilizados:
+
+\begin{equation}
+    \begin{aligned}
+        \cos \theta = q_1 \cdotp q_2 \\
+        t_1 = 1 - t \\
+        q_i = 
+        \begin{cases}
+            (q_1 \cdotp t_1) + (q_2 \cdotp t) & \quad \text{se } \cos \theta > 0 \\
+            (q_1 \cdotp t_1) + (q_2 \cdotp -t) & \quad \text{se } \cos \theta < 0 \\
+        \end{cases}
+    \end{aligned}
+\end{equation}
+
+\vspace{1cm}
+
+Onde $q_1$ e $q_2$ são os dois quaternions sendo interpolados, $t$ é o parâmetro de 
+interpolação e $q_i$ é o quaternion resultante da interpolação. É importante ressaltar 
+que $q_i$ deve ser normalizado ao final da interpolação.
+
+Quaternions ainda possuem um outro tipo de interpolação, a interpolação linear esférica, 
+que é um pouco mais custosa de se calcular do que a interpolação linear normal, porém 
+possui uma precisão maior. Essa interpolação é conhecida como "slerp", abreviação de 
+\textit{Spherical Linear Interpolation}. Utilizando os mesmos parâmetros da outra 
+interpolação, a slerp é dada por:
+
+\begin{equation}
+    \begin{aligned}
+        \theta = \arccos(q_1 \cdotp q_2) \\
+        t_1 = \sin((1 - t) \cdotp \theta / \sin \theta) \\
+        t_2 = \sin(t \cdotp \theta / \sin \theta) \\
+        q_i = (t_1 * q_1) + (t_2 * q_2)
+    \end{aligned}
+\end{equation}
+
+\vspace{1cm}
+
+Assim como na interpolação linear normal, aqui $q_i$ também deve ser normalizado ao final 
+da operação.
+
 \chapter{Trabalhos Relacionados}
-\label{cap3}
+\label{relatedworkscap}
 
 Placeholder
 
-\chapter{Trabalho Proposto}
-\label{cap4}
+\chapter{Proposta de Trabalho}
+\label{proposalcap}
 
 Neste capítulo será explicado a proposta deste trabalho, um motor de jogos escrito em Rust 
 com modelagem orientada a dados visando à otimização da comunicação entre o processador e 
 a memória.
 
-Além de utilizar os conceitos da modelagem orientada a dados, também fora necessário 
+Além de utilizar os conceitos da modelagem orientada a dados, também foi necessário 
 utilizar conceitos de computação gráfica, álgebra linear e geometria analítica, teoria de 
 grafos, processamento de imagens, física, entre outros.
 
@@ -1446,6 +1550,7 @@ as seguintes funções são suportadas para vetores:
     \item Produto escalar entre dois vetores.
     \item Produto vetorial entre dois vetores. Essa função é exclusiva para vetores 
         3D.
+    \item Interpolação linear entre dois vetores.
 \end{itemize}
 
 \subsection{Matrizes}
@@ -1471,7 +1576,78 @@ direta destes. Além disso, possui as seguintes funcionalidades:
 
 \subsection{Quaternions}
 
+Só há uma estrutura para os quaternions, com acesso aos seus componentes escalar $t$, e 
+ao vetorial $x,y,z$. Um quaternion pode ser construído tanto passando o valor dos seus 
+quatro componentes, quanto passando um ângulo e um eixo, útil para se fazer uma 
+transformação de rotação.
+
+A estrutura de quaternion possui as seguintes funcionalidades associadas:
+\begin{itemize}
+    \item Adição, subtração e igualdade entre quaternions.
+    \item Multiplicação por escalar.
+    \item Multiplicação entre quaternions.
+    \item Produto escalar entre quaternions.
+    \item Extração do ângulo do quaternion.
+    \item Extração do eixo do quaternion.
+    \item Cálculo da norma.
+    \item Normalização. Semelhante aos vetores, pode simplesmente normalizar ou retornar 
+        uma cópia normalizada.
+    \item Conversão para matriz.
+    \item Interpolação linear e interpolação linear esférica entre quaternions.
+\end{itemize}
+
 \subsection{Outras Utilidades}
+
+Além das funções mencionadas anteriormente, ainda existem algumas outras funções que 
+servem como convenções para facilitar o processo de desenvolvimento e minimização de 
+código escrito.
+
+A biblioteca matemática também possui funções que não estão associadas com nenhuma 
+estrutura, por exemplo, funções trigonométricas tais como: cotangente, conversão de 
+graus para radianos e vice-versa.
+
+Há constantes que também são utilizadas com frequência, como PI, epsilon, e um limitante 
+de pontos flutuantes. Esse limitante é utilizado para calcular a igualdade entre pontos 
+flutuantes e consequentemente, todas as estruturas implementadas. A igualdade entre 
+pontos flutuantes deve ser feita de maneira diferente da igualdade entre inteiros, isso 
+porque ao longo da execução, os pontos flutuantes acumulam "lixo", pequenos erros de 
+cálculo em suas menores casas decimais, por esse motivo, dois números reais podem ser 
+iguais, mas a operação de igualdade retorna falso por causa desses erros acumulados. A 
+igualdade entre dois pontos flutuantes pode ser calculada da seguinte maneira: 
+
+\begin{equation}
+    \begin{aligned}
+        d = x - y \\
+        x = y \iff d < T \and -d < T
+    \end{aligned}
+\end{equation}
+
+\vspace{.5cm}
+
+Onde $x$ e $y$ são os operandos, $d$ é a diferença entre eles e $T$ é o limitante de 
+pontos flutuantes.
+
+Construir matrizes manualmente é um processo demorado e propício a erros, por isso, a 
+biblioteca matemática possui diversas funções que criam matrizes prontas que são 
+frequentemente utilizadas. A seguir serão listadas matrizes que podem ser criadas a 
+partir de funções específicas:
+\begin{itemize}
+    \item Matriz identidade $3 \times 3$ ou $4 \times 4$.
+    \item Matriz nula $3 \times 3$ ou $4 \times 4$.
+    \item Conversão de uma matriz $3 \times 3$ para uma $4 \times 4$ e vice-versa.
+    \item Matriz de translação, criada a partir de um vetor 3D contendo o deslocamento em 
+        cada um dos eixos.
+    \item Matriz de rotação, criada a partir de um ângulo e do eixo de rotação. Existe 
+        uma função com esses mesmos parâmetros para criar um quaternion ao invés de uma 
+        matriz.
+    \item Matriz de escala, criada a partir de um vetor 3D contendo o fator de escala 
+        para cada um dos eixos.
+    \item Matriz de visualização, criada a partir de um vetor indicando a posição, um 
+        vetor indicando a direção e um vetor que representa o eixo que aponta para cima.
+    \item Matriz de projeção perspectiva, criada a partir de um ângulo que representa o 
+        campo de visão, a proporção da tela (largura por altura), a distância até o 
+        plano perto e a distância até o plano longe.
+\end{itemize}
 
 \section{Componente Gráfico}
 
