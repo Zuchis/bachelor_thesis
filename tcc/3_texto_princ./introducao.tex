@@ -148,3 +148,47 @@ de ser rápida, fácil de ser paralelizada e ter segurança de memória, prevenindo 
 de pilha, e acessos a posições de memória não inicializadas ou desalocadas~\cite{Matsakis:2014:RL:2692956.2663188}. Além disso, 
 como a linguagem é relativamente nova e grande parte das aplicações gráficas são escritas em C ou C++, esse trabalho pode ser 
 considerado um bom meio para testar o desempenho da linguagem.
+
+\section{Objetivos}
+\label{obj}
+
+\textbf{Objetivo geral}: Implementar uma \textit{engine} com modelagem orientada a dados 
+na linguagem de programação Rust e analisar sua eficiência e desempenho.\\
+
+\noindent\textbf{Objetivos específicos}: 
+Abaixo encontra-se uma lista dos principais objetivos a serem alcançados com este trabalho.
+\begin{itemize}
+    \item Verificar o estado atual no que diz respeito às implementações das \textit{engine}s modernas;
+    \item Explorar o potencial e limitações da linguagem de programação Rust para aplicações gráficas;
+    \item Utilizar o conceito de design orientado a dados para proporcionar uma melhora
+        na performance dos motores gráficos através da coerência de cache.
+    \item Analisar o desempenho da \textit{engine}, através do desenvolvimento de uma 
+        aplicação que utilize suas funcionalidades em duas versões, uma orientada a 
+        objetos e outra orientada a dados, comparando essas duas versões.
+    \item Demonstrar as mudanças necessárias para converter uma aplicação orientada a 
+        objetos para uma aplicação orientada a dados.
+\end{itemize}
+
+%------------------------------------------------
+\section{Metodologia}
+\label{met}
+
+Após a etapa de revisão bibliográfica sobre 
+os conceitos necessários para a implementação da \textit{engine} e o estudo aprofundado da linguagem Rust e suas 
+características avançadas, a aplicação será desenvolvida em etapas e o método utilizado será a implementação
+dos componentes da \textit{engine} sequencialmente, no qual estes serão testados individualmente.
+
+A etapa seguinte será a integração dos componentes para a construção do pipeline gráfico e implementação 
+das outras funcionalidades. Com a \textit{engine} tendo todos os seus componentes e características funcionando devidamente,
+serão feitas análises e comparações de seu desempenho e eficiência, não somente da \textit{engine} implementada, mas será 
+também pesquisado na literatura outras \textit{engines} já implementadas e quais foram as medidas utilizadas para medir seus 
+desempenhos. Por fim um \textit{postmortem} será escrito no TCC, explicando o que foi e o que não foi bem sucedido.
+
+\section{Organização do Trabalho}
+\label{paperstructure}
+
+Este trabalho está organizado da seguinte forma, no Capítulo 2 estão contidos os 
+fundamentos para o desenvolvimento do trabalho, o Capítulo 3 detalha alguns trabalhos 
+relacionados com o tema deste projeto, já o Capítulo 4 apresenta o projeto dos sistemas 
+a serem desenvolvidos e por fim, no Capítulo 5 estão contidas as considerações finais, 
+seguidas pelas referências bibliográficas.
