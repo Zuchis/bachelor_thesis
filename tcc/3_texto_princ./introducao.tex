@@ -57,15 +57,15 @@ precisa ficar alguns ciclos ocioso enquanto aguarda o dado necessário ser buscad
 principal~\cite{Mahapatra:1999:PBP:357783.331677}, como a velocidade de 
 acesso à memória é relativamente muito menor do que a velocidade de processamento, um processador mais rápido significa apenas 
 mais ciclos ociosos. Isso é conhecido como "Gargalo do Processador-Memória", e diante de tais limitações físicas, surge a 
-necessidade de boas práticas de programação para que ocorra a menor quantidade de \textit{cache misses} o possível.
+necessidade de boas práticas de programação para que ocorra a menor quantidade possível de \textit{cache misses}.
 
 Com esse problema em mente, ao analisar o design de programação orientado objetos, percebe-se que essa abordagem, enquanto que 
 mais legível e com código mais reutilizável, sofre muitas vezes em termos de eficiência de memória, pois seu design é centrado 
-em torno do problema e suas possíveis soluções, e não em torno dos dados, fornecendo abstração dos dados porém a 
-custo de desempenho.
+em torno do problema e suas possíveis soluções, e não em torno dos dados. Ou seja, forne abstração dos dados porém a 
+custo do desempenho.
 
 Quando uma classe de objetos possui dados, chamados de atributos, isto significa que essa classe está fornecendo um contexto 
-aos dados, e este pode comprometer o uso desses dados, pois ao adicionar métodos ao contexto, pode-se criar a necessidade 
+aos dados, e este pode comprometer o uso destes dados, pois ao adicionar métodos ao contexto, pode-se criar a necessidade 
 de adicionar mais dados à classe, o que pode rapidamente levar à classes que contém diversos fragmentos de dados que não 
 estão relacionados entre si~\cite{fabiandod}.
 
@@ -103,8 +103,8 @@ de colisão e física, sistema de animações e partículas, sistema de detecção de i
 sistema de áudio, sistema de rede para jogos online, entre outros~\cite{gregory2009game}.
 
 Para complementar, uma \textit{engine}, ou motor de jogos, pode ser entendido como um conjunto de bibliotecas e ferramentas, os quais combinados 
-são responsáveis por administrar toda a parte lógica de uma aplicação gráfica, separando-a em diferentes componentes utilizando as bibliotecas 
-pra isso, por vezes também conhecidos como componentes núcleo, e também fornece utilidades que aceleram o processo de desenvolvimento 
+são responsáveis por administrar toda a parte lógica de uma aplicação gráfica, separando-a em diferentes componentes utilizando bibliotecas, 
+que por vezes também são conhecidos como componentes núcleo, e fornecem utilidades que aceleram o processo de desenvolvimento 
 das aplicações através das ferramentas. A introdução das \textit{engines} na indústria de jogos digitais também introduziu um novo paradigma, 
 uma nova maneira de desenvolver os jogos, na qual é feita uma completa e clara separação do conteúdo lógico e do conteúdo criativo (arte, 
 animações, música, sons, texturas, etc.).
@@ -152,8 +152,9 @@ considerado um bom meio para testar o desempenho da linguagem.
 \section{Objetivos}
 \label{obj}
 
-\textbf{Objetivo geral}: Implementar uma \textit{engine} com modelagem orientada a dados 
-na linguagem de programação Rust e analisar sua eficiência e desempenho.\\
+\textbf{Objetivo geral}: Investigar o potencial da modelagem orientada a dados para o 
+desenvolvimento de uma engine na linguagem de programação Rust e analisar sua 
+eficiência e desempenho.\\
 
 \noindent\textbf{Objetivos específicos}: 
 Abaixo encontra-se uma lista dos principais objetivos a serem alcançados com este trabalho.
