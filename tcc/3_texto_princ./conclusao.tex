@@ -38,8 +38,52 @@ de tempo, permitindo rápida prototipagem e desenvolvimento, Também proporciona u
 alto grau de modularidade, permitindo a colaboração de equipes com mais de 1000 membros 
 no desenvolvimento dos projetos.
 
+A implementação de um motor de jogos requer conhecimentos de diversas áreas diferentes, 
+como computação gráfica, álgebra linear, geometria analítica, inteligência artificial, 
+processamento de imagens, física, entre outros. Isso faz com que esse tipo de programa 
+seja consideravelmente interdisciplinar. Além disso o processo de desenvolvimento em si 
+do sistema é complexo, não basta somente  implementação individual dos componentes que o 
+constitui, mas também a concepção da arquitetura do motor, que irá determinar como esses 
+componentes se comunicam entre si, processo necessário para a construção do loop de jogo.
+
+O loop de jogo é o funcionamento principal da aplicação e sua estruturação é ditada pela 
+integração dos diferentes componentes do motor de jogos. É dividido em três partes 
+maiores: detecção e gerenciamento de inputs, o processamento dos dados do jogo e a 
+apresentação dos resultados. Esse loop deve ser adequadamente implementado para evitar 
+que ele fique dependente da taxa de quadros por segundo, medida utilizada para o 
+desempenho da aplicação. Escolher a arquitetura certa para o loop de jogo não é uma 
+tarefa trivial, principalmente porque as implementações dos motores de jogos varia 
+consideravelmente, pois estas se adaptam com a complexidade dos projetos desenvolvidos 
+nestas. Para este trabalho, a estruturação do loop de jogo é um trabalho em andamento.
+
+Além de investigar o potencial da modelagem orientada a dados, este trabalho também pode 
+ser considerado como um bom meio para testar o desempenho da linguagem Rust para a 
+implementação de sistemas. O Rust tem o objetivo de ser uma linguagem eficiente e ter uso 
+seguro da memória, problema frequente nas linguagens C e C++, a linguagem consegue 
+atinjir esses objetivos através de abstrações sem custo, utilização de um sistema de 
+posses e otimizações de compilação.
+
+Para a análise e obtenção dos resultados, ainda há trabalho a ser feito. A seguir, 
+serão discutidos alguns aspectos desta proposta que ainda não foram resolvidos.
+
 \section{Escolha de Uma Arquitetura Adequada Para o Motor}
+
+Segundo~\cite{Anderson2008}, um problema que ainda persiste é a falta de material na 
+literatura que cobre a área de arquitetura de motor de jogoss. Além disso, não há material 
+a respeito de motores de jogos com modelagem orientada a dados, o que torna essa tarefa 
+ainda mais desafiadora. 
 
 \section{Determinar a Aplicação a Ser Desenvolvida}
 
+Conforme explicado na seção~\ref{proposalcap}, a implementação do motor de jogos não é o 
+suficiente para testar o seu desempenho e realizar comparações, é necessário a 
+implementação de uma aplicação que utilize as funcionalidades do motor de jogos. Por isso,
+uma aplicação simples será desenvolvida em duas versões, uma com modelagem orientada a 
+dados e a outra com programação orientada a objetos, como prova de conceito.
+
 \section{Escolha Definitiva das Métricas para Medidas de Desempenho}
+
+Apesar de se ter definido uma estratégia para realizar a análise e comparações do motor 
+de jogos, ainda falta ser decidido as métricas de desempenho que serão empregadas 
+nessas análises, pois, além do tempo de processamento, é necessário verificar o quão 
+eficiente a memória será utilizada durante a execução da aplicação desenvolvida.
