@@ -1479,6 +1479,54 @@ da operação.
 
 \section{Considerações Finais do Capítulo}
 
+Neste capítulo foram apresentados os fundamentos utilizados para o desenvolvimento do 
+trabalho proposto, que possui um alto fator interdisciplinar.
+
+A modelagem orientada a dados é um termo que surgiu recentemente, porém seu conceito de 
+uso eficiente e sequencial da memória já é utilizado a mais tempo. Foram apresentados 
+alguns de seus principais princípios, suas diferenças com a programação orientada a 
+objetos, que atualmente é considerada o padrão na indústria, e como a restruturação de 
+código utilizando essa abordagem pode proporcionar uma melhora no desempenho de uma 
+aplicação.
+
+Os motores de jogos revolucionaram o modo como os jogos são feitos na indústria através 
+da clara separação entre o conteúdo técnico e o criativo de um jogo. Foi explicado o 
+surgimento deste conceito, a filosofia de implementação de um motor de jogo, a 
+importância da integração apropriada de seus componentes e também foram apresentados 
+alguns exemplos de componentes comum em motores de jogos.
+
+Foram apresentados diversos conceitos matemáticos que são amplamente utilizados na 
+área de computação gráfica, e também as diferentes estruturas comumente utilizadas e 
+suas respectivas funcionalidades e métodos.
+
+Rust é uma linguagem de programação nova e promissora por apresentar um desempenho 
+semelhante às linguagens C e C++ porém apresenta um nível maior de de segurança de 
+memória. Foi feita uma breve introdução da linguagem, juntamente com seus objetivos 
+e foram explicadas algumas características que garantem que a linguagem consiga 
+cumpri-los.
+
+Foram apresentados os \textit{pipelines} de visualização e renderização, dois 
+conceitos importantes em aplicações gráficas que consistem em etapas que processam os 
+dados desde o seu carregamento no sistema até serem transformados em pixeis na tela, 
+e como o renderizador gráfico de baixo nível auxilia nas etapas da renderização.
+
+Outros conceitos importantes de computação gráfica também foram explicados, como 
+\textit{shaders}, iluminação e malhas de polígono.
+
+Todos os componentes são combinados para a formação de um loop principal, que será 
+encarregado de receber e gerenciar os \textit{inputs} do jogador, atualizar os 
+componentes que necessitam fazê-lo, e apresentar os resultados computados. Esse loop 
+é conhecido como loop de jogo, neste capítulo esse conceito foi introduzido e detalhado.
+Também foi discutido sobre alguns de seus problemas, como a necessidade de diferentes 
+frequências de atualização de cada um dos componentes, e também como os resultados 
+das atualizações podem ser diferentes dependendo do poder computacional do hardware 
+utilizado. Foi apresentada uma solução para este problema, e também uma medida de 
+desempenho popular para jogos, a taxa de quadros por segundo (FPS).
+
+Por fim, foi apresentado o conceito de interpolações e como o seu uso se relaciona com 
+o problema da variação de FPS em jogos. Além disso, foram apresentados exemplos de 
+implementação da interpolação linear para vetores e quaternions.
+
 \chapter{Trabalhos Relacionados}
 \label{relatedworkscap}
 
