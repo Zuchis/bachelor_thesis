@@ -1,5 +1,43 @@
 \chapter{Considera\c{c}\~oes Finais}
 
+A evolução do hardware de computadores chegou a um impasse, onde se tem processadores 
+extremamente rápidos porém uma velocidade de acesso à memória principal que foi incapaz de 
+acompanhar essa evolução. As aplicações de computador que fazem acesso muito frequente à 
+memória têm seu desempenho consideravelmente afetado por esse problema e precisa muitas 
+vezes recorrer ao paralelismo, o que pode gerar vários problemas incluindo concorrência e 
+imprevisibilidade dos dados, pois muitas vezes o paralelismo não estava planejado desde 
+o início do projeto.
+
+Jogos são uma categoria de aplicações gráficas que se encaixam nesse problema de acesso 
+frequente a memória, isto porque há muitos dados externos que precisam ser carregado na 
+aplicação, conhecidos como \textit{assets}, estes dados incluem: malhas, animações, sons, 
+música, planos de fundo, fontes, texturas, entre outros. Por isso, são necessárias a 
+leitura e armazenamento eficiente destes dados pois o bom desempenho em um jogo é 
+essencial para garantir a experiência do jogador.
+
+Existem outras soluções para esse problema além do paralelismo, uma delas foi 
+apresentada neste trabalho: a modelagem orientada a dados. A MOD é um termo 
+relativamente novo, seu primeiro uso foi em 2009 por Noel Llopis~\cite{fabiandod}, mas 
+a utilização de seus conceitos já foi apresentada em trabalho mais antigos. Sua 
+principal filosofia é que programas devem focar em dados, e não em código. Isso 
+significa não utilizar abstrações quando não são necessárias, utilizar um agrupamento 
+inteligente dos dados, no qual dados relacionados estão próximos um dos outros na 
+memória, enquanto dados não relacionados estão distantes. Além disso ocorre a separação 
+de dados que são frequentemente requisitados pelo processador, daqueles que são menos 
+utilizados, dessa maneira, esses dados pouco utilizados não irão poluir os caches da 
+memória sem necessidade.
+
+Apesar de parecer promissora, pouco se sabe sobre a MOD na área de desenvolvimento de 
+jogos e motores de jogos. Isso se deve a pouco material disponível na literatura e 
+também o fato de que a programação orientada a objetos está fortemente consolidada nessa 
+área.
+
+Um motor de jogos é uma maneira de se desenvolver jogos, e desde a sua introdução na 
+indústria em 1993, têm revolucionado a produção de jogos com uma substancial redução 
+de tempo, permitindo rápida prototipagem e desenvolvimento, Também proporciona um 
+alto grau de modularidade, permitindo a colaboração de equipes com mais de 1000 membros 
+no desenvolvimento dos projetos.
+
 \section{Escolha de Uma Arquitetura Adequada Para o Motor}
 
 \section{Determinar a Aplicação a Ser Desenvolvida}
