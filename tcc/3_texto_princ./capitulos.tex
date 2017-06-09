@@ -5,14 +5,86 @@
 \label{theorycap}
 
 Neste capítulo serão discutidos e explicados todos os conceitos e 
-fundamentação teórica necessários para a compreensão da proposta 
+fundamentos necessários para a compreensão da proposta 
 feita nesse trabalho, assim como a abordagem que será utilizada 
 para a implementação de todos os componentes que juntos vão compor 
 o motor de jogos que será o objeto de estudo deste trabalho.
 
-\section{Comunicação Entre o Processador e a Memória}
+\section{Modelagem Orientada a Dados}
+\label{secdataorienteddesign}
 
-\subsection{Gargalo do Processador-Memória}
+A modelagem orientada a dados (do inglês: \textit{Data Oriented Design}) é 
+uma forma de codificar os programas que propõe uma mudança no foco da 
+implementação: ao invés de se focar no código, o foco deve estar nos 
+dados.
+
+Apesar do termo "orientação a dados"\ ter sido usado apenas recentemente, a utilização 
+dos conceitos dessa técnica já têm sido usados há muito mais tempo do que a introdução 
+do termo.
+
+Um exemplo é o trabalho de Chellappa et al.~\cite{chellappa2008write}, no 
+qual é reconhecido o problema da velocidade de acesso à memória principal pelo 
+processador, e para solucionar esse problema é dito que os dados de uma aplicação devem 
+ser lidos na ordem apropriada. Otimizações feitas pelos compiladores são 
+limitadas para o caso da leitura da memória, para realizar esse tipo de 
+otimização seria necessário conhecimento do domínio do problema e dos algoritmos 
+utilizados, algo que os compiladores não possuem. 
+
+Além disso é reconhecido pelos autores o fato de um \textit{cache miss} causar a perda de 
+ciclos e, consequentemente, a perda de operações de ponto flutuante. Para demonstração do 
+problema e sua solução através da reestruturação de código, são mostrados no artigo 
+dois algoritmos diferentes. Um deles é de particular interesse para esse trabalho, que 
+é a multiplicação entre matrizes pois conforme visto na seção~\ref{secmathconcepts}, 
+operações de álgebra linear são extensivamente utilizadas em aplicações gráficas.
+
+Como as otimizações feitas pelo compilador são limitadas, é necessário estruturar o 
+código de maneira inteligente para que o acesso à memória seja o menos frequente o 
+possível e para aprimorar a coerência de cache, e é para esse aspecto que a MOD serve.
+
+Ao se modelar o código através de uma abordagem orientada a objetos, esta modelagem 
+é centrada em volta do problema e da sua solução. Os objetos, que não são coisas reais, 
+mas sim o resultado das soluções para o problema apresentado, manipulam apenas os dados 
+necessários para representá-los sem nenhuma consideração pelo hardware, pelos 
+padrões de dados reais ou de quantidades, por isso essa abordagem permite uma rápida 
+prototipagem dos programas pois essas soluções podem ser escritas diretamente da 
+modelagem para o código~\cite{fabiandod}.
+
+A MOD utiliza uma abordagem diferente, ao invés de assumir conhecimento nenhum sobre 
+o hardware, assume conhecimento nenhum sobre o problema, deixando-a para a 
+documentação. Prevendo onde os dados são mais vistos ou esperados, utiliza o input 
+mais provável para direcionar a escolha do algoritmo. Com isso, ao se utilizar essa 
+abordagem pode-se separar os dados mais utilizados dos menos utilizados de tal forma 
+que estes não sejam desnecessariamente carregados da memória.
+
+\begin{figure}[h]
+\centering
+    \captionof{figure}{Orientação a objetos vs. Orientação a Dados. Duas maneiras 
+    diferentes de se ler os dados da memória.}
+    \begin{minipage}[b]{0.35\textwidth}
+        \includegraphics[width=\textwidth]{../figuras/objectreadingorder}
+    \end{minipage}
+    \begin{minipage}[b]{0.35\textwidth}
+        \includegraphics[width=\textwidth]{../figuras/dodreadingorder}
+    \end{minipage}
+    \par\medskip
+    Disponível em: <http://gamesfromwithin.com/data-oriented-design>. Acesso em: 27/05/2017.
+    \label{oodvsdod}
+\end{figure}
+
+\medskip
+
+A figura~\ref{oodvsdod} apresenta duas maneiras diferentes de se ler dados da memória, 
+a primeira ocorre com a programação orientada a objetos, na qual os dados não são lidos 
+de maneira contígua, a sequência de chamadas da figura ocorre para todos os objetos 
+caso uma função ou uma rotina chame todos os objetos daquele tipo, o que não é uma 
+situação incomum de se acontecer. É preciso passar por todas as referências caso seja 
+necessário acessar os dados nos níveis mais baixos da árvore, e se uma função usar
+somente alguns desses elementos, essa leitura de dados não é muito eficiente. 
+
+Na segunda figura há uma separação do objeto em componentes diferentes, e componentes 
+do mesmo tipo são agrupados juntos na memória, independentemente do objeto de qual 
+vieram. Essa organização resulta em blocos largos de dados homogêneos, permitindo o 
+uso eficiente de memória através processamento contíguo de dados. 
 
 \section{Motor de Jogos}
 \label{secgameengine}
@@ -803,82 +875,6 @@ dada por:
     \end{aligned}
 \end{equation}
 
-\section{Modelagem Orientada a Dados}
-\label{secdataorienteddesign}
-
-A modelagem orientada a dados (do inglês: \textit{Data Oriented Design}) é 
-uma forma de codificar os programas que propõe uma mudança no foco da 
-implementação: ao invés de se focar no código, o foco deve estar nos 
-dados.
-
-Apesar do termo "orientação a dados"\ ter sido usado apenas recentemente, a utilização 
-dos conceitos dessa técnica já têm sido usados há muito mais tempo do que a introdução 
-do termo.
-
-Um exemplo é o trabalho de Chellappa et al.~\cite{chellappa2008write}, no 
-qual é reconhecido o problema da velocidade de acesso à memória principal pelo 
-processador, e para solucionar esse problema é dito que os dados de uma aplicação devem 
-ser lidos na ordem apropriada. Otimizações feitas pelos compiladores são 
-limitadas para o caso da leitura da memória, para realizar esse tipo de 
-otimização seria necessário conhecimento do domínio do problema e dos algoritmos 
-utilizados, algo que os compiladores não possuem. 
-
-Além disso é reconhecido pelos autores o fato de um \textit{cache miss} causar a perda de 
-ciclos e, consequentemente, a perda de operações de ponto flutuante. Para demonstração do 
-problema e sua solução através da reestruturação de código, são mostrados no artigo 
-dois algoritmos diferentes. Um deles é de particular interesse para esse trabalho, que 
-é a multiplicação entre matrizes pois conforme visto na seção~\ref{secmathconcepts}, 
-operações de álgebra linear são extensivamente utilizadas em aplicações gráficas.
-
-Como as otimizações feitas pelo compilador são limitadas, é necessário estruturar o 
-código de maneira inteligente para que o acesso à memória seja o menos frequente o 
-possível e para aprimorar a coerência de cache, e é para esse aspecto que a MOD serve.
-
-Ao se modelar o código através de uma abordagem orientada a objetos, esta modelagem 
-é centrada em volta do problema e da sua solução. Os objetos, que não são coisas reais, 
-mas sim o resultado das soluções para o problema apresentado, manipulam apenas os dados 
-necessários para representá-los sem nenhuma consideração pelo hardware, pelos 
-padrões de dados reais ou de quantidades, por isso essa abordagem permite uma rápida 
-prototipagem dos programas pois essas soluções podem ser escritas diretamente da 
-modelagem para o código~\cite{fabiandod}.
-
-A MOD utiliza uma abordagem diferente, ao invés de assumir conhecimento nenhum sobre 
-o hardware, assume conhecimento nenhum sobre o problema, deixando-a para a 
-documentação. Prevendo onde os dados são mais vistos ou esperados, utiliza o input 
-mais provável para direcionar a escolha do algoritmo. Com isso, ao se utilizar essa 
-abordagem pode-se separar os dados mais utilizados dos menos utilizados de tal forma 
-que estes não sejam desnecessariamente carregados da memória.
-
-\begin{figure}[h]
-\centering
-    \captionof{figure}{Orientação a objetos vs. Orientação a Dados. Duas maneiras 
-    diferentes de se ler os dados da memória.}
-    \begin{minipage}[b]{0.35\textwidth}
-        \includegraphics[width=\textwidth]{../figuras/objectreadingorder}
-    \end{minipage}
-    \begin{minipage}[b]{0.35\textwidth}
-        \includegraphics[width=\textwidth]{../figuras/dodreadingorder}
-    \end{minipage}
-    \par\medskip
-    Disponível em: <http://gamesfromwithin.com/data-oriented-design>. Acesso em: 27/05/2017.
-    \label{oodvsdod}
-\end{figure}
-
-\medskip
-
-A figura~\ref{oodvsdod} apresenta duas maneiras diferentes de se ler dados da memória, 
-a primeira ocorre com a programação orientada a objetos, na qual os dados não são lidos 
-de maneira contígua, a sequência de chamadas da figura ocorre para todos os objetos 
-caso uma função ou uma rotina chame todos os objetos daquele tipo, o que não é uma 
-situação incomum de se acontecer. É preciso passar por todas as referências caso seja 
-necessário acessar os dados nos níveis mais baixos da árvore, e se uma função usar
-somente alguns desses elementos, essa leitura de dados não é muito eficiente. 
-
-Na segunda figura há uma separação do objeto em componentes diferentes, e componentes 
-do mesmo tipo são agrupados juntos na memória, independentemente do objeto de qual 
-vieram. Essa organização resulta em blocos largos de dados homogêneos, permitindo o 
-uso eficiente de memória através processamento contíguo de dados. 
-
 \section{Linguagem de Programação Rust}
 
 Rust é uma linguagem de programação nova cuja primeira versão estável foi lançada em 2015.
@@ -913,13 +909,29 @@ abstrações de alto nível que são transformadas em código de nível mais baixo. Al
 a linguagem possui um sistema de traços, o qual possui um alto poder de expressividade 
 que permite a construção de abstrações.
 
-[DESCREVER MELHOR O SISTEMA DE TRAÇOS]
+O sistema de traços é uma característica da linguagem. Um traço pode ter uma ou mais 
+funcionalidades, se for declarado que um certo tipo de variável possui esse traço, isso 
+diz ao compilador do Rust que aquele tipo deve fornecer as funcionalidades descritas 
+no traço~\cite{rustdocs}.
 
-O sistema de traços é utilizado para escrever 
-funções genéricas que podem ser utilizadas para inúmeros tipos de dados diferentes. Quando 
-uma dessas funções é chamada para algum tipo de dado específico, o compilador gera uma 
-variante daquela função a qual terá ligação estática total, permitindo a aplicação de 
-otimizações~\cite{holk2013}.
+\begin{figure}[h]
+    \centering
+    \captionof{figure}{Demonstração do sistema de traços do Rust.}
+    \includegraphics[width =.8\textwidth]{../figuras/rusttraitsystem}
+    \par\medskip
+    Fonte: \cite{rustdocs}.
+    \label{traitsystemdemo}
+\end{figure}
+
+A figura~\ref{traitsystemdemo} demonstra um exemplo de uso do sistema de traços. Neste 
+exemplo, há uma estrutura chamada \textit{Circle}, e um traço chamado \textit{HasArea}, 
+esse traço possui a função \textit{area}. Através da palavra-chave \textit{impl}, o 
+traço \textit{HasArea} é implementado para a estrutura do exemplo, outras estruturas 
+poderiam ser criadas e para estas esse traço também poderia ser implementado.
+
+Quando uma dessas funções de um traço é chamada para algum tipo de dado específico, o 
+compilador gera uma variante daquela função a qual terá ligação estática total, 
+permitindo a aplicação de otimizações~\cite{holk2013}.
 
 \subsection{Posse}
 
@@ -943,7 +955,8 @@ coisa que esteja marcada como privada.
 \section{O \textit{Pipeline} de Visualização}
 \label{viewingpipelinesec}
 
-Todos os vértices presentes em uma cena, desde os seus valores crus até passarem pelo 
+Todos os vértices presentes em uma cena, desde os seus valores originais conforme 
+descritos em um sistema de modelagem de objetos até passarem pelo 
 processo de rasterização e aparecerem na tela, passam por uma série de etapas nas quais 
 ocorrem mudanças de sistemas de coordenadas. Essas etapas combinadas sequencialmente 
 formam o que é chamado de pipeline de visualização, ou também pipeline de transformação 
@@ -976,7 +989,7 @@ Nesse estágio os vértices são convertidos para um sistema de coordenadas unifica
 mundo (cena). Essa conversão é feita multiplicando os vértices por uma matriz conhecida 
 como matriz de transformação. Essa matriz é uma combinação de transformações de 
 translação, rotação e escala, podendo ter os três tipos, nenhum deles ou qualquer 
-combinação intermediária (e g. Apenas translação e escala). 
+combinação intermediária (por exemplo apenas translação e escala). 
 
 Isso significa que, para uma determinada cena, todos os objetos que possuem uma forma 
 associada a estes também possuem uma matriz de transformação associada, essa matriz é 
@@ -1080,19 +1093,24 @@ sombreamento de Blinn-Phong~\cite{Blinn1977MLR}.
 
 \section{Shaders}
 
-Shaders são pequenos programas que são escritos em sua própria linguagem, chamada de 
-linguagem de \textit{shading}, projetada para tornar a programação dos shaders fácil. 
+Shaders são pequenos programas que são executados na GPU, escritos em uma linguagem de 
+\textit{shading}, projetada para tornar a programação dos shaders fácil. 
 
 Esses programas são utilizados para descrever como processar os dados no 
 \textit{pipeline} gráfico~\cite{hughes2014computer}. Os dados são enviados da CPU para 
 a GPU através de uma API gráfica (ver seção~\ref{lowlevelrenderer}), onde os shaders 
 são capazes de referenciá-los e manipulá-los.
 
+Essas linguagens de \textit{shading} lembram vagamente linguagens imperativas 
+clássicas, porém contém apenas o necessários para o processamento destes dados na GPU. 
+Os shaders utilizados com OpenGL por exemplo, são escritos em uma linguagem conhecida 
+como GLSL, acrônimo para \textit{OpenGL Shading Language}~\cite{shreiner2013opengl}.
+
 Há várias operações que os shaders são capazes de realizar sobre os dados na GPU, Tais 
-como: transformar os vértices dos objetos de um espaço para outro (i.e espaço do objeto 
-para espaço do mundo), sombreamento, utilizar as coordenadas de normais para 
-iluminação, \textit{mappings}, utilizar coordenadas de textura para aplicar uma certa 
-textura, entre outros.
+como: transformar os vértices dos objetos de um espaço para outro (por exemplo, 
+do espaço do objeto para espaço do mundo), sombreamento, utilizar as coordenadas de 
+normais para iluminação, \textit{mappings}, utilizar coordenadas de textura para 
+aplicar uma certa textura, entre outros.
 
 Existem vários tipos diferentes de shader, cada um é responsável por uma etapa 
 diferente do \textit{pipeline} de renderização. A seguir será listada os diferentes 
@@ -1108,33 +1126,47 @@ renderização~\cite{shreiner2013opengl}~\cite{hughes2014computer}:
     \item Geometry Shader: Podem alterar a lista de triângulos a serem processados nas 
         etapas subsequentes. Um uso popular dos \textit{geometry shaders} é para a 
         renderização por camadas~\cite{shreiner2013opengl}.
-    \item Fragment Shader: responsável pelo processamento dos fragmentos, isto são 
+    \item Fragment Shader: responsável pelo processamento dos fragmentos, que são 
         pedaços de polígonos que vão aparecer em um único pixel. Colocando de outra 
         maneira, os \textit{fragment shaders} irão determinar a cor final de um pixel 
         na tela, por isso neste shader serão computadas interpolações de cores, a 
         iluminação aplicada sobre o vértice e as texturas, se houver alguma.
-    \item Compute Shader: neste shader será feita a computação de informação arbitrária, 
+    \item Compute Shader: neste shader será feita o cálculo de informação arbitrária, 
         geralmente utilizado para tarefas que não estão diretamente relacionadas com a 
         renderização de triângulos ou pixeis.
 \end{itemize}
 
+Um conjunto contendo cada um desses tipos diferentes de shader é conhecido como 
+"programa de shader". Primeiramente um programa de shader deve ser criado, depois disso 
+todos os shaders são individualmente carregados, compilados e adicionados a um 
+programa de shader. Após essa etapa de compilação, o programa então deve ser ligado à 
+GPU e está pronto para ser usado. Uma instrução para explicitamente utilizar um 
+programa de shader é necessária antes do processo de renderização ser feito.
+
+Uma aplicação não é restrita a apenas um programa de shader, vários programas podem 
+ser criados por aplicação, permitindo o uso alternado destes durante uma execução. 
+Isso significa que os objetos presentes na cena podem utilizar um programa de shader 
+específico para sua renderização e consequentemente seu método de renderização poderá 
+ser diferente de outros objetos.
+
 \section{Renderizador Gráfico de Baixo Nível}
 \label{lowlevelrenderer}
 
-O renderizador gráfico de baixo nível é responsável pelos elementos mais crus da 
+O renderizador gráfico de baixo nível é responsável pelos elementos mais técnicos da 
 renderização. Sua preocupação é lidar com as primitivas geométricas da maneira mais 
 eficiente o possível sem comprometer suas integridades~\cite{gregory2009game}.
 
 Uma de suas funções é lidar com a comunicação entre a aplicação gráfica e a GPU, esta 
 estará constantemente recebendo dados da aplicação durante toda a sua execução. Esta 
-comunicação é feita através de uma API gráfica, como por exemplo, o 
-OpenGL~\cite{shreiner2013opengl}, que apesar de possuir uma vasta quantidade de comandos 
-diferentes para uma rica manipulação dos recursos da GPU, geralmente necessidade de uma 
-grande quantidade de código para fazer até mesmo as rotinas mais simples de uma aplicação 
-gráfica. Por isso, além de utilizar uma API gráfica, esse componente responsável pela 
-renderização de baixo nível também geralmente inclui um \textit{wrapper} para os comandos 
-da API, condensando vários funções diferentes em abstrações de maior nível, agilizando 
-o desenvolvimento e minimizando a quantidade de erros.
+comunicação é feita através de uma API gráfica, como por exemplo, a API gráfica 
+utilizada para o motor de jogos deste trabalho, o OpenGL~\cite{shreiner2013opengl}, 
+que apesar de possuir uma vasta quantidade de comandos diferentes para uma rica 
+manipulação dos recursos da GPU, geralmente necessidade de uma grande quantidade de 
+código para fazer até mesmo as rotinas mais simples de uma aplicação gráfica. Por isso, 
+além de utilizar uma API gráfica, esse componente responsável pela renderização de 
+baixo nível também geralmente inclui um \textit{wrapper} para os comandos da API, 
+condensando várias funções diferentes em abstrações de maior nível, agilizando o 
+desenvolvimento e minimizando a quantidade de erros.
 
 O renderizador de baixo nível também conta com outros componentes, como a gerência da 
 matriz de visualização e dos parâmetros da projeção 3D (campo de visão, e as posições 
@@ -1191,20 +1223,14 @@ Na etapa de geometria a maior parte das operações sobre vértices e polígonos são
 Essa etapa ainda é subdividida em outras etapas menores: transformação de modelo e de 
 visualização, \textit{vertex shading}, projeção, truncamento e mapeamento para tela. 
 
-\subsubsection{Transformação de Modelo e de Visualização}
-
 A transformação de modelo e de visualização converte o sistema de coordenadas de um 
 vértice para coordenadas do mundo e coordenadas de visualização, respectivamente conforme 
 visto na seção~\ref{viewingpipelinesec}.
-
-\subsubsection{\textit{Vertex Shading}}
 
 O \textit{vertex shading} é o processo pelo qual todos os vértices da cena passam e nessa 
 parte serão definidas suas cores, posições, texturas, quantidade de iluminação e outros 
 atributos. Todos esses atributos são então enviados para a etapa de rasterização onde 
 serão interpolados.
-
-\subsubsection{Projeção}
 
 Na etapa de projeção, ocorre uma transformação do volume de visualização, e o seu formato 
 dependerá do tipo de projeção utilizada, alterando a percepção dos objetos da cena. 
@@ -1213,14 +1239,10 @@ Conforme discutido na seção~\ref{viewingpipelinesec}, a projeção utilizada neste
 truncada, chamada de \textit{frustum}, na qual os objetos mais próximos da base da 
 pirâmide aparentam ser menores.
 
-\subsubsection{Truncamento}
-
 A etapa de truncamento serve para truncar os objetos da cena que estão sendo parcialmente 
 vistos no volume de visualização. Objetos que possuem alguns vértices dentro e outros 
 fora do volume de visualização precisam ter seus vértices que estão fora realocados para 
 os extremos do volume de visualização.
-
-\subsubsection{Mapeamento para Tela}
 
 Na última sub-etapa, a de mapeamento para tela, as coordenadas das primitivas truncadas 
 dentro do volume de visualização são transformadas para a tela. As coordenadas $x$ e 
@@ -1240,34 +1262,29 @@ Assim como a etapa de geometria, a etapa de rasterização também é dividida em su
 que são: configuração dos triângulos, \textit{triangle traversal}, \textit{pixel shading} 
 e combinação.
 
-\subsubsection{Configuração dos Triângulos}
+Na etapa de configuração dos triângulos, os dados sobre as superfícies dos triângulos 
+são computados. Esses dados são utilizados para a interpolação de várias informações 
+de \textit{shading} produzida na etapa de geometria. Etapa feita por operações fixas 
+do hardware dedicado para essa parte.
 
-Nesta etapa os dados sobre as superfícies dos triângulos são computados. Esses dados são 
-utilizados para a interpolação de várias informações de \textit{shading} produzida na 
-etapa de geometria. Etapa feita por operações fixas do hardware dedicado para essa parte.
+Na etapa de \textit{triangle traversal} são procurados os pixeis que estão dentro de 
+um triângulo, ou seja, que pertencem ao plano formado pelos três vértices de um dos 
+triângulos presentes na tela. Esse processo de procura é conhecido como 
+\textit{triangle traversal}. Para cada um dos pixeis encontrados é gerado um 
+fragmento. As propriedades dos fragmentos de cada triângulo são geradas utilizando 
+dados interpolados entre os três vértices.
 
-\subsubsection{Triangle Traversal}
+No \textit{pixel shading}, são feitas todas as computações de \textit{shading} pixel 
+por pixel, usando os dados interpolados como input, resultando em uma ou mais cores 
+para serem passadas à próxima etapa. Esta etapa, ao contrário das outras que são 
+feitas por funções fixas do hardware dedicado, é feita por núcleos programáveis da 
+GPU, nomeadamente pelo \textit{fragment shader}. Esse shader será responsável por 
+aplicar texturas, iluminação, entre outros em cada um dos fragmentos.
 
-Nessa etapa são procurados os pixeis que estão dentro de um triângulo, ou seja, que 
-pertencem ao plano formado pelos três vértices de um dos triângulos presentes na tela. 
-Esse processo de procura é conhecido como \textit{triangle traversal}. Para cada um dos 
-pixeis encontrados é gerado um fragmento. As propriedades dos fragmentos de cada 
-triângulo são geradas utilizando dados interpolados entre os três vértices.
-
-\subsubsection{Pixel Shading}
-
-Nessa etapa são feitas todas as computações de \textit{shading} pixel por pixel, usando 
-os dados interpolados como input, resultando em uma ou mais cores para serem passadas à 
-próxima etapa. Esta etapa, ao contrário das outras que são feitas por funções fixas do 
-hardware dedicado, é feita por núcleos programáveis da GPU, nomeadamente pelo 
-\textit{fragment shader}. Esse shader será responsável por aplicar texturas, iluminação, 
-entre outros em cada um dos fragmentos.
-
-\subsubsection{Combinação}
-
-Por fim, a informação de cada pixel é armazenada em um \textit{buffer} de cores, que 
-contém cada um dos componentes RGB da cor final. O a unidade da GPU responsável por essa 
-etapa não é completamente programável, porém altamente customizável.
+Por fim, na combinação a informação de cada pixel é armazenada em um \textit{buffer} 
+de cores, que contém cada um dos componentes RGB da cor final. O a unidade da GPU 
+responsável por essa etapa não é completamente programável, porém altamente 
+customizável.
 
 A cor resultante da etapa anterior (\textit{pixel shading}) é combinada com a cor 
 atualmente armazenada no \textit{buffer}.
@@ -1460,6 +1477,8 @@ interpolação, a slerp é dada por:
 Assim como na interpolação linear normal, aqui $q_i$ também deve ser normalizado ao final 
 da operação.
 
+\section{Considerações Finais do Capítulo}
+
 \chapter{Trabalhos Relacionados}
 \label{relatedworkscap}
 
@@ -1468,11 +1487,11 @@ Placeholder
 \chapter{Proposta de Trabalho}
 \label{proposalcap}
 
-Neste capítulo será explicado a proposta deste trabalho, um motor de jogos escrito em Rust 
+Neste capítulo será explicada a proposta deste trabalho, um motor de jogos escrito em Rust 
 com modelagem orientada a dados visando à otimização da comunicação entre o processador e 
 a memória.
 
-Além de utilizar os conceitos da modelagem orientada a dados, também foi necessário 
+Além de utilizar os conceitos da modelagem orientada a dados, também é necessário 
 utilizar conceitos de computação gráfica, álgebra linear e geometria analítica, teoria de 
 grafos, processamento de imagens, física, entre outros.
 
@@ -1484,23 +1503,23 @@ trabalho.
 
 Além dos componentes, também serão explicadas as estratégias empregadas para a 
 implementação de outros elementos importantes discutidos previamente no 
-capítulo~\ref{cap2} que fazem parte da estrutura de um motor de jogos, como o 
+capítulo~\ref{theorycap} que fazem parte da estrutura de um motor de jogos, como o 
 \textit{pipeline} de renderização e o loop de jogo.
 
 Como um motor de jogos por si só não é o suficiente para se gerar análises e resultados, 
-pois seu objetivo é dar suporte ao desenvolvimento de uma outra aplicação, uma aplicação 
-gráfica. Ou seja, um motor de jogos é um sistema, que não fornece serviços diretamente 
-para o usuário, mas sim serviços para se produzir outro software. Por esse motivo, além 
-do desenvolvimento do motor de jogos, será necessário o desenvolvimento de uma aplicação 
-que utilize as funcionalidades do motor para realmente verificar sua eficiência.
+pois seu objetivo é dar suporte ao desenvolvimento de uma outra aplicação nesse caso 
+um jogo, podendo ser outra aplicação gráfica mais genérica. Ou seja, um motor de jogos 
+é um sistema, que não fornece serviços diretamente para o usuário, mas sim serviços 
+para se produzir outro software. Por esse motivo, além do desenvolvimento do motor de 
+jogos, será necessário o desenvolvimento de uma aplicação que utilize as 
+funcionalidades do motor para realmente verificar sua eficiência.
 
 Para que seja possível um meio de comparação, será desenvolvida uma aplicação simples que 
 utilize os módulos do motor de jogos em duas versões diferentes, uma delas será feita 
 com programação orientada a objetos, e na outra será utilizada modelagem orientada a 
-dados. Isso permitirá duas coisas: a primeira será a comparação entre essas duas 
-aplicações e a análise de eficiência da MOD, a segunda será a demonstração de como uma 
-aplicação com orientação a objetos pode ser convertida para um equivalente com orientação 
-a dados.
+dados. Isso permitirá a comparação entre essas duas aplicações e a análise de 
+eficiência da MOD, bem como a demonstração de como uma aplicação com orientação a 
+objetos pode ser convertida para um equivalente com orientação a dados.
 
 \section{Biblioteca Matemática}
 
@@ -1510,7 +1529,7 @@ funções necessárias para se realizar os testes e obter os resultados desejados d
 trabalho. 
 
 A biblioteca é uma das partes do motor mais extensivamente utilizada pois uma 
-considerável parcela dos componentes necessitam a sua utilização. Além disso, todas as 
+considerável parcela dos componentes necessitam de sua utilização. Além disso, todas as 
 malhas e outros dados que são enviados aos shaders programáveis são armazenados em 
 estruturas dessa biblioteca, como as matrizes de transformação, visualização e projeção, 
 fontes de luz, texturas, etc.
@@ -1530,8 +1549,7 @@ dupla~\cite{Verth:2008}.
 \subsection{Vetores}
 
 Para os vetores, há uma estrutura separada para os vetores 3D e para os 4D. Os vetores 
-2D não estarão presentes na biblioteca pois não terão uso para a aplicação pretendida, 
-portanto seu desenvolvimento seria redundante.
+2D não estarão presentes na biblioteca pois não terão uso para a aplicação pretendida.
 
 Além do acesso individual a cada um dos componentes do vetor e sua manipulação direta, 
 as seguintes funções são suportadas para vetores:
@@ -1618,7 +1636,7 @@ igualdade entre dois pontos flutuantes pode ser calculada da seguinte maneira:
 \begin{equation}
     \begin{aligned}
         d = x - y \\
-        x = y \iff d < T \and -d < T
+        x = y \iff d < T \land -d < T
     \end{aligned}
 \end{equation}
 
@@ -1651,10 +1669,208 @@ partir de funções específicas:
 
 \section{Componente Gráfico}
 
+O componente gráfico de um motor de jogos é um dos maiores módulos, devido a 
+considerável quantidade de sub-tarefas que ele realiza, alguns exemplos são: definir 
+as malhas de cada objeto, gerenciamento da câmera, gerenciamento das cenas, 
+manipulação da parte configurável do \textit{pipeline} de renderização, configuração 
+das otimizações de renderização, interfaceamento com a API gráfica através da 
+utilização do renderizador gráfico de baixo-nível (seção~\ref{lowlevelrenderer}) e 
+também de outras maneiras, como por exemplo a utilização de funções que compõem uma 
+interface para a manipulação das variáveis contidas nos \textit{shaders}, definição da 
+ordem de renderização dos objetos da cena, entre outros. 
+
+A parte gráfica é a última a ser atualizada em um quadro, antes da renderização da 
+cena. As atualizações dessa parte visual consiste em alterações nas propriedades dos 
+objetos que estão na cena, como suas matrizes de transformação, cores, texturas, 
+programa de \textit{shader} que irão utilizar, suas malhas e seus efeitos de 
+pré-processamento ou pós-processamento. Além disso, há atualizações de outros 
+parâmetros não relacionados aos objetos geométricos, como a matriz de visualização e 
+projeção, parâmetros das fontes de iluminação, alteração da resolução da tela, entre 
+outros.
+
+Para o motor deste trabalho, há apenas a implementação do \textit{vertex shader} e do 
+\textit{fragment shader}, pois estes são os únicos que são indispensáveis para a 
+construção do \textit{pipeline} de renderização, o restante dos \textit{shaders} 
+possuem implementações padrões já fornecidas pelo OpenGL~\cite{shreiner2013opengl}.
+
+Da parte manipulável do \textit{pipeline} de renderização, o motor permite a 
+alteração direta das posições dos objetos na cena, a hierarquia dos objetos, suas 
+malhas e seus programas de \textit{shader}. Além disso, é também possível a alteração 
+dos parâmetros das matrizes de visualização e projeção e também os parâmetros de 
+iluminação através de variáveis uniforme.
+
+As variáveis uniformes são utilizadas para qualquer parâmetro existente nos 
+\textit{shaders} os quais se deseja modificar ao longo da execução da aplicação. Suas 
+diferenças em relação às variáveis normais é que as variáveis uniformes são 
+modificadas apenas no nível de aplicação, sendo usadas nos \textit{shaders} apenas 
+para a leitura de seus valores. Outra diferença é que a declaração de uma variável 
+uniforme se estende para todos os \textit{shaders} do programa de \textit{shader}, e 
+não somente naquele que a variável uniforme foi declarada~\cite{wolff2013opengl}.
+
 \subsection{Câmera}
 
-\subsection{Grafo de Cenas}
+A câmera dita o modo como a cena é visualizada pelo espectador. É basicamente 
+constituída de dois componentes, a matriz de visualização, que irá determinar de qual 
+posição a cena será vista e a partir dessa posição, de qual ângulo a cena será vista. 
+Há também a matriz de projeção, que irá aplicar uma das técnicas de projeção sobre a 
+cena e irá também cortar da renderização os objetos que estão fora do campo de visão 
+da câmera. 
+
+Uma câmera pode ter comportamentos diferentes, e este dependerá de como é pretendida a 
+interação do espectador com a cena. Alguns exemplos de comportamento incluem:
+\begin{itemize}
+    \item Câmera livre: possui livre movimentação ao longo dos três eixos
+    \item Câmera 2.5D: possui livre movimentação ao longo de dois eixos, e o terceiro 
+        é fixado, geralmente é o eixo que aponta para cima.
+    \item Câmera esférica: a câmera se move em torno de uma esfera que geralmente 
+        engloba a cena inteira, porém o tamanho desta esfera pode ser alterado, 
+        causando os efeitos de \textit{zoom in} e \textit{zoom out}.
+\end{itemize}
+
+Podem existir mais de uma câmera na mesma cena e suas visões podem aparecer 
+simultaneamente na tela, geralmente é feito um esquema de divisão de tela para que isso 
+seja possível.
+
+\subsection{Grafo de Cena}
+
+O grafo de cena é o esquema de divisão espacial utilizado neste trabalho. Consiste em 
+uma estrutura para definir a hierarquia dos objetos de uma cena e as propriedades de 
+cada um.
+
+Essa estrutura é um grafo acíclico direcionado cujos nós formam uma hierarquia. Cada 
+nó possui um conjunto de propriedades, tais propriedades podem ser herdadas de seu 
+nó pai e podem ser passadas para os nós filhos. Por exemplo, se um nó possui uma 
+matriz de transformação, então nas coordenadas do mundo seus filhos não terão mais o 
+centro do mundo como referência, mas sim o centro representado pela matriz de 
+transformação do seu pai, e suas posições finais serão dadas pela combinação da suas 
+matrizes de transformação com a do seu pai.
+
+O esquema de nós permite fácil reutilização de componentes, se dois objetos idênticos 
+forem necessários na cena, basta criar um nó com as propriedades e utilizar 
+instanciação, e também permite flexibilidade, cada nó pode ter sua própria malha, 
+programa de \textit{shader}, entre outros atributos~\cite{hughes2014computer}. As 
+ligações permitem uma fácil construção de hierarquia, e também torna trivial coisas 
+como uma mudança de posição de um subgrupo inteiro de objetos.
+
+\begin{figure}[h]
+    \centering
+    \captionof{figure}{Exemplo de um grafo de cena parcialmente descrevendo um objeto 
+    que representa um carro.}
+    \includegraphics[width =.6\textwidth]{../figuras/scenegraph}
+    \par\medskip
+    Disponível em: <http://www.opensg.org/htdocs/doc-1.8/PageScenegraph.html>. Acesso 
+    em: 05/06/2017.
+    \label{scenegraphexample}
+\end{figure}
+
+A figura~\ref{scenegraphexample} demonstra um exemplo de um grafo de cena que está 
+parcialmente representando um carro utilizando hierarquia, nele há um nó que 
+representa uma roda, este nó possui quatro instâncias e estas compartilham uma mesma 
+malha que descreve a geometria da roda. Os nós da roda são filhos do nó que representa 
+o carro como um todo.
 
 \subsection{Otimizações de Renderização}
 
+Como o processo de renderização é computacionalmente caro, é necessário que esse 
+processo seja o mais otimizado o possível. Até mesmo simples otimizações podem causar 
+um impacto considerável no desempenho da renderização. 
+
+Dentre outras, há duas otimizações de renderização que são utilizadas neste trabalho: 
+\textit{backface culling} e \textit{frustum culling}.
+
+O \textit{backface culling} é uma técnica que elimina um dos dois lados de uma face. 
+Como em aplicações 3D os objetos consistem em malhas que por sua vez são um conjunto 
+de faces adjacentes, apenas um dos lados dessas faces são vistos, chamado de parte de 
+fora das malhas. O interior dos objetos, chamado de parte de dentro, não é visto pelo 
+espectador, por isso não há motivo em renderizá-lo, o \textit{backface culling} é 
+encarregado de eliminar essa parte do interior~\cite{hughes2014computer}.
+
+O \textit{frustum culling} é a remoção total ou parcial dos objetos que estão fora do 
+frustum de visualização da câmera. Uma cena pode ser potencialmente extensa e conter 
+objetos com formas complexas, por isso é importante que os parâmetros que definem as 
+dimensões do frustum de visualização sejam adequadamente ajustados, para que objetos 
+muito distantes ou fora do ângulo de visualização da câmera não sejam renderizados.
+
 \section{Gerenciador de Recursos}
+
+O gerenciador de recursos consiste em uma interface unificada que serve como conexão 
+entre o conteúdo técnico da aplicação, nesse caso o motor de jogos e todos os seus 
+módulos, e o conteúdo criativo, conhecido como \textit{assets}, o qual é constituído 
+de malhas, animações, sons, música, planos de fundo, fontes, texturas, e qualquer outro 
+tipo de conteúdo que seja julgado necessário. Além dos \textit{assets}, há também 
+outros tipos de dados que são gerenciados por este componente, que são \textit{inputs} 
+do motor de jogos, como scripts, cenas e \textit{shaders}.
+
+A função dessa interface é garantir acesso a esses \textit{assets} e \textit{inputs} 
+do motor de jogos a partir da utilização do sistema de arquivos do sistema operacional 
+no qual a aplicação está sendo executada, onde esse conteúdo externo está armazenado. 
+O acesso ao sistema de arquivos já é fornecido por bibliotecas da linguagem de 
+programação. Cabe então ao gerador de recursos fornecer funções com um maior nível de 
+abstração que utiliza essas chamadas ao sistema de arquivos disponibilizadas pela 
+linguagem, esse processo é conhecido como criação de um \textit{wrapper}. 
+
+Algumas das funcionalidades presentes na API de acesso ao sistema de arquivos 
+incluem~\cite{gregory2009game}:
+\begin{itemize}
+    \item Manipulação de nomes de arquivos e caminhos de diretórios,
+    \item Abrir, fechar, ler e escrever arquivos individuais,
+    \item Listar os conteúdos de um diretório,
+    \item Gerenciamento de pedidos de I/O assíncronos
+\end{itemize}
+
+Além dessas funções, é também da responsabilidade do gerenciador de recursos garantir 
+que apenas uma cópia de cada arquivo carregado no sistema exista, economizando o uso 
+da memória, a qual é escarça. Por exemplo, vários objetos presentes em uma cena podem 
+compartilhar uma mesma malha, então mesmo que exista mais de um objeto que utilize a 
+mesma malha, somente uma cópia desta é necessária estar carregada no sistema.
+
+Para o trabalho proposto, o gerenciador de recursos possui três funcionalidades 
+principais:
+\begin{itemize}
+    \item Carregar malhas externas,
+    \item Carregar \textit{shaders},
+    \item Garantir a singularidade de cada um dos recursos carregados no sistema.
+\end{itemize}
+
+Para carregar malhas externas, o gerenciador de recursos possui um \textit{parser} 
+de arquivos no formato OBJ, um formato de arquivo para definição de geometria. Um 
+arquivo OBJ contém as posições de cada vértice, as coordenadas de textura, as normais 
+de cada vértice e a lista de faces que compõem o objeto. As faces são triangulares, e 
+cada face é constituída de três triplas de índices, o primeiro índice é de um dos 
+vértices do triângulo, o segundo índice é da coordenada de textura do vértice e o 
+terceiro índice é a normal do vértice.
+
+Para carregar os \textit{shaders}, além de especificar o caminho do diretório onde o 
+vértice se encontra, há um outro parâmetro que especifica qual é o tipo do 
+\textit{shader} que está sendo carregado, isso é necessário para que a sua compilação 
+seja adequada.
+
+\section{Considerações Finais do Capítulo}
+
+Foi apresentada a proposta deste trabalho, um motor de jogos com modelagem orientada a 
+dados, algumas das estratégias escolhidas para a sua implementação e o que foi 
+necessário para modelar alguns dos componentes presentes no motor.
+
+Como um motor de jogos é apenas um recurso utilizado para a criação de uma aplicação 
+gráfica, foi necessário propor uma estratégia para a verificação da modelagem orientada 
+a dados como uma forma de otimização de desempenho, e também para a comparação com os 
+jeitos mais tradicionais de se implementar um jogo.
+
+Todas as operações matemáticas apresentadas e explicadas na seção~\ref{secmathconcepts} 
+são utilizadas em uma biblioteca matemática, essa por sua vez é extensivamente 
+utilizada nos outros módulos do motor. As funcionalidades de cada uma das estruturas 
+utilizadas foram listadas. Além disso, algumas funcionalidades e convenções não 
+relacionadas com nenhuma das estruturas também foram listadas.
+
+O componente gráfico é uma parte extensa do motor de jogos e que precisa lidar com 
+vários fatores diferentes. Esses fatores foram apresentados e juntamente com eles 
+quais foram as decisões tomadas para a implementação ou gerenciamento de cada um.
+
+Foi apresentado o conceito de um câmera, e possíveis comportamentos diferentes que 
+esta pode ter. Também foi apresentada uma estrutura para lidar com a hierarquia de 
+objetos de uma cena e suas propriedades, o grafo de cena, e duas técnicas de otimização 
+de renderização utilizadas neste trabalho.
+
+Por fim, um outro componente foi apresentado, o gerenciador de recurso, que fornece uma 
+interface para acessar todo o conteúdo criativo, que é externo ao motor de jogos, e
+também os \textit{inputs} para o motor.
