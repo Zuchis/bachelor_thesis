@@ -86,6 +86,83 @@ do mesmo tipo são agrupados juntos na memória, independentemente do objeto de qu
 vieram. Essa organização resulta em blocos largos de dados homogêneos, permitindo o 
 uso eficiente de memória através processamento contíguo de dados. 
 
+\section{Linguagem de Programação Rust}
+
+Rust é uma linguagem de programação nova cuja primeira versão estável foi lançada em 2015.
+É desenvolvida pelo grupo de pesquisa \textit{Mozilla}~\cite{rustdocs}, foi projetada 
+para ser uma linguagem de sistemas de propósito geral e multiparadigma, tomando influências 
+tanto de linguagens imperativas quanto de linguagens funcionais. Exemplos de 
+funcionalidades de linguagens funcionais como Haskell ou ML: tipos de dados algébricos, 
+casamento de padrões e polimorfismo restringido. A diferença é que Rust é capaz de oferecer 
+essas funcionalidades com um completo controle do \textit{layout} da memória e de sua 
+alocação, assim como C e C++~\cite{holk2013}.
+
+Os objetivos nos quais a linguagem foca são: segurança, velocidade e concorrência, sem a 
+utilização de um \textit{garbage collector}, permitindo a escrita de código de baixo 
+nível eficiente com diversas verificações de segurança em tempo de compilação que não causam 
+sobrecargas e ainda elimina todas as condições de concorrência~\cite{rustdocs}. 
+
+Um dos motivos pelo qual a linguagem foi desenvolvida foi uma resposta ao fato de que C e 
+C++, mesmo sendo rápidas, não são seguras nem ergonômicas, e particularmente ineficiente para 
+concorrência. Apesar de ter sido estabilizada apenas há pouco tempo, seus objetivos são 
+ambiciosos e a linguagem tem apresentado excelente desempenho. Seu código tem segurança de 
+memória por padrão, mais rápido que C++, mais fácil de manter e excelente em 
+concorrência~\cite{Beingessner2016}.
+
+A linguagem atinge seus objetivos de velocidade e segurança de memória através de dois 
+conceitos: abstrações sem custo e \textit{posse}. Esses dois conceitos serão explicados 
+a seguir.
+
+\subsection{Abstrações Sem Custo}
+
+Rust é capaz de fazer otimizações agressivas na compilação para permitir a construção de 
+abstrações de alto nível que são transformadas em código de nível mais baixo. Além disso 
+a linguagem possui um sistema de traços, o qual possui um alto poder de expressividade 
+que permite a construção de abstrações.
+
+O sistema de traços é uma característica da linguagem. Um traço pode ter uma ou mais 
+funcionalidades, se for declarado que um certo tipo de variável possui esse traço, isso 
+diz ao compilador do Rust que aquele tipo deve fornecer as funcionalidades descritas 
+no traço~\cite{rustdocs}.
+
+\begin{figure}[h]
+    \centering
+    \captionof{figure}{Demonstração do sistema de traços do Rust.}
+    \includegraphics[width =.8\textwidth]{../figuras/rusttraitsystem}
+    \par\medskip
+    Fonte: \cite{rustdocs}.
+    \label{traitsystemdemo}
+\end{figure}
+
+A figura~\ref{traitsystemdemo} demonstra um exemplo de uso do sistema de traços. Neste 
+exemplo, há uma estrutura chamada \textit{Circle}, e um traço chamado \textit{HasArea}, 
+esse traço possui a função \textit{area}. Através da palavra-chave \textit{impl}, o 
+traço \textit{HasArea} é implementado para a estrutura do exemplo, outras estruturas 
+poderiam ser criadas e para estas esse traço também poderia ser implementado.
+
+Quando uma dessas funções de um traço é chamada para algum tipo de dado específico, o 
+compilador gera uma variante daquela função a qual terá ligação estática total, 
+permitindo a aplicação de otimizações~\cite{holk2013}.
+
+\subsection{Posse}
+
+O modelo de posse da linguagem possui dois aspectos principais: controlar onde e quando os 
+dados vivem, e controlar onde e quando uma mudança pode ocorrer. Esses aspectos são 
+garantidos por três funcionalidades principais: tipos afins, escopo e 
+privacidade~\cite{Beingessner2016}.
+
+Tipos afins representa valores que são de propriedade exclusiva. Se uma variável que possui 
+uma coleção for passado por valor a uma função, ou se sua coleção for atribuída a outra 
+variável, a variável original perde a posse da coleção e o seu acesso.
+
+Escopos e privacidade são dois conceitos mais presentes em outras linguagens. Os escopos 
+definem uma região na qual os ponteiros que estão nela são validos somente nesta região e 
+o compilador garante que os ponteiros não vão extender seu ciclo de vida para além dela. No 
+Rust essas regiões são definias por escopos léxicos. Por fim a privacidade é um conceito 
+presente em muitas outras linguagens, campos e funções podem ser marcados como sendo públicos 
+ou privados, e apenas o código que está dentro de certos limites pode ter acesso a qualquer 
+coisa que esteja marcada como privada.
+
 \section{Motor de Jogos}
 \label{secgameengine}
 
@@ -875,83 +952,6 @@ dada por:
     \end{aligned}
 \end{equation}
 
-\section{Linguagem de Programação Rust}
-
-Rust é uma linguagem de programação nova cuja primeira versão estável foi lançada em 2015.
-É desenvolvida pelo grupo de pesquisa \textit{Mozilla}~\cite{rustdocs}, foi projetada 
-para ser uma linguagem de sistemas de propósito geral e multiparadigma, tomando influências 
-tanto de linguagens imperativas quanto de linguagens funcionais. Exemplos de 
-funcionalidades de linguagens funcionais como Haskell ou ML: tipos de dados algébricos, 
-casamento de padrões e polimorfismo restringido. A diferença é que Rust é capaz de oferecer 
-essas funcionalidades com um completo controle do \textit{layout} da memória e de sua 
-alocação, assim como C e C++~\cite{holk2013}.
-
-Os objetivos nos quais a linguagem foca são: segurança, velocidade e concorrência, sem a 
-utilização de um \textit{garbage collector}, permitindo a escrita de código de baixo 
-nível eficiente com diversas verificações de segurança em tempo de compilação que não causam 
-sobrecargas e ainda elimina todas as condições de concorrência~\cite{rustdocs}. 
-
-Um dos motivos pelo qual a linguagem foi desenvolvida foi uma resposta ao fato de que C e 
-C++, mesmo sendo rápidas, não são seguras nem ergonômicas, e particularmente ineficiente para 
-concorrência. Apesar de ter sido estabilizada apenas há pouco tempo, seus objetivos são 
-ambiciosos e a linguagem tem apresentado excelente desempenho. Seu código tem segurança de 
-memória por padrão, mais rápido que C++, mais fácil de manter e excelente em 
-concorrência~\cite{Beingessner2016}.
-
-A linguagem atinge seus objetivos de velocidade e segurança de memória através de dois 
-conceitos: abstrações sem custo e \textit{posse}. Esses dois conceitos serão explicados 
-a seguir.
-
-\subsection{Abstrações Sem Custo}
-
-Rust é capaz de fazer otimizações agressivas na compilação para permitir a construção de 
-abstrações de alto nível que são transformadas em código de nível mais baixo. Além disso 
-a linguagem possui um sistema de traços, o qual possui um alto poder de expressividade 
-que permite a construção de abstrações.
-
-O sistema de traços é uma característica da linguagem. Um traço pode ter uma ou mais 
-funcionalidades, se for declarado que um certo tipo de variável possui esse traço, isso 
-diz ao compilador do Rust que aquele tipo deve fornecer as funcionalidades descritas 
-no traço~\cite{rustdocs}.
-
-\begin{figure}[h]
-    \centering
-    \captionof{figure}{Demonstração do sistema de traços do Rust.}
-    \includegraphics[width =.8\textwidth]{../figuras/rusttraitsystem}
-    \par\medskip
-    Fonte: \cite{rustdocs}.
-    \label{traitsystemdemo}
-\end{figure}
-
-A figura~\ref{traitsystemdemo} demonstra um exemplo de uso do sistema de traços. Neste 
-exemplo, há uma estrutura chamada \textit{Circle}, e um traço chamado \textit{HasArea}, 
-esse traço possui a função \textit{area}. Através da palavra-chave \textit{impl}, o 
-traço \textit{HasArea} é implementado para a estrutura do exemplo, outras estruturas 
-poderiam ser criadas e para estas esse traço também poderia ser implementado.
-
-Quando uma dessas funções de um traço é chamada para algum tipo de dado específico, o 
-compilador gera uma variante daquela função a qual terá ligação estática total, 
-permitindo a aplicação de otimizações~\cite{holk2013}.
-
-\subsection{Posse}
-
-O modelo de posse da linguagem possui dois aspectos principais: controlar onde e quando os 
-dados vivem, e controlar onde e quando uma mudança pode ocorrer. Esses aspectos são 
-garantidos por três funcionalidades principais: tipos afins, escopo e 
-privacidade~\cite{Beingessner2016}.
-
-Tipos afins representa valores que são de propriedade exclusiva. Se uma variável que possui 
-uma coleção for passado por valor a uma função, ou se sua coleção for atribuída a outra 
-variável, a variável original perde a posse da coleção e o seu acesso.
-
-Escopos e privacidade são dois conceitos mais presentes em outras linguagens. Os escopos 
-definem uma região na qual os ponteiros que estão nela são validos somente nesta região e 
-o compilador garante que os ponteiros não vão extender seu ciclo de vida para além dela. No 
-Rust essas regiões são definias por escopos léxicos. Por fim a privacidade é um conceito 
-presente em muitas outras linguagens, campos e funções podem ser marcados como sendo públicos 
-ou privados, e apenas o código que está dentro de certos limites pode ter acesso a qualquer 
-coisa que esteja marcada como privada.
-
 \section{O \textit{Pipeline} de Visualização}
 \label{viewingpipelinesec}
 
@@ -1531,11 +1531,10 @@ implementação da interpolação linear para vetores e quaternions.
 \label{relatedworkscap}
 
 Neste capítulo serão apresentados alguns trabalhos na literatura que estão relacionados 
-com a proposta deste trabalho. 
-
-A maioria dos trabalhos apresentados concentra-se em criar funcionalidades únicas para 
-um motor de jogos e também nas melhores práticas para o desenvolvimento de motores de 
-jogos, porém nenhum destes trabalhos explora o uso da modelagem orientada a dados.
+com a proposta deste trabalho. A maioria dos trabalhos apresentados concentra-se em criar 
+funcionalidades únicas para um motor de jogos e também nas melhores práticas para o 
+desenvolvimento de motores de jogos, porém nenhum destes trabalhos explora o uso da 
+modelagem orientada a dados.
 
 Apesar de nenhum deles estar diretamente relacionado com a proposta deste trabalho, os 
 autores também tinham como um dos objetivos desenvolver um motor de jogos eficiente e 
@@ -1557,10 +1556,10 @@ flexibilidade, adaptabilidade e independência, além de não apresentar os problem
 uso de herança.
 
 O trabalhos deles prossegue então, para explicar seus diferenciais, como a utilização de 
-entidades dinâmicas, que permite a reconfiguração dinâmica das entidades em diferentes 
+entidades que permitem a sua reconfiguração dinâmica em diferentes 
 momentos da aplicação. Consequentemente isso permite flexibilidade e extensibilidade 
-até mesmo em tempo de execução. As decisões de design que os permitiram atingir esses 
-objetivos são então apresentadas.
+até mesmo em tempo de execução. Por fim eles apresentam as decisões de design que os 
+permitiram atingir esses objetivos são então apresentadas.
 
 Anderson~\cite{Anderson2008} levanta em seu trabalho alguns problemas ainda pendentes 
 em se tratando de desenvolvimento de motores de jogos, e incentiva a pesquisa no campo 
@@ -1576,7 +1575,7 @@ apresente uma explicação minuciosa sobre a modelagem e estruturação da arquitetu
 um motor de jogos.
 
 Depois dessa introdução, são mencionados alguns problemas persistentes nessa área, que 
-podem ser potenciais áreas de pesquisa a respeito de motores de jogos, tais problemas 
+podem ser potenciais áreas de pesquisa a respeito de motores de jogos. Primeiramente,
 são: há uma falta de convenção sobre as terminologias utilizadas em desenvolvimento de 
 jogos, frequentemente levando a problemas de comunicação e pesquisa eficiente e confusão 
 entre os estudantes novos na área. 
@@ -1619,7 +1618,7 @@ componentes separados do motor de jogos, mas sim a utilização das melhores práti
 programação e modelagem para a construção de um motor de jogos com uma arquitetura 
 robusta.
 
-Zhu~\cite{Zhu2016ECG} propõe uma nova metodologia para o desenvolvimento de jogos, 
+Zhu~\cite{Zhu2016ECG} propõem uma nova metodologia para o desenvolvimento de jogos, 
 chamada de \textit{Engine- Cooperative Game Modeling} (ECGM), um modelo híbrido 
 que combina duas outras metodologias: \textit{Model-Driven Game Development} (MDGD) e a 
 cadeia de ferramentas do motor de jogos, com ênfase nos aspectos técnicos. A motivação 
@@ -1653,6 +1652,9 @@ sobre maneiras de melhorar a arquitetura e projeto de um motor de jogos, ou prop
 uma maior flexibilidade e extensibilidade, nenhum deles discute sobre como melhorar a 
 estrutura desses componentes, principalmente levando em consideração a evolução do 
 hardware, conforme mencionado por Anderson~\cite{Anderson2008}.
+
+Devido ao fato da modelagem orientada a dados ainda não ser um conceito muito difundido, 
+não foi possível encontrar trabalhos que tivessem ênfase especificamente neste tópico.
 
 \chapter{Proposta de Trabalho}
 \label{proposalcap}
@@ -1839,7 +1841,7 @@ partir de funções específicas:
 
 \section{Componente Gráfico}
 
-O componente gráfico de um motor de jogos é um dos maiores módulos, devido a 
+O componente gráfico de um motor de jogos é um dos principais módulos, devido a 
 considerável quantidade de sub-tarefas que ele realiza, alguns exemplos são: definir 
 as malhas de cada objeto, gerenciamento da câmera, gerenciamento das cenas, 
 manipulação da parte configurável do \textit{pipeline} de renderização, configuração 
@@ -1858,10 +1860,11 @@ parâmetros não relacionados aos objetos geométricos, como a matriz de visualizaç
 projeção, parâmetros das fontes de iluminação, alteração da resolução da tela, entre 
 outros.
 
-Para o motor deste trabalho, há apenas a implementação do \textit{vertex shader} e do 
-\textit{fragment shader}, pois estes são os únicos que são indispensáveis para a 
-construção do \textit{pipeline} de renderização, o restante dos \textit{shaders} 
-possuem implementações padrões já fornecidas pelo OpenGL~\cite{shreiner2013opengl}.
+Para o motor a ser desenvolvido deste trabalho, há apenas a implementação do 
+\textit{vertex shader} e do \textit{fragment shader}, pois estes são os únicos que são 
+indispensáveis para a construção do \textit{pipeline} de renderização, o restante dos 
+\textit{shaders} possuem implementações padrões já fornecidas pelo 
+OpenGL~\cite{shreiner2013opengl}.
 
 Da parte manipulável do \textit{pipeline} de renderização, o motor permite a 
 alteração direta das posições dos objetos na cena, a hierarquia dos objetos, suas 
@@ -1903,11 +1906,9 @@ seja possível.
 
 \subsection{Grafo de Cena}
 
-O grafo de cena é o esquema de divisão espacial utilizado neste trabalho. Consiste em 
-uma estrutura para definir a hierarquia dos objetos de uma cena e as propriedades de 
-cada um.
-
-Essa estrutura é um grafo acíclico direcionado cujos nós formam uma hierarquia. Cada 
+Consiste em uma estrutura para definir a hierarquia dos objetos de uma cena e as 
+propriedades de cada um. Essa estrutura é um grafo acíclico direcionado cujos nós 
+formam uma hierarquia. Cada 
 nó possui um conjunto de propriedades, tais propriedades podem ser herdadas de seu 
 nó pai e podem ser passadas para os nós filhos. Por exemplo, se um nó possui uma 
 matriz de transformação, então nas coordenadas do mundo seus filhos não terão mais o 
@@ -2018,7 +2019,7 @@ seja adequada.
 \section{Considerações Finais do Capítulo}
 
 Foi apresentada a proposta deste trabalho, um motor de jogos com modelagem orientada a 
-dados, algumas das estratégias escolhidas para a sua implementação e o que foi 
+dados, algumas das estratégias escolhidas para a sua implementação e o que é 
 necessário para modelar alguns dos componentes presentes no motor.
 
 Como um motor de jogos é apenas um recurso utilizado para a criação de uma aplicação 
