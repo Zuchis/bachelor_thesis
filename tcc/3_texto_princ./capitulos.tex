@@ -1530,7 +1530,129 @@ implementação da interpolação linear para vetores e quaternions.
 \chapter{Trabalhos Relacionados}
 \label{relatedworkscap}
 
-Placeholder
+Neste capítulo serão apresentados alguns trabalhos na literatura que estão relacionados 
+com a proposta deste trabalho. 
+
+A maioria dos trabalhos apresentados concentra-se em criar funcionalidades únicas para 
+um motor de jogos e também nas melhores práticas para o desenvolvimento de motores de 
+jogos, porém nenhum destes trabalhos explora o uso da modelagem orientada a dados.
+
+Apesar de nenhum deles estar diretamente relacionado com a proposta deste trabalho, os 
+autores também tinham como um dos objetivos desenvolver um motor de jogos eficiente e 
+bem estruturado.
+
+Freitas~\cite{deFreitas2012GEC} propôs um modelo de motor de jogos com uma 
+arquitetura baseada em componentes, na qual as entidades do jogo são definidas através 
+da agregação de componentes, em contraste com os modelos clássicos os quais utilizam 
+hierarquia de classes e heranças múltiplas, que leva a problemas como forte 
+interdependência das entidades, conflito de nomenclaturas e heranças repetidas.
+
+Esta arquitetura baseada em componentes atualmente é utilizada em motores de jogos 
+comerciais populares, como é o caso do motor de jogos de propósito geral Unity3D. Nesse 
+modelo, uma entidade pode ter características diferentes adicionadas a ela através da 
+adição de componentes configuráveis, como um componente renderizador de imagens, um 
+reprodutor de áudios, um corpo suscetível à aplicação de forças físicas, entre outros. 
+Este modelo de arquitetura permite então a criação de entidades com uma maior 
+flexibilidade, adaptabilidade e independência, além de não apresentar os problemas do 
+uso de herança.
+
+O trabalhos deles prossegue então, para explicar seus diferenciais, como a utilização de 
+entidades dinâmicas, que permite a reconfiguração dinâmica das entidades em diferentes 
+momentos da aplicação. Consequentemente isso permite flexibilidade e extensibilidade 
+até mesmo em tempo de execução. As decisões de design que os permitiram atingir esses 
+objetivos são então apresentadas.
+
+Anderson~\cite{Anderson2008} levanta em seu trabalho alguns problemas ainda pendentes 
+em se tratando de desenvolvimento de motores de jogos, e incentiva a pesquisa no campo 
+de arquitetura e design de motores de jogos. 
+
+Primeiramente, os autores comentam sobre o aumento significativo do uso motores de 
+jogos, pelo aumento da produtividade que estes proporcionam. Depois é mencionada a falta 
+de literatura e pesquisa a respeito de modelagem e arquitetura de motores de jogos em 
+geral, sendo que a maioria do material encontrado tem ênfase apenas na implementação dos 
+componentes individuais, enquanto que as estratégias utilizadas para a modelagem dos 
+motores como um todo não são comentadas, sendo então difícil encontrar material que 
+apresente uma explicação minuciosa sobre a modelagem e estruturação da arquitetura de 
+um motor de jogos.
+
+Depois dessa introdução, são mencionados alguns problemas persistentes nessa área, que 
+podem ser potenciais áreas de pesquisa a respeito de motores de jogos, tais problemas 
+são: há uma falta de convenção sobre as terminologias utilizadas em desenvolvimento de 
+jogos, frequentemente levando a problemas de comunicação e pesquisa eficiente e confusão 
+entre os estudantes novos na área. 
+
+O segundo problema mencionado é a dificuldade na determinação do limite entre o que faz 
+parte do jogo propriamente dito e o que faz parte do motor de jogos. Não há uma 
+definição concreta sobre o que é um motor de jogos e existem várias versões diferentes, 
+frequentemente levando ao equívoco no entendimento sobre o conceito de um motor de 
+jogos. 
+
+O terceiro problema mencionado é sobre as decisões de modelagem do motor de jogos, e 
+como diferentes gêneros de jogos afetam essas decisões, pois algumas estratégias em 
+específico beneficiam somente uma classe específica de jogos. É levantada então a 
+questão da possibilidade de definição de um motor de jogos que é eficiente para qualquer 
+jogo independente do seu tipo.
+
+O quarto problema mencionado é sobre o impacto que as rotinas de baixo-nível dos motores 
+de jogos causam na modelagem de alto-nível do mesmo, comentando sobre a constante 
+evolução da tecnologia utilizada em hardwares ou nas interfaces do software e suas 
+capacidades, e como essas mudanças podem afetar a evolução de um ou múltiplos 
+componentes do motor de jogos.
+
+O último problema mencionado é sobre as melhores convenções e práticas de programação 
+que devem ser utilizadas na modelagem de um motor de jogos. Como os motores de jogos 
+estão em constante crescimento e evolução desde seus desenvolvimentos iniciais, a 
+adição de novas funcionalidades pode ser problemática ou até mesmo impossível, se os 
+objetivos no motor de jogos não foram bem definidos no início do projeto, ou se sua 
+arquitetura não foi bem estruturada. Os autores ponderam então se existe um conjunto de 
+melhores práticas para evitar ou reduzir estes problemas.
+
+Keenan~\cite{Keenan2011} salienta a importância da definição de uma boa arquitetura para 
+o desenvolvimento de um motor de jogos. Em seu trabalho, ele menciona os problemas 
+relacionados com a má estruturação do motor de jogos, e como a criação de um sistema 
+flexível e modularizado pode evitar esses problemas, além de proporcionar outras 
+vantagens.
+
+Como o seu trabalho é para fins educativos, o restante de seu trabalho trata sobre a 
+criação de um curso sobre arquitetura de jogos, no qual o foco não é a implementação dos 
+componentes separados do motor de jogos, mas sim a utilização das melhores práticas de 
+programação e modelagem para a construção de um motor de jogos com uma arquitetura 
+robusta.
+
+Zhu~\cite{Zhu2016ECG} propõe uma nova metodologia para o desenvolvimento de jogos, 
+chamada de \textit{Engine- Cooperative Game Modeling} (ECGM), um modelo híbrido 
+que combina duas outras metodologias: \textit{Model-Driven Game Development} (MDGD) e a 
+cadeia de ferramentas do motor de jogos, com ênfase nos aspectos técnicos. A motivação 
+de seu trabalho é que nenhuma das abordagens para o MDGD na literatura demonstrou 
+convincentemente uma boa integração do MDGD com a cadeia de ferramentas do motor de 
+jogos.
+
+No restante do trabalho, é descrito o funcionamento desta metodologia proposta, e como 
+ela pode fornecer uma melhoria na modelagem dos projetos ao utilizar o MDGD levando em 
+consideração a cadeia de ferramentas tipicamente utilizadas em motores de jogos.
+
+\section{Considerações Finais do Capítulo}
+
+Dados os problemas mencionados nos trabalhos relacionados, percebe-se que a maior 
+dificuldade no desenvolvimento de um motor de jogos não consiste na implementação dos 
+componentes individuais que compõem o motor, mas sim na integração adequada destes 
+componentes e no projeto e modelagem eficientes do motor. 
+
+Como foi mencionado, a maior parte do material encontrado concentra-se na implementação 
+dos componentes individuais e nas otimizações feitas sobre estes, como por exemplo as 
+otimizações que podem ser feitas em algoritmos de inteligência artificial comumente 
+utilizados em jogos. Como a proposta deste trabalho se concentra exatamente em uma 
+abordagem diferente para a modelagem e estruturação dos componentes do motor de jogos 
+e consequentemente na integração destes, foi possível encontrar trabalhos apenas 
+parcialmente relacionados.
+
+Além disso nenhum dos trabalhos encontrados deu ênfase nos problemas que podem surgir 
+do uso da programação orientada a objetos em jogos, e quais são as alternativas ou 
+práticas que podem contornar esses problemas. Apesar de alguns trabalhos mencionarem 
+sobre maneiras de melhorar a arquitetura e projeto de um motor de jogos, ou proporcionar 
+uma maior flexibilidade e extensibilidade, nenhum deles discute sobre como melhorar a 
+estrutura desses componentes, principalmente levando em consideração a evolução do 
+hardware, conforme mencionado por Anderson~\cite{Anderson2008}.
 
 \chapter{Proposta de Trabalho}
 \label{proposalcap}
