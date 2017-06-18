@@ -1,0 +1,121 @@
+\documentclass{beamer}
+
+\usepackage{graphicx,hyperref,udesc,url}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{booktabs}
+%\usepackage[portugues]{babel}
+\usepackage{amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage[brazil]{babel}
+\usepackage{csquotes}
+\usepackage{listings}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage{verbatim}
+
+\title[]{Otimizações para Motores de Jogos Através de Modelagem Orientada a Dados}
+
+\author[Vinicius Bruch Zuchi]{
+    Vinicius Bruch Zuchi\\\medskip
+    {\small \url{vinicius.b.zuchi@gmail.com}\\}}
+
+\institute[UDESC]{
+    Departamento de Ci\^encia da Computa\c{c}\~ao \\
+    Centro de Ci\^encias e Tecnol\'ogicas\\
+Universidade do Estado de Santa Catarina}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}
+    \frametitle{Sum\'ario}
+    \tableofcontents
+\end{frame}
+
+\section{Motivação}
+
+\frame{\tableofcontents[currentsection]}
+
+\begin{frame}[t]{Hierarquia de Memória}
+
+    *Imagem da hierarquia de memória, explicar a diferença de cada nível*
+
+\end{frame}
+
+\begin{frame}[t]{O Gargalo de Desempenho}
+
+    *Processor-memory bottleneck*
+    
+\end{frame}
+
+\section{Por Que Modelagem Orientada a Dados?}
+
+\frame{\tableofcontents
+    [
+        currentsection,
+        currentsubsection,
+        subsectionstyle=show/shaded/hide
+    ] }
+
+\begin{frame}[t]{Modelagem Orientada a Dados}
+
+    *Explicar o conceito de MOD e quais são os problemas da POO*
+    
+\end{frame}
+
+\begin{frame}[t]{Diferença de OOD e DOD}
+
+    *Imagem do TCC de ood vs.\ dod*
+    
+\end{frame}
+
+\section{Por Que Rust?}
+
+\begin{frame}[t]{Linguagem de Programação Rust}
+
+    *Falar o básico sobre o Rust*
+    
+\end{frame}
+
+\begin{frame}[t]{Características da Linguagem}
+
+    *Falar sobre velocidade, segurança de memória, abstrações sem custo, e comparável 
+    ao C e C++*
+    
+\end{frame}
+
+\section{Motor de Jogos}
+
+\begin{frame}[t]{Conceito}
+
+    *Breve descrição sobre motor de jogos*
+    
+\end{frame}
+
+\begin{frame}[t]{MOD e Jogos}
+
+    *Explicar que tem muitas variáveis e entidades, precisam ser constantemente 
+    atualizadas, muitos objetos com muitos dados fracamente relacionados, 
+    poluição do cache*
+    
+\end{frame}
+
+\section{Proposta de Trabalho}
+
+\begin{frame}[t]{Motor de Jogos com MOD}
+
+    *Explicar que vou usar uma engine como caso de estudo, vou explorar o potencial da 
+    MOD e do Rust, depois vou fazer análise e comparar com POO*
+    
+\end{frame}
+
+\begin{frame}{Fim}
+    \centering
+    \LARGE{Dúvidas?}
+\end{frame}
+\end{document}

@@ -1,0 +1,136 @@
+Etapas do algoritmo genético:
+    Inicialização da População: Inicialmente muitas possíveis soluções são geradas ale-
+        atoriamente para formar a população inicial. O tamanho da população depende
+        da natureza do problema. Tradicionalmente a população é gerada randomicamente,
+        permitindo toda a gama de possíveis soluções. Ocasionalmente, por exemplo, em, as
+        soluções podem ser estrategicamente colocadas em áreas onde as melhores soluções
+        possam ser encontradas (WHITLEY, 1994).
+    • Avaliação do Fitness: A função tness é denida sobre a representação genética e
+        mede a qualidade da solução representada. A função de
+        tness varia conforme o2.2 Evolução Diferencial
+        19
+        problema. A adaptação de cada solução na população é avaliada por meio da função
+        de tness a cada geração do algoritmo, os melhores indivíduos são selecionados para
+        a próxima geração (WHITLEY, 1994). A avaliação é o cálculo da função de
+        tness ,
+        que por sua vez é a minimização ou maximização da chamada função objetivo.
+    • Seleção: A partir da medição da função de tness , nessa etapa são selecionados cro-
+        mossomos na população para a reprodução. Quanto melhor o cromossomo, melhor
+        são as chances dele ser selecionado para se reproduzir (WHITLEY, 1994).
+    • Crossover: Este operador escolhe aleatoriamente um locus entre dois cromossomos e
+        troca os subsequentes antes e depois daquele locus, entre dois cromossomos para criar
+        dois lhos (WHITLEY, 1994). Por exemplo, nas cadeias de 10000100 e 11111111
+        se for escolhido o terceiro locus irá gerara após o
+        10011111 e 11100100. O operador de
+        crossover os seguintes lhos:
+        crossover imita a recombinação biológica
+        entre dois organismos haploides (cromossomo único).
+    • Mutação: Este operador vira aleatoriamente alguns dos bits em um cromossomo
+        (WHITLEY, 1994). Por exemplo, a cadeia 00000100 pode sofrer mutação na sua
+        segunda posição, para se obter 01000100. A mutação pode ocorrer em cada posição
+        de bit de uma cadeia com alguma probabilidade, geralmente muito pequeno (por
+        exemplo, 0.001).
+
+Cultura:
+    Um sistema que carrega conceitos que são transmitidos historica e socialmente dentro e entre populações.
+
+Algoritmos Culturais são Considerados um incremento do algoritmo genético:
+    Utiliza-se um campo de conhecimento que é conhecido como "espaço de crença" em adição ao componente populacional do algoritmo genético clássico.
+
+História:    
+    The  multi-agent  Village  simulation  was  initially  
+    developed to examine the settlement and farming practices of 
+    prehispanic Pueblo Indians of 
+    the Central Mesa Verde region 
+    of  Southwest  Colorado
+      [1,2].  The  original  model  of  Kohler  
+    was  used  to  examine  whether  drought  alone  was  responsible  
+    for the departure of the prehispanic Puebloan people from the 
+    Four  Corners  region  after  700  years  of  occupation. 
+    Os AC's foram introduzidos por Robert G. Reynolds, que possui os principais trabalhos na área.
+    Ele utilizou o conceito de cultura para criar um novo espaço de conhecimento que pudesse ser compartilhado entre os agentes em um sistema multiagente. No seu trabalho cada agente era uma casa, e o conjunto de casas formava o vilarejo. Em cada casa havia uma família, e a sobrevivência dos membros de cada família dependia da quantidade de alimento que a casa (agente) possuía. Os filhos podiam crescer e formar novas famílias, e se alguém perdesse seu cônjuge, este poderia se casar novamente com alguém que estivesse solteiro e também formar uma nova família.
+    Cada agente mantinha links para os agentes que pertenciam à família, em até no máximo duas gerações (pais, avós, filhos e netos), e com isso cada agente criava uma "rede de parentesco".
+    Para a sobrevivência de cada agente, eles dependiam basicamente das práticas de agricultura de cada membro da casa, que por sua vez dependia da distribuição das terras agrícolas (conhecimento topográfico) e da distribuição pluviométrica (conhecimento temporal), além das práticas de plantação e colheita (conhecimento de domínio); e também das trocas realizadas entre os agentes pertencentes a uma rede de parentesco, essas trocas são humanitárias, ou seja, não se mantém um registro de dívida, um agente pode pedir alimento em tempos de necessidade e também pode doar alimento em tempos de prosperidade.
+    Nos primeiros modelos, essas trocas eram feitas aleatoriamente e isso não obteve resultados esperados/desejáveis. Com isso, os agentes passaram a manter um histórico de trocas bem sucedidas e um componente cultural foi adicionados, que é compartilhado entre os agentes e possui os conhecimentos citados anteriormente, além disso, os agentes também compartilham suas melhores experiências. Com isso quando um agente precisar pedir alimento novamente, ele irá preferir os agentes de sua rede de parentesco com os quais este teve sucesso nas trocas, ao gerar suas probabilidades, os resultados são comparados com os que estão no conhecimento cultural. 
+    
+Modo de Funcionamento:
+    O espaço populacional contém as características e comportamentos dos indivíduos
+    O componente cultural utiliza as experiências passadas dos indivíduos combinadas com as previsões de futuras experiências destes para formar um mapeamento do indivíduo (símbolos). Este mapeamento é combinado com os mapeamentos de todos os outros indivíduos para gerar um mapeamento do grupo. Este mapeamento do grupo serve para influenciar as próximas ações dos indivíduos e do grupo.
+    
+Função de Aceitação e de Influência:
+    Indivíduos selecionados contribuem para o conhecimento cultural por meio da função de aceitação.
+    Na função de aceitação são selecionados indivíduos que irão influenciar o espaço de crenças atual.
+    
+    Por sua vez, o conhecimento cultural controla a evolução da população através da função de influência.
+    A função de influência estabelece como o conhecimento armazenado no espaço de crenças vai interferir nos operadores do espaço populacional. Geralmente é utilizada uma função de influência para cada tipo de conhecimento armazenado.
+    A função de influência decide quais fontes de conhecimento vão influenciar os indivíduos. A seleção é feita, por exemplo, pela roleta com base no desempenho das fontes de conhecimento nas gerações anteriormente usadas.
+    
+Representação de um indivíduo:
+    Um indivíduo pode ser representado de duas maneiras: 
+    1) como um conjunto de traços ou comportamentos. 
+    2) Um mapeamento ou uma descrição generalizada de suas experiências
+    Essas representações podem ser feitas por meio de qualquer técnica que faça uso de uma população de indivíduos, como é o caso dos algoritmos genéticos.
+    O espaço de crenças foi criado para guiar os indivíduos na direção das melhores regiões do espaço de busca
+    
+    
+Operadores:
+    Podem modificar os traços ou comportamentos dos indivíduos.
+    Podem fundir mapeamentos e modificá-los para formar o mapeamento de grupo.
+    Operadores podem ser genéricas ou específicos a um certo problema.
+    
+Evolução dos Indivíduos:
+    Ao longo das gerações, traços podem ser perdidos ou adicionados.
+    Símbolos utilizados para representar mapeamentos podem ser esquecidos e novos símbolos podem ser adicionados.
+    Por esses motivos, a representação dos traços e dos mapeamentos podem evoluir como um resultado das experiências de grupo.
+    
+Espaço de Crença:
+    Permite a persistência do conhecimento, pois, como um indivíduo compartilha suas experiências no espaço de crença, este pode ser removido do sistema sem que o conhecimento adquirido por ele seja perdido
+    
+
+Categorias de conhecimento:
+
+Conhecimento Normativo: 
+    O Conhecimento Normativo (CN) contém os atributos (variáveis do problema) e os
+    possíveis valores que esses atributos podem tomar. Estas informações são recolhidas a
+    partir da função de aceitação ou conhecimentos pré-denidos. A fonte do conhecimento
+    normativo é usada para armazenar valores máximos e mínimos para os atributos numé-
+    ricos. Para cada atributo nominal ou discreto, uma lista separada armazena possíveis
+    valores que os atributos podem tomar. O conhecimento normativo é atualizado a par-
+    tir da função de aceitação e utilizado pelos agentes durante a mutação
+
+Conhecimento Situacional:
+    O Conhecimento Situacional (CS) consiste no melhor exemplar encontrado ao longo
+    do processo evolutivo. Ele representa um líder para os outros indivíduos a seguir. Desta
+    forma, os agentes usam o exemplo, em vez de um indivíduo escolhido aleatoriamente para
+    a recombinação. Este conhecimento pode ser atualizado por meio do armazenamento dos
+    melhores exemplos no m de cada geração. Então são usados estes exemplos para a esco-
+    lha de indivíduos para a reprodução. Além disso, o usuário pode especicar esquemas de
+    condições para certos atributos que podem ser utilizados para a busca de indivíduos seme-
+    lhantes ou diferentes que seja de interesse do usuário
+    
+Conhecimento Topográfico:
+    O Conhecimento Topográco (CT) é uma estratégia para manter a diversidade, princi-
+    palmente em sistemas evolutivos multiobjetivos. O CT é utilizado para manter as soluções
+    distribuídas uniformemente no conjunto ótimo de Pareto (quando não é possível de melho-
+    rar a situação), em vez de reunir soluções em apenas uma pequena região. Acasalamento
+    restrito, em que o acasalamento é permitido somente quando a distância entre os dois pais
+    é grande o suciente
+    
+Conhecimento de Domínio:
+    O domínio do conhecimento (DC) contém o vetor de valores de métricas para cada
+    conhecimento. Indivíduos produzidos são avaliados no nal de cada geração e o vetor de
+    tness calculado. O DC é atualizado com estes vetores de tness . Os vetores de tness
+    em DC são comparados uns com os outros usando estratégia de otimização de Pareto para
+    escolher os indivíduos de elite no m de cada geração. Os indivíduos de elite, assim esco-
+    lhidos são armazenados no conhecimento histórico
+    
+Conhecimento Histórico:
+    O Conhecimento Histórico (CH) registra em uma lista os melhores indivíduos, e são
+    atualizados no nal de cada geração. Algoritmos evolutivos são conhecidos por utilizar
+    menos memória, uma vez que não retém memória das gerações anteriores. No entanto
+    tentativas foram feitas para manter os indivíduos de elite em cada geração como uma
+    população elite separada, tendo-se o máximo de memória possível para os algoritmos
+    evolucionários. O algoritmo cultural utiliza a memória para a estratégia evolutiva de uma
+    forma sistemática, utilizando as diferentes fontes de conhecimento. CH pode ser usado
+    para armazenar os indivíduos de elite de cada geração, mantendo assim a memória por
+    meio das gerações
