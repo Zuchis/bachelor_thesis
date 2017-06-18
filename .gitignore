@@ -6,3 +6,5 @@ target
 *.bbl
 *.aux
 *.blg
+*.nav
+*.toc
