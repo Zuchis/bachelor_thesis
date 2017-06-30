@@ -21,7 +21,7 @@ figura~\ref{memhier} demonstra essa hierarquia em ordem decrescente de velocidad
     \captionof{figure}{A hierarquia do sistema de memória.}
     \includegraphics[width =.6\textwidth]{../figuras/memoryhierarchy}
     \par\medskip
-    Fonte: Autoria própria.
+    Fonte: Adaptado de~\cite{Toy1986}.
     \label{memhier}
 \end{figure}
 
@@ -61,7 +61,7 @@ necessidade de boas práticas de programação para que ocorra a menor quantidade p
 
 Com esse problema em mente, ao analisar o design de programação orientado objetos, percebe-se que essa abordagem, enquanto que 
 mais legível e com código mais reutilizável, sofre muitas vezes em termos de eficiência de memória, pois seu design é centrado 
-em torno do problema e suas possíveis soluções, e não em torno dos dados. Ou seja, forne abstração dos dados porém a 
+em torno do problema e suas possíveis soluções, e não em torno dos dados. Ou seja, fornece abstração dos dados porém a 
 custo do desempenho.
 
 Quando uma classe de objetos possui dados, chamados de atributos, isto significa que essa classe está fornecendo um contexto 
@@ -75,8 +75,8 @@ atributos específicos destes, todos os outros dados pertencentes à classe também
 poluídos com dados desnecessários e aumentando a incoerência de cache.
 
 Com a premissa de amenizar o máximo possível estes problemas, a modelagem orientada a dados, como o nome sugere, encoraja a 
-mudança da perspectiva da programação dos objetos para os dados, seus tipos, como está armazenado na memória e como será lido 
-e processado~\cite{fabiandod}. Para alcançar esses objetivos, essa técnica sugere dividir cada objeto em diferentes 
+mudança da perspectiva da programação dos objetos para os dados, seus tipos, como estão armazenados na memória e como serão 
+lidos e processados~\cite{fabiandod}. Para alcançar esses objetivos, essa técnica sugere dividir cada objeto em diferentes 
 componentes, e agrupar componentes do mesmo tipo na memória, sem se importar de qual objeto vieram. Isso resulta em largos 
 blocos de dados homogêneos, permitindo o processamento sequencial dos dados, e garantindo um aprimoramento significativo 
 no desempenho~\cite{fabiandod}.
@@ -85,28 +85,28 @@ Esta abordagem de modelagem é mais condizente com a realidade de muitos programa
 quantidade de objetos de um determinado tipo, sendo necessário o processamento de todos eles. Mas esta abordagem não traz a 
 solução para todos os problemas, e também possui suas desvantagens, uma delas é a falta de intuitividade para codificação 
 orientada a dados. Uma das vantagens da orientação a objetos é a similaridade do pensamento com o mundo real e os seus 
-problemas, deixando o código mais legível para os humanos. A modelagem orientada a dados requer que o programador raciocine com 
-uma mentalidade muito diferente da qual a maioria está acostumada, e conceber código não intuitivo pode trazer complicações 
-futuras para a adição de novas funcionalidades ou correções.
+problemas, deixando o código mais legível para os humanos. A modelagem orientada a dados 
+requer um raciocício menos natural comparado à modelagem orientada a objetos, tornando 
+por vezes o código menos intuitivo.
 
 Para as aplicações na área de computação gráfica, esses problemas não seriam diferentes, principalmente levando em 
 consideração que uma grande parte dos trabalhos nessa área utilizam a programação orientada a objetos. Essas aplicações, 
 principalmente jogos eletrônicos modernos, utilizam um complexo sistema o qual possui muitos componentes diferentes que 
 contém dados que constantemente transitam entre a memória, o processador e a GPU. Esse sistema é comumente conhecido 
-como motor de jogo (do inglês \textit{Game Engine}), ou simplesmente como \textit{engine}.
+como motor de jogos (do inglês \textit{Game Engine}), ou simplesmente como \textit{engine}.
 
-Uma \textit{engine}, apesar de não possuir uma definição absoluta, é geralmente entendida como o software responsável por lidar com 
+Um motor de jogos, apesar de não possuir uma definição absoluta, é geralmente entendida como o software responsável por lidar com 
 todos os módulos que juntos compõem um jogo eletrônico, como por exemplo, bibliotecas matemáticas (contendo operações de vetores, 
 matrizes, quaternions, métodos trigonométricos, etc.), gerência de memória, 
 estruturas de dados personalizadas, o motor de renderização, gerenciador de recursos, ferramentas para depuração e análise de performance, sistemas 
 de colisão e física, sistema de animações e partículas, sistema de detecção de inputs (mouse, teclado e outros controladores),
 sistema de áudio, sistema de rede para jogos online, entre outros~\cite{gregory2009game}.
 
-Para complementar, uma \textit{engine}, ou motor de jogos, pode ser entendido como um conjunto de bibliotecas e ferramentas, os quais combinados 
-são responsáveis por administrar toda a parte lógica de uma aplicação gráfica, separando-a em diferentes componentes utilizando bibliotecas, 
-que por vezes também são conhecidos como componentes núcleo, e fornecem utilidades que aceleram o processo de desenvolvimento 
-das aplicações através das ferramentas. A introdução das \textit{engines} na indústria de jogos digitais também introduziu um novo paradigma, 
-uma nova maneira de desenvolver os jogos, na qual é feita uma completa e clara separação do conteúdo lógico e do conteúdo criativo (arte, 
+Para complementar, um motor de jogos pode ser entendido como um conjunto de bibliotecas e ferramentas, os quais combinados 
+são responsáveis por administrar toda a parte lógica de uma aplicação gráfica. O motor é separado em diferentes componentes, 
+que são conhecidos como componentes núcleo, estes fornecem utilidades que aceleram o processo de desenvolvimento 
+das aplicações. A introdução dos motores de jogos na indústria de jogos digitais também introduziu um novo paradigma, 
+uma nova maneira de desenvolver jogos, na qual é feita uma completa e clara separação do conteúdo lógico e do conteúdo criativo (arte, 
 animações, música, sons, texturas, etc.).
 
 O motor de renderização, também conhecido como motor gráfico, é um dos maiores e mais complexos componentes de um motor de 
@@ -131,17 +131,17 @@ a hierarquia entre elas e define subdivisões espaciais~\cite{gregory2009game}. T
 como por exemplo a remoção parcial de objetos que não são considerados para contribuir à imagem final, essa técnica é 
 conhecida como \textit{culling}~\cite{akenine2008real}.
 
-Todos esses elementos, técnicas e otimizações do motor gráfico no fim constroem o que é conhecido como pipeline de 
-renderização. A principal função desse pipeline é renderizar uma imagem bidimensional, 
+Todos esses elementos, técnicas e otimizações do motor gráfico no fim constroem o que é conhecido como \textit{pipeline} de 
+renderização. A principal função desse \textit{pipeline} é renderizar uma imagem bidimensional, 
 dada uma câmera virtual, objetos tridimensionais, fontes de luz, equações de sombreamento, texturas, entre 
 outros~\cite{akenine2008real}.
 
 Considerando os problemas supracitados a respeito do gargalo de performance do processador-memória, e das desvantagens da 
-programação orientada a objetos, este trabalho propõe a implementação de uma \textit{engine} desde o princípio com o objetivo de 
+programação orientada a objetos, este trabalho propõe a implementação de um motor de jogos desde o princípio com o objetivo de 
 explorar o potencial da modelagem orientada a dados, um conceito pouco difundido entre a comunidade de programadores, 
 e seus benefícios para aplicações gráficas, uma área na qual a orientação a objetos está fortemente impregnada. Uma vez
-que uma \textit{engine} completa é uma aplicação consideravelmente grande e complexa, este trabalho irá se concentrar na implementação
-do motor gráfico e suas otimizações. Para a implementação da \textit{engine}, foi escolhida a linguagem de programação Rust.
+que um motor de jogos completo é uma aplicação consideravelmente grande e complexa, este trabalho irá se concentrar na implementação
+do motor gráfico e suas otimizações. Para a implementação do motor de jogos, foi escolhida a linguagem de programação Rust.
 
 Rust é uma linguagem de programação de baixo nível, com tipagem estática e forte. A linguagem foi projetada com os objetivos 
 de ser rápida, fácil de ser paralelizada e ter segurança de memória, prevenindo a ocorrência de condições de corrida, estouros 
@@ -153,17 +153,17 @@ considerado um bom meio para testar o desempenho da linguagem.
 \label{obj}
 
 \textbf{Objetivo geral}: Investigar o potencial da modelagem orientada a dados para o 
-desenvolvimento de uma engine na linguagem de programação Rust e analisar sua 
+desenvolvimento de um motor de jogos na linguagem de programação Rust e analisar sua 
 eficiência e desempenho.\\
 
 \noindent\textbf{Objetivos específicos}: 
 Abaixo encontra-se uma lista dos principais objetivos a serem alcançados com este trabalho.
 \begin{itemize}
-    \item Verificar o estado atual no que diz respeito às implementações das \textit{engine}s modernas;
+    \item Verificar o estado atual no que diz respeito às implementações de motores de jogos modernos;
     \item Explorar o potencial e limitações da linguagem de programação Rust para aplicações gráficas;
     \item Utilizar o conceito de design orientado a dados para proporcionar uma melhora
         na performance dos motores gráficos através da coerência de cache.
-    \item Analisar o desempenho da \textit{engine}, através do desenvolvimento de uma 
+    \item Analisar o desempenho do motor de jogos, através do desenvolvimento de uma 
         aplicação que utilize suas funcionalidades em duas versões, uma orientada a 
         objetos e outra orientada a dados, comparando essas duas versões.
     \item Demonstrar as mudanças necessárias para converter uma aplicação orientada a 
@@ -175,14 +175,14 @@ Abaixo encontra-se uma lista dos principais objetivos a serem alcançados com est
 \label{met}
 
 Após a etapa de revisão bibliográfica sobre 
-os conceitos necessários para a implementação da \textit{engine} e o estudo aprofundado da linguagem Rust e suas 
+os conceitos necessários para a implementação do motor de jogos e o estudo aprofundado da linguagem Rust e suas 
 características avançadas, a aplicação será desenvolvida em etapas e o método utilizado será a implementação
-dos componentes da \textit{engine} sequencialmente, no qual estes serão testados individualmente.
+dos componentes do motor sequencialmente, no qual estes serão testados individualmente.
 
-A etapa seguinte será a integração dos componentes para a construção do pipeline gráfico e implementação 
-das outras funcionalidades. Com a \textit{engine} tendo todos os seus componentes e características funcionando devidamente,
-serão feitas análises e comparações de seu desempenho e eficiência, não somente da \textit{engine} implementada, mas será 
-também pesquisado na literatura outras \textit{engines} já implementadas e quais foram as medidas utilizadas para medir seus 
+A etapa seguinte será a integração dos componentes para a construção do \textit{pipeline} gráfico e implementação 
+das outras funcionalidades. Com o motor de jogos tendo todos os seus componentes e características funcionando devidamente,
+serão feitas análises e comparações de seu desempenho e eficiência, não somente do motor implementado, mas será 
+também pesquisado na literatura outros motores de jogos já implementados e quais foram as medidas utilizadas para medir seus 
 desempenhos. Por fim um \textit{postmortem} será escrito no TCC, explicando o que foi e o que não foi bem sucedido.
 
 \section{Organização do Trabalho}

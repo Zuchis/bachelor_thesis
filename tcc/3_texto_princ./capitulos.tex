@@ -16,11 +16,25 @@ o motor de jogos que será o objeto de estudo deste trabalho.
 A modelagem orientada a dados (do inglês: \textit{Data Oriented Design}) é 
 uma forma de codificar os programas que propõe uma mudança no foco da 
 implementação: ao invés de se focar no código, o foco deve estar nos 
-dados.
+dados. Apesar do termo "orientação a dados"\ ter sido usado apenas recentemente, 
+a utilização dos conceitos dessa técnica já têm sido usados há muito mais tempo 
+do que a introdução do termo.
 
-Apesar do termo "orientação a dados"\ ter sido usado apenas recentemente, a utilização 
-dos conceitos dessa técnica já têm sido usados há muito mais tempo do que a introdução 
-do termo.
+Orientação a dados foi introduzido por John A. Sharp~\cite{Sharp1980}, cujo objetivo 
+era aumentar a eficiência do processador e da utilização da memória. Além disso, o autor 
+cita que um dos objetivos dessa técnica de programação é facilitar a concorrência na 
+execução dos programas. No seu trabalho é proposta uma metodologia de projeto que 
+menciona outro conceito importante, o do fluxo de dados.
+
+Ao se projetar um programa ou sistema, a primeira tarefa a ser feita é determinar o 
+fluxo de dados necessários. Essa etapa consiste em determinar quais componentes do 
+sistema requerem cada um dos diferentes tipos de dados presente neste, e também 
+especificar quais são os componentes que geram novos dados. Depois que o fluxo de dados 
+no sistema está completamente especificado, o próximo passo é descrever como os dados 
+recebidos por cada componente são transformados nos dados que este componente precisa 
+gerar. Sharp defende que qualquer programa pode ser descrito dessa maneira, a 
+transformação de um dado conjunto de \textit{inputs} para um certo conjunto de 
+\textit{outputs} requeridos.
 
 Um exemplo é o trabalho de Chellappa et al.~\cite{chellappa2008write}, no 
 qual é reconhecido o problema da velocidade de acesso à memória principal pelo 
@@ -38,8 +52,15 @@ dois algoritmos diferentes. Um deles é de particular interesse para esse trabalh
 operações de álgebra linear são extensivamente utilizadas em aplicações gráficas.
 
 Como as otimizações feitas pelo compilador são limitadas, é necessário estruturar o 
-código de maneira inteligente para que o acesso à memória seja o menos frequente o 
+código de maneira inteligente para que o acesso à memória seja o menos frequente  
 possível e para aprimorar a coerência de cache, e é para esse aspecto que a MOD serve.
+Um dos objetivos dessa técnica é permitir a leitura sequencial dos dados. Para atingir 
+isso, os objetos pertencentes ao domínio do problema são representados por 
+identificadores únicos que são utilizados para acessar suas propriedades. Essas 
+propriedades são \textit{arrays} de dados que são armazenados na memória de maneira 
+contígua, e para utilizar essa técnica de maneira eficiente, é essencial administrar 
+esses \textit{arrays} das propriedades para garantir que permancem contíguos conforme 
+novos dados são adicionados e removidos~\cite{Fontana2017}.
 
 Ao se modelar o código através de uma abordagem orientada a objetos, esta modelagem 
 é centrada em volta do problema e da sua solução. Os objetos, que não são coisas reais, 
@@ -49,23 +70,26 @@ padrões de dados reais ou de quantidades, por isso essa abordagem permite uma rá
 prototipagem dos programas pois essas soluções podem ser escritas diretamente da 
 modelagem para o código~\cite{fabiandod}.
 
-A MOD utiliza uma abordagem diferente, ao invés de assumir conhecimento nenhum sobre 
-o hardware, assume conhecimento nenhum sobre o problema, deixando-a para a 
-documentação. Prevendo onde os dados são mais vistos ou esperados, utiliza o input 
+A MOD utiliza uma abordagem diferente, prevendo onde os dados são mais vistos ou 
+esperados através da determinação do fluxo de dados, utiliza o input 
 mais provável para direcionar a escolha do algoritmo. Com isso, ao se utilizar essa 
 abordagem pode-se separar os dados mais utilizados dos menos utilizados de tal forma 
 que estes não sejam desnecessariamente carregados da memória.
 
 \begin{figure}[h]
-\centering
+    \centering
     \captionof{figure}{Orientação a objetos vs. Orientação a Dados. Duas maneiras 
     diferentes de se ler os dados da memória.}
-    \begin{minipage}[b]{0.35\textwidth}
+    \begin{subfigure}[b]{0.35\textwidth}
         \includegraphics[width=\textwidth]{../figuras/objectreadingorder}
-    \end{minipage}
-    \begin{minipage}[b]{0.35\textwidth}
+        \caption{Orientação a Objetos}
+        \label{fig:ood}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.35\textwidth}
         \includegraphics[width=\textwidth]{../figuras/dodreadingorder}
-    \end{minipage}
+        \caption{Orientação a Dados}
+        \label{fig:dod}
+    \end{subfigure}
     \par\medskip
     Disponível em: <http://gamesfromwithin.com/data-oriented-design>. Acesso em: 27/05/2017.
     \label{oodvsdod}
@@ -81,10 +105,10 @@ situação incomum de se acontecer. É preciso passar por todas as referências caso
 necessário acessar os dados nos níveis mais baixos da árvore, e se uma função usar
 somente alguns desses elementos, essa leitura de dados não é muito eficiente. 
 
-Na segunda figura há uma separação do objeto em componentes diferentes, e componentes 
-do mesmo tipo são agrupados juntos na memória, independentemente do objeto de qual 
-vieram. Essa organização resulta em blocos largos de dados homogêneos, permitindo o 
-uso eficiente de memória através processamento contíguo de dados. 
+Na figura~\ref{fig:dod} há uma separação do objeto em componentes diferentes, e 
+componentes do mesmo tipo são agrupados juntos na memória, independentemente do objeto 
+de qual vieram. Essa organização resulta em blocos largos de dados homogêneos, 
+permitindo o uso eficiente de memória através processamento contíguo de dados. 
 
 \section{Linguagem de Programação Rust}
 
@@ -92,10 +116,11 @@ Rust é uma linguagem de programação nova cuja primeira versão estável foi lançad
 É desenvolvida pelo grupo de pesquisa \textit{Mozilla}~\cite{rustdocs}, foi projetada 
 para ser uma linguagem de sistemas de propósito geral e multiparadigma, tomando influências 
 tanto de linguagens imperativas quanto de linguagens funcionais. Exemplos de 
-funcionalidades de linguagens funcionais como Haskell ou ML: tipos de dados algébricos, 
-casamento de padrões e polimorfismo restringido. A diferença é que Rust é capaz de oferecer 
-essas funcionalidades com um completo controle do \textit{layout} da memória e de sua 
-alocação, assim como C e C++~\cite{holk2013}.
+funcionalidades de linguagens funcionais como Haskell ou ML adotadas pela linguagem 
+Rust incluem: tipos de dados algébricos, casamento de padrões e polimorfismo restringido. 
+A diferença é que Rust é capaz de oferecer essas funcionalidades com um completo 
+controle do \textit{layout} da memória e de sua alocação, assim como C e 
+C++~\cite{holk2013}.
 
 Os objetivos nos quais a linguagem foca são: segurança, velocidade e concorrência, sem a 
 utilização de um \textit{garbage collector}, permitindo a escrita de código de baixo 
@@ -103,11 +128,12 @@ nível eficiente com diversas verificações de segurança em tempo de compilação qu
 sobrecargas e ainda elimina todas as condições de concorrência~\cite{rustdocs}. 
 
 Um dos motivos pelo qual a linguagem foi desenvolvida foi uma resposta ao fato de que C e 
-C++, mesmo sendo rápidas, não são seguras nem ergonômicas, e particularmente ineficiente para 
-concorrência. Apesar de ter sido estabilizada apenas há pouco tempo, seus objetivos são 
-ambiciosos e a linguagem tem apresentado excelente desempenho. Seu código tem segurança de 
-memória por padrão, mais rápido que C++, mais fácil de manter e excelente em 
-concorrência~\cite{Beingessner2016}.
+C++, mesmo sendo rápidas, não são seguras em termos de uso da memória. Apesar de ter 
+sido estabilizada apenas há pouco tempo, seus objetivos permitem o desenvolvimento de 
+programas robustos e a linguagem tem apresentado excelente desempenho. Seu código tem 
+segurança de memória por padrão (a linguagem não permite duas referências mutáveis para 
+uma mesma variável, elmininando assim, as condições de corrida), mais rápido que C++, 
+mais fácil de manter e excelente em concorrência~\cite{Beingessner2016}.
 
 A linguagem atinge seus objetivos de velocidade e segurança de memória através de dois 
 conceitos: abstrações sem custo e \textit{posse}. Esses dois conceitos serão explicados 
@@ -115,7 +141,7 @@ a seguir.
 
 \subsection{Abstrações Sem Custo}
 
-Rust é capaz de fazer otimizações agressivas na compilação para permitir a construção de 
+Rust possui uma alta capacidade de otimização na compilação para permitir a construção de 
 abstrações de alto nível que são transformadas em código de nível mais baixo. Além disso 
 a linguagem possui um sistema de traços, o qual possui um alto poder de expressividade 
 que permite a construção de abstrações.
@@ -142,7 +168,8 @@ poderiam ser criadas e para estas esse traço também poderia ser implementado.
 
 Quando uma dessas funções de um traço é chamada para algum tipo de dado específico, o 
 compilador gera uma variante daquela função a qual terá ligação estática total, 
-permitindo a aplicação de otimizações~\cite{holk2013}.
+permitindo a aplicação de otimizações, como por exemplo a aplicação de 
+\textit{inlining}~\cite{holk2013}.
 
 \subsection{Posse}
 
@@ -170,28 +197,25 @@ O termo e o conceito de motor de jogos surgiram no início da década de 1990, qua
 empresa \textit{Id Software} lançou o jogo \textit{DOOM} e, juntamente com ele, seu 
 motor de jogos conhecido como \textit{DOOM Engine}, que depois foi nomeado como 
 \textit{Id Tech 1}~\cite{gregory2009game}.
-
 O jogo \textit{DOOM}, através da \textit{Id Tech 1}, é considerado o primeiro jogo da 
 indústria de jogos digitais que possui uma clara separação entre os componentes núcleo 
 do jogo, chamada de parte lógica, dos componentes criativos, tais como animações, 
 modelos geométricos, sons, imagens, planos de fundo, música, etc.
-
 A \textit{Id Software}, além de ter criado um novo conceito de \textit{software} 
 na indústria de jogos que atualmente é considerado padrão em grandes empresas e ter 
 gerado uma vasta família de motores de jogos que partiram da \textit{Id Tech 1}, também 
-conceberam um novo paradigma para se desenvolver jogos digitais, onde a produção de todo 
-o conteúdo lógico é independentemente e separadamente feita dos componentes criativos.
+conceberam um novo paradigma para se desenvolver jogos digitais.
 
 A maior vantagem da utilização de motores de jogos consiste na reutilização de código. 
 Isso significa que, para rotinas parecidas, ou até mesmo para outros projetos, um mesmo 
-código pode ser utilizado mudando-se apenas alguns parâmetros. Além disso, motores de 
-jogos mais completos geralmente permitem uma rápida prototipagem de novos projetos,
+código pode ser utilizado mudando-se apenas alguns parâmetros. Além disso, um motor de 
+jogos mais completo geralmente permite uma rápida prototipagem de novos projetos,
 requer uma habilidade menor por parte dos programadores e minimiza seus esforços 
 através de abstrações.
 
 A implementação de um motor de jogos é feito através do desenvolvimento separado de 
 diversos componentes. Cada componente é responsável por uma parte específica da parte 
-lógica do jogo, ao oposto do que era feito na programação de jogos tradicional, cujo 
+lógica do jogo, ao oposto do que era feito na programação tradicional de jogos, cujo 
 objetivo primário era maximizar o desempenho para o hardware utilizado. Essa preocupação 
 com o desempenho, juntamente com o curto intervalo de tempo que os desenvolvedores tinham 
 para terminar os projetos geralmente resultava em códigos que não ficavam conforme os 
@@ -232,7 +256,6 @@ e animação.
 Qualquer motor de jogos necessita de uma biblioteca matemática, uma vez que 
 jogos são aplicações as quais são extremamente dependentes de operações e 
 conceitos matemáticos. 
-
 Essas bibliotecas fornecem diversas utilidades, algoritmos e funções 
 matemáticas, tais como: estruturas de dados personalizadas de vetores, 
 matrizes e quaternions; operações matriciais e vetoriais; rotações e 
@@ -248,7 +271,7 @@ muito além do escopo deste trabalho, o restante desta seção tratará dos conceito
 propriedades que são relevantes para a computação gráfica apenas.
 
 Verth e Bishop~\cite{Verth:2008} e Mortenson~\cite{mortenson1999mathematics} fizeram uma 
-excelente cobertura de toda a matemática essencial utilizada em motores de jogos. O restante 
+cobertura de toda a matemática essencial utilizada em motores de jogos. O restante 
 da seção cobrirá apenas os tópicos mais essenciais e para uma abordagem mais completa do 
 assunto, esses trabalhos deverão ser consultados. Todos os conceitos apresentados aqui 
 são utilizados para a elaboração da biblioteca matemática presente neste trabalho.
@@ -257,17 +280,15 @@ são utilizados para a elaboração da biblioteca matemática presente neste trabalh
 
 Vetores e pontos são as estruturas essenciais de todos os objetos presentes em 
 aplicações gráficas. 
-
-Os pontos representam posições do espaço, podem ser utilizados para determinar os 
+Os pontos representam posições do espaço e podem ser utilizados para determinar os 
 vértices da superfície de um objeto, que consequentemente determinará seu formato 
-(chamado de modelo), e também podem representar a posição de um objeto no espaço, 
-essa posição geralmente se refere ao centro do objeto. Se os pontos de um objeto 
+(chamado de modelo). Os pontos também podem representar a posição de um objeto no 
+espaço, a qual geralmente se refere ao centro do objeto. Se os pontos de um objeto 
 forem alterados, o modelo desse objeto também será alterado.
 
 Vetores (no campo da geometria) são entidades que possuem uma direção e um comprimento, 
 chamado de magnitude e representam a diferença entre dois pontos. São utilizados para 
 armazenar grandezas (como velocidade, gravidade, aceleração, atrito, etc.) e direções.
-
 Há alguns casos específicos de vetores que recebem nomeações 
 diferentes, por exemplo vetores cuja magnitude é igual a 1 são chamados de vetores 
 unitários ou vetores normalizados. Um vetor cuja magnitude é igual a 0 é chamado de 
@@ -275,7 +296,7 @@ vetor zero, e não possui nenhuma direção.
 
 Para representar um vetor no computador, utiliza-se a chamada "base Euclidiana padrão", 
 composta pelos três vetores unitários linearmente independentes $i$, $j$ e $k$ que são 
-perpendiculares entre si para o caso do espaço tridimensional $\mathbb{R}^3$, para o 
+perpendiculares entre si para o caso do espaço tridimensional $\mathbb{R}^3$. Para o 
 espaço bidimensional $\mathbb{R}^2$, utiliza-se somente os vetores $i$ e $j$. 
 
 Utilizando essa base, pode-se representar unicamente qualquer vetor no espaço através 
@@ -302,7 +323,7 @@ algebricamente através de uma tripla $(x,y,z)$, ou uma dupla para o caso dos vet
 \end{figure}
 
 Com essa representação algébrica, pode-se definir as operações sobre vetores tão 
-utilizadas na computação gráfica 
+utilizadas na computação gráfica.
 
 \subsection{Operações Sobre Vetores}
 
@@ -441,15 +462,14 @@ Diferentemente do produto escalar, o produto vetorial não é definido para vetore
 Matrizes são \textit{arrays} bidimensionais nas quais cada valor individual é chamado de 
 elemento. A descrição de uma matriz é feita especificando o seu número de linhas e número 
 de colunas, sendo $m$ o número de linhas e $n$ o número de colunas, é dito que é uma matriz 
-$m$ por $n$, denotado por $m\ x\ n$. A relação da quantidade de linhas e colunas é também 
-conhecida como o tamanho da matriz.
+$m$ por $n$, denotado por $m\ \times n$. A relação da quantidade de linhas e colunas é 
+também conhecida como o tamanho da matriz.
 
 Uma linha é uma sequência de elementos na horizontal da esquerda para a direita, enquanto 
 que uma coluna é uma sequência de elementos na vertical de cima para baixo. Para 
 referenciar um elemento específico de uma matriz $A$, usa-se a notação: $a_{i,j}$, onde 
 $i$ referencia uma linha e $j$ uma coluna. Dessa maneira, o elemento $a_{1,2}$ é o elemento 
 que está na primeira linha e na segunda coluna na matriz A.
-
 O conjunto de elementos os quais o número da linha é igual ao número da coluna (ex: 
 $a_{1,1}$) é chamado de diagonal principal.
 
@@ -466,9 +486,10 @@ listadas algumas dessas matrizes específicas:
     \item Matriz linha: matriz que só possui uma linha de elementos
 \end{itemize}
 
-Existem outros casos específicos de matrizes, como matrizes triangulares,  mas não são tão 
-importantes quanto estas. Uma característica importante das matrizes linha e coluna é 
-que elas podem ser utilizadas para representar vetores matricialmente.
+Uma característica importante das matrizes linha e coluna é 
+que elas podem ser utilizadas para representar vetores matricialmente. A Representação 
+matricial dos vetores é necessária para se realizar multiplicações entre vetor e 
+matriz, tal operação será explicada posteriormente.
 
 \subsection{Operações Sobre Matrizes}
 
@@ -502,7 +523,6 @@ vetores, soma-se componente-a-componente. Sendo $S$ a soma de $A$ e $B$, teremos
 
 A subtração é feita de maneira semelhante, subtraindo-se os componentes ao invés de 
 somá-los. Assim como números reais e vetores, a subtração não é comutativa para matrizes.
-
 Nota-se que para realizar essas operações, os tamanhos de $A$, $B$ e $S$ devem ser 
 iguais. 
 
@@ -567,14 +587,15 @@ seguinte maneira:
 
 \begin{equation}
     \begin{aligned}
-        c_{i,j} = \displaystyle\sum_{k=0}^{n-1} a_{i,k}b{k,j}
+        C_{M,Q} = A_{M,N} \times B_{P,Q} \\
+        c_{i,j} = \displaystyle\sum_{k=0}^{n-1} a_{i,k}b_{k,j}
     \end{aligned}
 \end{equation}
 
-Para se realizar o produto escalar entre as linhas e as colunas, elas devem possuir a 
-mesma dimensão, ou seja, a multiplicação entre duas matrizes somente é possível se o 
-número de colunas de uma for igual ao número de linhas da outra. Isso também implica 
-que apenas matrizes quadradas podem ser multiplicadas por si mesmas. 
+Onde $N = P$, ou seja, para se realizar o produto escalar entre as linhas e as colunas, 
+elas devem possuir a mesma dimensão. O número de colunas de uma matriz deve ser igual ao 
+número de linhas da outra. Isso também implica que apenas matrizes quadradas podem ser 
+multiplicadas por si mesmas. 
 
 Conforme mencionado na seção~\ref{matrices}, vetores podem ser representados 
 matricialmente através de uma matriz linha ou matriz coluna, essas representações são 
@@ -609,7 +630,6 @@ respectivamente.
 Caso uma matriz linha seja utilizada para representar o vetor, o número de linhas da 
 matriz deve corresponder ao número de elementos do vetor, e o vetor deverá ser colocado 
 à esquerda da operação.
-
 É importante salientar que a multiplicação entre matrizes não é comutativa, apesar de 
 ainda ser associativa como vetores e números reais.
 
@@ -625,12 +645,12 @@ resultará em $A$:
 
 \subsubsection{Matriz Inversa}
 
-A inversa de uma matriz $A$, definida como $A^-1$, é uma matriz a qual multiplicada por 
+A inversa de uma matriz $A$, definida como $A^{-1}$, é uma matriz a qual multiplicada por 
 $A$ resulta na matriz identidade $I$:
 
 \begin{equation}
     \begin{aligned}
-        A \cdotp A^-1 = I
+        A \cdotp A^{-1} = I
     \end{aligned}
 \end{equation}
 
@@ -638,7 +658,7 @@ E:
 
 \begin{equation}
     \begin{aligned}
-        A^-1 \cdotp A = I
+        A^{-1} \cdotp A = I
     \end{aligned}
 \end{equation}
 
@@ -646,7 +666,7 @@ Para que essa multiplicação possa ocorrer, o número de colunas da matriz inversa
 precisa ser igual ao número de linhas da original, e a recíproca também deve ser 
 verdadeira. Por isso, uma matriz e sua inversa devem ser quadradas e de mesma dimensão, 
 portanto nem todas as matrizes possuem uma inversa, já nem todas as matrizes são 
-quadradas. A inversa da inversa retorna a matriz original. 
+quadradas. 
 
 Uma das utilidades da matriz inversa é que ela pode reverter a transformação feita 
 pela sua matriz original, multiplicando o vetor transformado pela inversa da matriz 
@@ -782,8 +802,8 @@ base Euclidiana padrão ($i$, $j$ e $k$), e as rotações que são feitas em torno d
 eixo arbitrário qualquer. 
 
 As rotações puras, apesar de serem mais simples, não são muito úteis, pois são 
-limitadas, principalmente se se quer realizar uma rotação em torno de um eixo que é 
-a combinação de outros, ou passar o eixo de rotação como argumento. Por esses motivos, 
+limitadas, principalmente se for requerido realizar uma rotação em torno de um eixo que 
+é a combinação de outros, ou passar o eixo de rotação como argumento. Por esses motivos, 
 as rotações puras não serão utilizadas nesse trabalho, ao invés disso, uma técnica de 
 rotação mais eficiente será utilizada, que é a fórmula de rotação de Rodrigues, que 
 permite rotacionar um vetor em torno de qualquer eixo arbitrário.
@@ -798,7 +818,7 @@ A fórmula de rotação de Rodrigues é definida por:
 
 \vspace{.5cm}
 
-Onde $I$ é a matriz identidade, $\theta$ é o quanto quer-se rotacionar e $K$ é uma 
+Onde $I$ é a matriz identidade, $\theta$ é o quanto se quer rotacionar e $K$ é uma 
 matriz dada por:
 
 \begin{equation}
@@ -853,7 +873,7 @@ Quaternions, aparte de sua definição matemática, são estruturas que possuem quat
 elementos, e são utilizados em aplicações gráficas pois são capazes de realizar 
 rotações em objetos sem o problema do \textit{Gimbal Lock}, no qual uma certa sequência 
 de rotações faz com que dois eixos se alinhem, resultando na perda de um grau de 
-liberdade. 
+liberdade~\cite{hughes2014computer}.
 
 Os quaternions são definidos pelos seguintes quatro elementos: 
 
@@ -942,10 +962,9 @@ toma a seguinte forma:
 
 Para transformá-lo em matriz, o quaternion deve estar normalizado.
 
-Assim como matrizes, quaternions também podem ser concatenados multiplicando-os, 
-permitindo dessa maneira combinações de transformações sucessivas. A concatenação é 
-dada por:
-
+Assim como matrizes, quaternions também podem ser concatenados através de 
+multiplicações, permitindo dessa maneira combinações de transformações sucessivas. 
+A multiplicação entre dois quaternions é dada por:
 \begin{equation}
     \begin{aligned}
         q_2 \times q_1 = (w_1w_2 - v_1 \cdotp v_2, w_1v_2 + w_2v_1 + v_2 \times v_1)
@@ -978,9 +997,10 @@ são feitas através de aritmética de matrizes.
 
 \subsection{Coordenadas do Objeto}
 
-O sistema de coordenadas do objeto é considerado o sistema de coordenadas "cru" deste. 
-Neste sistema as coordenadas são locais e o ponto de referência é o centro do objeto. 
-Quando se define uma malha de polígonos, os vértices estão nesse sistema de coordenadas.
+O sistema de coordenadas do objeto é considerado o sistema de coordenadas inicial, não 
+processado deste. Neste sistema as coordenadas são locais e o ponto de referência é o 
+centro do objeto. Quando se define uma malha de polígonos, os vértices estão nesse 
+sistema de coordenadas.
 
 \subsection{Coordenadas do Mundo}
 \label{worldcoord}
@@ -998,15 +1018,13 @@ o recurso utilizado para posicioná-los do mundo da aplicação.
 \subsection{Coordenadas de Visualização}
 
 Nesse estágio as coordenadas são convertidas para o \textit{eye space}, no qual os 
-vértices são posicionados conforme o ponto de vista de uma câmera.
-
-Uma câmera é um objeto abstrato de uma cena o qual possui uma posição e uma orientação, 
-e é nesse estágio que os objetos da cena são posicionados de acordo com esses dois 
-parâmetros.
+vértices são posicionados conforme o ponto de vista de uma câmera virtual, que é um 
+objeto abstrato de uma cena o qual possui uma posição e uma orientação. Nesse estágio os
+objetos da cena são posicionados de acordo com esses dois parâmetros da câmera.
 
 A conversão é feita através da matriz de visualização, que é construída a partir da 
 posição da câmera, da sua orientação e também de um vetor que diz qual dos eixos é 
-considerado o eixo com a direção "para cima" da câmera. Tradicionalmente se utiliza o 
+considerado o eixo com a direção "para cima"\ da câmera. Tradicionalmente se utiliza o 
 eixo $y$ (i e. $(0,1,0)$), porém outros eixos podem ser utilizados.
 
 \subsection{Coordenadas Truncadas}
@@ -1021,22 +1039,21 @@ dependente da técnica de projeção empregada.
 A projeção é um processo que converte as coordenadas de um espaço tridimensional para um 
 espaço truncado. Objetos que estão parcialmente visíveis têm seus vértices que estão fora 
 do volume de visualização realocados para as extremidades do mesmo. 
-
 A conversão é feita através da matriz de projeção, e sua construção também é dependente 
 da técnica de projeção.
 
 A técnica de projeção utilizada neste trabalho é a projeção de perspectiva, esta técnica 
-transforma o volume de visualização em uma pirâmide truncada. O topo da pirâmide é 
-chamado de plano perto, e é o início da visualização da câmera. A base da pirâmide é 
-chamada de plano longe, e é o fim da visualização da câmera. Quanto mais próximo os 
-objetos estão da base da pirâmide, menor eles irão aparentar na cena.
+transforma o volume de visualização em uma pirâmide truncada, conhecida como 
+\textit{frustum} de visualização. O topo da pirâmide é chamado de plano perto, e é o 
+início da visualização da câmera. A base da pirâmide é chamada de plano longe, e é o 
+fim da visualização da câmera. Quanto mais próximo os objetos estão da base da 
+pirâmide, menor eles irão aparentar na cena.
 
 \subsection{Coordenadas Normalizadas do Dispositivo}
 
 Nesse estágio é feita uma normalização das coordenadas 3D para um intervalo entre 
 $[-1,1]$ para cada um dos eixos. Nessa normalização, $-1$ e $1$ representam os extremos 
 do dispositivo tanto na vertical quanto na horizontal.
-
 Esse estágio não é dependente de nenhum argumento da aplicação e é feito automaticamente 
 pelo componente do hardware responsável.
 
@@ -1045,7 +1062,9 @@ pelo componente do hardware responsável.
 As coordenadas chegam nesse estágio somente na fase final de renderização, que é o 
 processo de rasterização (seção~\ref{renderingpipelinesec}), as coordenadas 3D 
 normalizadas são convertidas para coordenadas de janela 2D e assim como o estágio 
-anterior, este estágio é feito automaticamente pelo hardware.
+anterior, este estágio é feito automaticamente pelo hardware. Após esse estágio, os 
+pixels terão suas coordenadas definidas para serem devidamente dispostos na tela da 
+aplicação.
 
 \section{Malhas de Polígono}
 
@@ -1061,7 +1080,6 @@ não são coplanares, não se sabe como o interior deve ser preenchido nesse caso.
 Triângulos também são polígonos atômicos (dividir um triângulo em dois sempre resultará 
 em dois polígonos) e qualquer forma pode ser representada como uma subdivisão de 
 triângulos, ou aproximada, caso seja muito complexa~\cite{hughes2014computer}.
-
 Além disso, triângulos mantém sua integridade de forma sobre a maior parte de 
 transformações afins e projeções de perspectiva, e a maior parte dos hardwares 
 comerciais de aceleração gráfica são otimizados para rasterização de 
@@ -1095,7 +1113,6 @@ sombreamento de Blinn-Phong~\cite{Blinn1977MLR}.
 
 Shaders são pequenos programas que são executados na GPU, escritos em uma linguagem de 
 \textit{shading}, projetada para tornar a programação dos shaders fácil. 
-
 Esses programas são utilizados para descrever como processar os dados no 
 \textit{pipeline} gráfico~\cite{hughes2014computer}. Os dados são enviados da CPU para 
 a GPU através de uma API gráfica (ver seção~\ref{lowlevelrenderer}), onde os shaders 
@@ -1106,7 +1123,7 @@ clássicas, porém contém apenas o necessários para o processamento destes dados n
 Os shaders utilizados com OpenGL por exemplo, são escritos em uma linguagem conhecida 
 como GLSL, acrônimo para \textit{OpenGL Shading Language}~\cite{shreiner2013opengl}.
 
-Há várias operações que os shaders são capazes de realizar sobre os dados na GPU, Tais 
+Há várias operações que os shaders são capazes de realizar sobre os dados na GPU, tais 
 como: transformar os vértices dos objetos de um espaço para outro (por exemplo, 
 do espaço do objeto para espaço do mundo), sombreamento, utilizar as coordenadas de 
 normais para iluminação, \textit{mappings}, utilizar coordenadas de textura para 
@@ -1133,7 +1150,7 @@ renderização~\cite{shreiner2013opengl}~\cite{hughes2014computer}:
         iluminação aplicada sobre o vértice e as texturas, se houver alguma.
     \item Compute Shader: neste shader será feita o cálculo de informação arbitrária, 
         geralmente utilizado para tarefas que não estão diretamente relacionadas com a 
-        renderização de triângulos ou pixeis.
+        renderização de triângulos ou pixels.
 \end{itemize}
 
 Um conjunto contendo cada um desses tipos diferentes de shader é conhecido como 
@@ -1212,10 +1229,9 @@ feitas para a melhora do desempenho do pipeline.
 
 Alguns exemplos de computações que são feitas nesse estágio são: gerenciamento de inputs, 
 detecção de colisão, animações de texturas, animações através de transformações, ajuste 
-de parâmetros que são utilizados nas outras etapas, etc.
-
-Ao final dessa fase, toda a geometria e parâmetros computados são passados à fase de 
-geometria, esse é considerado o passo mais importante.
+de parâmetros que são utilizados nas outras etapas, etc. Ao final dessa fase, toda a 
+geometria e parâmetros computados são passados à fase de geometria.\ essa passagem de 
+dados é considerado o passo mais importante da parte de aplicação.
 
 \subsection{Geometria}
 
@@ -1236,8 +1252,8 @@ Na etapa de projeção, ocorre uma transformação do volume de visualização, e o se
 dependerá do tipo de projeção utilizada, alterando a percepção dos objetos da cena. 
 Conforme discutido na seção~\ref{viewingpipelinesec}, a projeção utilizada neste trabalho 
 é a projeção perspectiva, que transforma o volume de visualização em uma pirâmide 
-truncada, chamada de \textit{frustum}, na qual os objetos mais próximos da base da 
-pirâmide aparentam ser menores.
+truncada, chamada de \textit{frustum} de visualização, na qual os objetos mais próximos 
+da base da pirâmide aparentam ser menores.
 
 A etapa de truncamento serve para truncar os objetos da cena que estão sendo parcialmente 
 vistos no volume de visualização. Objetos que possuem alguns vértices dentro e outros 
@@ -1246,7 +1262,7 @@ os extremos do volume de visualização.
 
 Na última sub-etapa, a de mapeamento para tela, as coordenadas das primitivas truncadas 
 dentro do volume de visualização são transformadas para a tela. As coordenadas $x$ e 
-$y$ de cada primitiva são transformadas para formar as coordenadas tela. As coordenadas 
+$y$ de cada primitiva são transformadas para formar as coordenadas da tela. As coordenadas 
 de tela combinadas com as coordenadas $z$ são chamadas de coordenadas de janela. É nessa 
 etapa que as coordenadas são essencialmente convertidas de tridimensionais para 
 bidimensionais.
@@ -1254,10 +1270,9 @@ bidimensionais.
 \subsection{Rasterização}
 
 Com todos os dados para o devido \textit{shading} do objeto, nessa etapa as cores dos 
-pixeis são computadas e definidas, esse é o processo conhecido como rasterização, que é 
+pixels são computadas e definidas, esse é o processo conhecido como rasterização, que é 
 a conversão dos vértices em coordenadas de janela juntamente com a informação de 
-\textit{shading} para pixeis desenhados na tela.
-
+\textit{shading} para pixels desenhados na tela.
 Assim como a etapa de geometria, a etapa de rasterização também é dividida em sub-etapas, 
 que são: configuração dos triângulos, \textit{triangle traversal}, \textit{pixel shading} 
 e combinação.
@@ -1267,10 +1282,9 @@ são computados. Esses dados são utilizados para a interpolação de várias informa
 de \textit{shading} produzida na etapa de geometria. Etapa feita por operações fixas 
 do hardware dedicado para essa parte.
 
-Na etapa de \textit{triangle traversal} são procurados os pixeis que estão dentro de 
+Na etapa de \textit{triangle traversal} são procurados os pixels que estão dentro de 
 um triângulo, ou seja, que pertencem ao plano formado pelos três vértices de um dos 
-triângulos presentes na tela. Esse processo de procura é conhecido como 
-\textit{triangle traversal}. Para cada um dos pixeis encontrados é gerado um 
+triângulos presentes na tela. Para cada um dos pixels encontrados é gerado um 
 fragmento. As propriedades dos fragmentos de cada triângulo são geradas utilizando 
 dados interpolados entre os três vértices.
 
@@ -1282,49 +1296,53 @@ GPU, nomeadamente pelo \textit{fragment shader}. Esse shader será responsável po
 aplicar texturas, iluminação, entre outros em cada um dos fragmentos.
 
 Por fim, na combinação a informação de cada pixel é armazenada em um \textit{buffer} 
-de cores, que contém cada um dos componentes RGB da cor final. O a unidade da GPU 
+de cores, que contém cada um dos componentes RGB da cor final. A unidade da GPU 
 responsável por essa etapa não é completamente programável, porém altamente 
 customizável.
-
 A cor resultante da etapa anterior (\textit{pixel shading}) é combinada com a cor 
 atualmente armazenada no \textit{buffer}.
 
 Essa etapa também é responsável por resolver a visibilidade, ou seja, armazenar no 
 \textit{buffer} de cores somente as cores das primitivas que estão visíveis a partir 
 do ponto de vista da câmera. Para a maior parte dos hardwares gráficos, isso é feito com 
-o algoritmo do \textit{Z-buffer}.
+o algoritmo do \textit{Z-buffer}. Esse algoritmo foi originalmente proposto por Edwin 
+Catmull~\cite{Catmull1974}, seu funcionamento consiste no uso de um \textit{buffer} de 
+profundidade, disposto em uma matriz bidimensional que armazena a profundidade de cada 
+um dos pixels da tela. Quando um objeto precisa ser renderizado em um pixel já 
+utilizado, o método compara as duas profundidades e caso o novo objeto esteja mais 
+próximo do observador, o pixel é então sobrescrito por este objeto e o novo valor de 
+profundidade substitui o antigo no \textit{buffer}.
 
 Todos os \textit{buffers} combinados formam o chamado \textit{frame buffer}, que em 
 consequência contém toda a informação de um quadro de uma cena renderizada. A tela exibe 
 os conteúdos do \textit{buffer} de cores.
 
-\section{O Loop de Jogo}
+\section{O \textit{Loop} de Jogo}
 \label{gameloopsec}
 
-O loop do jogo é onde os componentes funcionam em conjunto para proporcionar o que 
+O \textit{loop} do jogo é onde os componentes funcionam em conjunto para proporcionar o que 
 define um jogo: uma aplicação interativa em tempo real. 
-
-Sistemas em tempo real, como jogos, possuem restrições de tempo para realizar todas as 
-suas rotinas, se o sistema não for capaz de fazer seu trabalho dentro do limite de 
-tempo irá falhar. Uma vez que sistemas em tempo real são supostos a fazer suas tarefas 
-em tempo real, se um jogo não for capaz de fazer isso, o usuário (nesse caso o 
-jogador) não receberá um \textit{feedback} contínuo, e o jogo não fornecerá a 
-interatividade que deveria. Um loop de jogo pode ser implementado com a finalidade 
-de satisfazer essas restrições~\cite{Joselli2010}.
-
 Sistemas interativos em tempo real podem ser divididos em três módulos principais: 
 recebimento de inputs, processamento e apresentação dos 
 resultados~\cite{dalmau2004core}.
 
+Jogos possuem restrições de tempo para realizar todas as 
+suas rotinas, se o sistema não for capaz de fazer seu trabalho dentro do limite de 
+tempo irá falhar. Uma vez que sistemas em tempo real são supostos a fazer suas tarefas 
+em tempo real, se um jogo não for capaz de fazer isso, o usuário (nesse caso o 
+jogador) não receberá um \textit{feedback} contínuo, e o jogo não fornecerá a 
+interatividade que deveria. Um \textit{loop} de jogo pode ser implementado com a 
+finalidade de satisfazer essas restrições~\cite{Joselli2010}.
+
 Nos jogos eletrônicos, o sistema de inputs corresponde ao gerenciamento do dispositivo 
-de inputs, como mouse, teclado ou controlador de jogo, o processamento é responsável 
+de inputs, como mouse, teclado ou controlador de jogo; o processamento é responsável 
 por tomar as decisões que afetam o estado do jogo, e a apresentação é responsável por 
 mostrar os resultados desses dois outros estágios, através de áudio e 
 vídeo~\cite{valente2005real}. 
 
-Elaborar um loop de jogo significa organizar esses três módulos, e seus submódulos na 
+Elaborar um \textit{loop} de jogo significa organizar esses três módulos, e seus submódulos na 
 certa para deixar a simulação o mais fiel o possível da experiência desejada. 
-Considerando os módulos citados, o loop do jogo pode ser dividido da seguinte maneira, 
+Considerando os módulos citados, o \textit{loop} do jogo pode ser dividido da seguinte maneira, 
 na seguinte ordem:
 
 \begin{itemize}
@@ -1341,7 +1359,7 @@ reproduzidos todos os áudios necessários e a cena é renderizada na tela com os
 resultados dos estágios anteriores.
 
 Uma medida de desempenho de aplicações gráficas que também é utilizada para medir a 
-frequência com a qual esses loops são executados é a quantidade de quadros por 
+frequência com a qual esses \textit{loops} são executados é a quantidade de quadros por 
 segundo (\textit{Frames per Second}) que são renderizados na tela, conhecido como 
 FPS. Cada quadro que aparece na tela representa uma imagem construída e apresentada 
 pela aplicação.
@@ -1361,7 +1379,7 @@ conhecido como \textit{delta time}, indicando uma diferença de tempo.
 
 Além da separação do estágio de processamento em sub-tarefas, é importante salientar 
 que nem todas possuem a mesma necessidade de atualização que outras. Por exemplo, a IA 
-não precisa ser atualizada com a mesma frequência do que a simulação das físicas, 
+não precisa ser atualizada com a mesma frequência do que as simulações físicas, 
 é necessário somente quando um agente precisa tomar uma decisão. A renderização por 
 outro lado, proporcionará um resultado melhor quanto mais atualizada esta for, desde 
 que não comprometa o desempenho geral do sistema. Por isso, uma forma de otimizar o 
@@ -1412,8 +1430,7 @@ mais próximo de $1$ mais próximo de $P_1\ $ se estará.
 
 Esse conceito de interpolação linear pode ser estendida para vetores e quaternions por 
 exemplo, permitindo a aplicação gradual de forças e de rotações.
-
-Na área de computação gráfica, é popular a utilização do jargão "lerp"\ para se referir 
+Na área de Computação Gráfica, é popular a utilização do jargão "lerp"\ para se referir 
 à interpolação linear, uma abreviação de \textit{Linear Interpolation}.
 
 \subsection{Interpolação Entre Vetores}
@@ -1481,7 +1498,6 @@ da operação.
 
 Neste capítulo foram apresentados os fundamentos utilizados para o desenvolvimento do 
 trabalho proposto, que possui um alto fator interdisciplinar.
-
 A modelagem orientada a dados é um termo que surgiu recentemente, porém seu conceito de 
 uso eficiente e sequencial da memória já é utilizado a mais tempo. Foram apresentados 
 alguns de seus principais princípios, suas diferenças com a programação orientada a 
@@ -1494,7 +1510,6 @@ da clara separação entre o conteúdo técnico e o criativo de um jogo. Foi explica
 surgimento deste conceito, a filosofia de implementação de um motor de jogo, a 
 importância da integração apropriada de seus componentes e também foram apresentados 
 alguns exemplos de componentes comum em motores de jogos.
-
 Foram apresentados diversos conceitos matemáticos que são amplamente utilizados na 
 área de computação gráfica, e também as diferentes estruturas comumente utilizadas e 
 suas respectivas funcionalidades e métodos.
@@ -1507,16 +1522,15 @@ cumpri-los.
 
 Foram apresentados os \textit{pipelines} de visualização e renderização, dois 
 conceitos importantes em aplicações gráficas que consistem em etapas que processam os 
-dados desde o seu carregamento no sistema até serem transformados em pixeis na tela, 
+dados desde o seu carregamento no sistema até serem transformados em pixels na tela, 
 e como o renderizador gráfico de baixo nível auxilia nas etapas da renderização.
-
-Outros conceitos importantes de computação gráfica também foram explicados, como 
+Outros conceitos importantes de Computação Gráfica também foram explicados, como 
 \textit{shaders}, iluminação e malhas de polígono.
 
-Todos os componentes são combinados para a formação de um loop principal, que será 
+Todos os componentes são combinados para a formação de um \textit{loop} principal, que será 
 encarregado de receber e gerenciar os \textit{inputs} do jogador, atualizar os 
-componentes que necessitam fazê-lo, e apresentar os resultados computados. Esse loop 
-é conhecido como loop de jogo, neste capítulo esse conceito foi introduzido e detalhado.
+componentes que necessitam fazê-lo, e apresentar os resultados computados. Esse \textit{loop} 
+é conhecido como \textit{loop} de jogo, neste capítulo esse conceito foi introduzido e detalhado.
 Também foi discutido sobre alguns de seus problemas, como a necessidade de diferentes 
 frequências de atualização de cada um dos componentes, e também como os resultados 
 das atualizações podem ser diferentes dependendo do poder computacional do hardware 
@@ -1535,7 +1549,6 @@ com a proposta deste trabalho. A maioria dos trabalhos apresentados concentra-se
 funcionalidades únicas para um motor de jogos e também nas melhores práticas para o 
 desenvolvimento de motores de jogos, porém nenhum destes trabalhos explora o uso da 
 modelagem orientada a dados.
-
 Apesar de nenhum deles estar diretamente relacionado com a proposta deste trabalho, os 
 autores também tinham como um dos objetivos desenvolver um motor de jogos eficiente e 
 bem estruturado.
@@ -1547,7 +1560,8 @@ hierarquia de classes e heranças múltiplas, que leva a problemas como forte
 interdependência das entidades, conflito de nomenclaturas e heranças repetidas.
 
 Esta arquitetura baseada em componentes atualmente é utilizada em motores de jogos 
-comerciais populares, como é o caso do motor de jogos de propósito geral Unity3D. Nesse 
+comerciais populares, como é o caso do motor de jogos de propósito geral 
+Unity3D\footnote{Site do Unity3D: https://unity3d.com}. Nesse 
 modelo, uma entidade pode ter características diferentes adicionadas a ela através da 
 adição de componentes configuráveis, como um componente renderizador de imagens, um 
 reprodutor de áudios, um corpo suscetível à aplicação de forças físicas, entre outros. 
@@ -1559,7 +1573,7 @@ O trabalhos deles prossegue então, para explicar seus diferenciais, como a utili
 entidades que permitem a sua reconfiguração dinâmica em diferentes 
 momentos da aplicação. Consequentemente isso permite flexibilidade e extensibilidade 
 até mesmo em tempo de execução. Por fim eles apresentam as decisões de design que os 
-permitiram atingir esses objetivos são então apresentadas.
+permitiram atingir esses objetivos.
 
 Anderson~\cite{Anderson2008} levanta em seu trabalho alguns problemas ainda pendentes 
 em se tratando de desenvolvimento de motores de jogos, e incentiva a pesquisa no campo 
@@ -1611,8 +1625,7 @@ o desenvolvimento de um motor de jogos. Em seu trabalho, ele menciona os problem
 relacionados com a má estruturação do motor de jogos, e como a criação de um sistema 
 flexível e modularizado pode evitar esses problemas, além de proporcionar outras 
 vantagens.
-
-Como o seu trabalho é para fins educativos, o restante de seu trabalho trata sobre a 
+Como o seu trabalho é para fins educativos, o restante do artigo trata sobre a 
 criação de um curso sobre arquitetura de jogos, no qual o foco não é a implementação dos 
 componentes separados do motor de jogos, mas sim a utilização das melhores práticas de 
 programação e modelagem para a construção de um motor de jogos com uma arquitetura 
@@ -1625,7 +1638,6 @@ cadeia de ferramentas do motor de jogos, com ênfase nos aspectos técnicos. A mot
 de seu trabalho é que nenhuma das abordagens para o MDGD na literatura demonstrou 
 convincentemente uma boa integração do MDGD com a cadeia de ferramentas do motor de 
 jogos.
-
 No restante do trabalho, é descrito o funcionamento desta metodologia proposta, e como 
 ela pode fornecer uma melhoria na modelagem dos projetos ao utilizar o MDGD levando em 
 consideração a cadeia de ferramentas tipicamente utilizadas em motores de jogos.
@@ -1662,10 +1674,9 @@ não foi possível encontrar trabalhos que tivessem ênfase especificamente neste t
 Neste capítulo será explicada a proposta deste trabalho, um motor de jogos escrito em Rust 
 com modelagem orientada a dados visando à otimização da comunicação entre o processador e 
 a memória.
-
 Além de utilizar os conceitos da modelagem orientada a dados, também é necessário 
-utilizar conceitos de computação gráfica, álgebra linear e geometria analítica, teoria de 
-grafos, processamento de imagens, física, entre outros.
+utilizar conceitos de Computação Gráfica, Álgebra Linear e Geometria Analítica, Teoria 
+de Grafos, Processamento de Imagens, Física, entre outros.
 
 Conforme explicado na seção~\ref{secgameengine}, um motor de jogos é uma combinação de 
 diversos componentes diferentes que juntos compõem a parte lógica de um jogo digital. As 
@@ -1678,31 +1689,28 @@ implementação de outros elementos importantes discutidos previamente no
 capítulo~\ref{theorycap} que fazem parte da estrutura de um motor de jogos, como o 
 \textit{pipeline} de renderização e o loop de jogo.
 
-Como um motor de jogos por si só não é o suficiente para se gerar análises e resultados, 
-pois seu objetivo é dar suporte ao desenvolvimento de uma outra aplicação nesse caso 
-um jogo, podendo ser outra aplicação gráfica mais genérica. Ou seja, um motor de jogos 
-é um sistema, que não fornece serviços diretamente para o usuário, mas sim serviços 
-para se produzir outro software. Por esse motivo, além do desenvolvimento do motor de 
-jogos, será necessário o desenvolvimento de uma aplicação que utilize as 
-funcionalidades do motor para realmente verificar sua eficiência.
+Como um motor de jogos por si só não é suficiente para se gerar análises e resultados, 
+pois seu objetivo é dar suporte ao desenvolvimento de uma outra aplicação, além do 
+desenvolvimento do motor, será necessário o desenvolvimento de uma aplicação 
+que utilize as funcionalidades deste para realmente verificar sua eficiência.
 
-Para que seja possível um meio de comparação, será desenvolvida uma aplicação simples que 
-utilize os módulos do motor de jogos em duas versões diferentes, uma delas será feita 
-com programação orientada a objetos, e na outra será utilizada modelagem orientada a 
-dados. Isso permitirá a comparação entre essas duas aplicações e a análise de 
-eficiência da MOD, bem como a demonstração de como uma aplicação com orientação a 
-objetos pode ser convertida para um equivalente com orientação a dados.
+Para que seja possível um meio de comparação, será desenvolvida uma aplicação simples em 
+duas versões diferentes, uma delas será feita com programação orientada a objetos, e na 
+outra será utilizada modelagem orientada a dados. Isso permitirá a comparação entre 
+essas duas abordagens e a análise de eficiência da MOD, bem como a demonstração de como 
+uma aplicação com orientação a objetos pode ser convertida para um equivalente com 
+orientação a dados.
 
 \section{Biblioteca Matemática}
 
-Utilizando os conceitos discutidos na seção~\ref{secmathconcepts}, a intenção é ter uma 
-biblioteca matemática o mais minimalista o possível, contendo somente as estruturas e 
-funções necessárias para se realizar os testes e obter os resultados desejados deste 
-trabalho. 
+Utilizando os conceitos discutidos na seção~\ref{secmathconcepts}, a intenção é 
+desenvolver uma biblioteca matemática o mais minimalista o possível, contendo somente 
+as estruturas e funções necessárias para se realizar os testes e obter os resultados 
+desejados deste trabalho. 
 
 A biblioteca é uma das partes do motor mais extensivamente utilizada pois uma 
 considerável parcela dos componentes necessitam de sua utilização. Além disso, todas as 
-malhas e outros dados que são enviados aos shaders programáveis são armazenados em 
+malhas e outros dados que são enviados aos \textit{shaders} programáveis são armazenados em 
 estruturas dessa biblioteca, como as matrizes de transformação, visualização e projeção, 
 fontes de luz, texturas, etc.
 
@@ -1797,9 +1805,9 @@ estrutura, por exemplo, funções trigonométricas tais como: cotangente, conversão
 graus para radianos e vice-versa.
 
 Há constantes que também são utilizadas com frequência, como PI, epsilon, e um limitante 
-de pontos flutuantes. Esse limitante é utilizado para calcular a igualdade entre pontos 
-flutuantes e consequentemente, todas as estruturas implementadas. A igualdade entre 
-pontos flutuantes deve ser feita de maneira diferente da igualdade entre inteiros, isso 
+arbitrário de pontos flutuantes. Esse limitante é utilizado para calcular a igualdade 
+entre pontos flutuantes e consequentemente, todas as estruturas implementadas. Essa 
+igualdade deve ser calculada de maneira diferente da igualdade entre inteiros, isso 
 porque ao longo da execução, os pontos flutuantes acumulam "lixo", pequenos erros de 
 cálculo em suas menores casas decimais, por esse motivo, dois números reais podem ser 
 iguais, mas a operação de igualdade retorna falso por causa desses erros acumulados. A 
@@ -1807,8 +1815,9 @@ igualdade entre dois pontos flutuantes pode ser calculada da seguinte maneira:
 
 \begin{equation}
     \begin{aligned}
-        d = x - y \\
-        x = y \iff d < T \land -d < T
+        d = |x - y| \\
+        x = y \iff d < T \\
+        x,\ y,\ d,\ T \in \mathbb{R}
     \end{aligned}
 \end{equation}
 
@@ -1860,7 +1869,7 @@ parâmetros não relacionados aos objetos geométricos, como a matriz de visualizaç
 projeção, parâmetros das fontes de iluminação, alteração da resolução da tela, entre 
 outros.
 
-Para o motor a ser desenvolvido deste trabalho, há apenas a implementação do 
+Para o motor a ser desenvolvido neste trabalho, há apenas a implementação do 
 \textit{vertex shader} e do \textit{fragment shader}, pois estes são os únicos que são 
 indispensáveis para a construção do \textit{pipeline} de renderização, o restante dos 
 \textit{shaders} possuem implementações padrões já fornecidas pelo 
@@ -1873,24 +1882,26 @@ dos parâmetros das matrizes de visualização e projeção e também os parâmetros de
 iluminação através de variáveis uniforme.
 
 As variáveis uniformes são utilizadas para qualquer parâmetro existente nos 
-\textit{shaders} os quais se deseja modificar ao longo da execução da aplicação. Suas 
+\textit{shaders} que se deseja modificar ao longo da execução da aplicação. Suas 
 diferenças em relação às variáveis normais é que as variáveis uniformes são 
 modificadas apenas no nível de aplicação, sendo usadas nos \textit{shaders} apenas 
 para a leitura de seus valores. Outra diferença é que a declaração de uma variável 
-uniforme se estende para todos os \textit{shaders} do programa de \textit{shader}, e 
-não somente naquele que a variável uniforme foi declarada~\cite{wolff2013opengl}.
+uniforme é global no contexto do programa de \textit{shader}, e 
+não somente no \textit{shader} que a variável uniforme foi 
+declarada~\cite{wolff2013opengl}.
 
 \subsection{Câmera}
 
-A câmera dita o modo como a cena é visualizada pelo espectador. É basicamente 
+A câmera estabelece o modo como a cena é visualizada pelo espectador. É basicamente 
 constituída de dois componentes, a matriz de visualização, que irá determinar de qual 
 posição a cena será vista e a partir dessa posição, de qual ângulo a cena será vista. 
 Há também a matriz de projeção, que irá aplicar uma das técnicas de projeção sobre a 
 cena e irá também cortar da renderização os objetos que estão fora do campo de visão 
 da câmera. 
 
-Uma câmera pode ter comportamentos diferentes, e este dependerá de como é pretendida a 
-interação do espectador com a cena. Alguns exemplos de comportamento incluem:
+Uma câmera pode ser configurada de maneiras diferentes, e os parâmetros dependerão de 
+como é pretendida a interação do espectador com a cena. Alguns exemplos de 
+comportamento incluem:
 \begin{itemize}
     \item Câmera livre: possui livre movimentação ao longo dos três eixos
     \item Câmera 2.5D: possui livre movimentação ao longo de dois eixos, e o terceiro 
@@ -1916,12 +1927,18 @@ centro do mundo como referência, mas sim o centro representado pela matriz de
 transformação do seu pai, e suas posições finais serão dadas pela combinação da suas 
 matrizes de transformação com a do seu pai.
 
-O esquema de nós permite fácil reutilização de componentes, se dois objetos idênticos 
-forem necessários na cena, basta criar um nó com as propriedades e utilizar 
-instanciação, e também permite flexibilidade, cada nó pode ter sua própria malha, 
-programa de \textit{shader}, entre outros atributos~\cite{hughes2014computer}. As 
-ligações permitem uma fácil construção de hierarquia, e também torna trivial coisas 
+O esquema dos nós no grafo de cena permite fácil reutilização de componentes, se dois 
+objetos idênticos forem necessários na cena, basta criar um nó com as propriedades e 
+utilizar instanciação, e também permite flexibilidade, cada nó pode ter sua própria 
+malha, programa de \textit{shader}, entre outros atributos~\cite{hughes2014computer}. 
+As ligações permitem uma fácil construção de hierarquia, e também torna trivial coisas 
 como uma mudança de posição de um subgrupo inteiro de objetos.
+
+A figura~\ref{scenegraphexample} demonstra um exemplo de um grafo de cena que está 
+parcialmente representando um carro utilizando hierarquia, nele há um nó que 
+representa uma roda, este nó possui quatro instâncias e estas compartilham uma mesma 
+malha que descreve a geometria da roda. Os nós da roda são filhos do nó que representa 
+o carro como um todo.
 
 \begin{figure}[h]
     \centering
@@ -1933,12 +1950,6 @@ como uma mudança de posição de um subgrupo inteiro de objetos.
     em: 05/06/2017.
     \label{scenegraphexample}
 \end{figure}
-
-A figura~\ref{scenegraphexample} demonstra um exemplo de um grafo de cena que está 
-parcialmente representando um carro utilizando hierarquia, nele há um nó que 
-representa uma roda, este nó possui quatro instâncias e estas compartilham uma mesma 
-malha que descreve a geometria da roda. Os nós da roda são filhos do nó que representa 
-o carro como um todo.
 
 \subsection{Otimizações de Renderização}
 
@@ -1957,10 +1968,11 @@ espectador, por isso não há motivo em renderizá-lo, o \textit{backface culling} 
 encarregado de eliminar essa parte do interior~\cite{hughes2014computer}.
 
 O \textit{frustum culling} é a remoção total ou parcial dos objetos que estão fora do 
-frustum de visualização da câmera. Uma cena pode ser potencialmente extensa e conter 
-objetos com formas complexas, por isso é importante que os parâmetros que definem as 
-dimensões do frustum de visualização sejam adequadamente ajustados, para que objetos 
-muito distantes ou fora do ângulo de visualização da câmera não sejam renderizados.
+\textit{frustum} de visualização da câmera. Uma cena pode ser potencialmente extensa e 
+conter objetos com formas complexas, por isso é importante que os parâmetros que 
+definem as dimensões do \textit{frustum} de visualização sejam adequadamente ajustados, 
+para que objetos muito distantes ou fora do ângulo de visualização da câmera não sejam 
+renderizados.
 
 \section{Gerenciador de Recursos}
 
@@ -1991,7 +2003,7 @@ incluem~\cite{gregory2009game}:
 
 Além dessas funções, é também da responsabilidade do gerenciador de recursos garantir 
 que apenas uma cópia de cada arquivo carregado no sistema exista, economizando o uso 
-da memória, a qual é escarça. Por exemplo, vários objetos presentes em uma cena podem 
+da memória, a qual é escassa. Por exemplo, vários objetos presentes em uma cena podem 
 compartilhar uma mesma malha, então mesmo que exista mais de um objeto que utilize a 
 mesma malha, somente uma cópia desta é necessária estar carregada no sistema.
 
@@ -2037,11 +2049,10 @@ O componente gráfico é uma parte extensa do motor de jogos e que precisa lidar c
 vários fatores diferentes. Esses fatores foram apresentados e juntamente com eles 
 quais foram as decisões tomadas para a implementação ou gerenciamento de cada um.
 
-Foi apresentado o conceito de um câmera, e possíveis comportamentos diferentes que 
+Foi apresentado o conceito de uma câmera, e possíveis configurações diferentes que 
 esta pode ter. Também foi apresentada uma estrutura para lidar com a hierarquia de 
 objetos de uma cena e suas propriedades, o grafo de cena, e duas técnicas de otimização 
 de renderização utilizadas neste trabalho.
-
 Por fim, um outro componente foi apresentado, o gerenciador de recurso, que fornece uma 
 interface para acessar todo o conteúdo criativo, que é externo ao motor de jogos, e
 também os \textit{inputs} para o motor.
