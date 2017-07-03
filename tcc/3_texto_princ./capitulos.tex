@@ -8,7 +8,7 @@ Neste capítulo serão discutidos e explicados todos os conceitos e
 fundamentos necessários para a compreensão da proposta 
 feita nesse trabalho, assim como a abordagem que será utilizada 
 para a implementação de todos os componentes que juntos vão compor 
-o motor de jogos que será o objeto de estudo deste trabalho.
+o motor de jogos que será o objeto de estudo.
 
 \section{Modelagem Orientada a Dados}
 \label{secdataorienteddesign}
@@ -71,7 +71,7 @@ prototipagem dos programas pois essas soluções podem ser escritas diretamente da
 modelagem para o código~\cite{fabiandod}.
 
 A MOD utiliza uma abordagem diferente, prevendo onde os dados são mais vistos ou 
-esperados através da determinação do fluxo de dados, utiliza o input 
+esperados através da determinação do fluxo de dados, utiliza o \textit{input} 
 mais provável para direcionar a escolha do algoritmo. Com isso, ao se utilizar essa 
 abordagem pode-se separar os dados mais utilizados dos menos utilizados de tal forma 
 que estes não sejam desnecessariamente carregados da memória.
@@ -108,7 +108,7 @@ somente alguns desses elementos, essa leitura de dados não é muito eficiente.
 Na figura~\ref{fig:dod} há uma separação do objeto em componentes diferentes, e 
 componentes do mesmo tipo são agrupados juntos na memória, independentemente do objeto 
 de qual vieram. Essa organização resulta em blocos largos de dados homogêneos, 
-permitindo o uso eficiente de memória através processamento contíguo de dados. 
+permitindo o uso eficiente de memória através processamento de dados contíguos. 
 
 \section{Linguagem de Programação Rust}
 
@@ -116,7 +116,7 @@ Rust é uma linguagem de programação nova cuja primeira versão estável foi lançad
 É desenvolvida pelo grupo de pesquisa \textit{Mozilla}~\cite{rustdocs}, foi projetada 
 para ser uma linguagem de sistemas de propósito geral e multiparadigma, tomando influências 
 tanto de linguagens imperativas quanto de linguagens funcionais. Exemplos de 
-funcionalidades de linguagens funcionais como Haskell ou ML adotadas pela linguagem 
+características de linguagens funcionais como Haskell ou ML adotadas pela linguagem 
 Rust incluem: tipos de dados algébricos, casamento de padrões e polimorfismo restringido. 
 A diferença é que Rust é capaz de oferecer essas funcionalidades com um completo 
 controle do \textit{layout} da memória e de sua alocação, assim como C e 
@@ -136,7 +136,7 @@ uma mesma variável, elmininando assim, as condições de corrida), mais rápido que
 mais fácil de manter e excelente em concorrência~\cite{Beingessner2016}.
 
 A linguagem atinge seus objetivos de velocidade e segurança de memória através de dois 
-conceitos: abstrações sem custo e \textit{posse}. Esses dois conceitos serão explicados 
+conceitos: abstrações sem custo e posse. Esses dois conceitos serão explicados 
 a seguir.
 
 \subsection{Abstrações Sem Custo}
@@ -171,19 +171,67 @@ compilador gera uma variante daquela função a qual terá ligação estática total,
 permitindo a aplicação de otimizações, como por exemplo a aplicação de 
 \textit{inlining}~\cite{holk2013}.
 
-\subsection{Posse}
+\subsection{Sistema de Posse}
 
 O modelo de posse da linguagem possui dois aspectos principais: controlar onde e quando os 
 dados vivem, e controlar onde e quando uma mudança pode ocorrer. Esses aspectos são 
 garantidos por três funcionalidades principais: tipos afins, escopo e 
 privacidade~\cite{Beingessner2016}.
 
-Tipos afins representa valores que são de propriedade exclusiva. Se uma variável que possui 
-uma coleção for passado por valor a uma função, ou se sua coleção for atribuída a outra 
-variável, a variável original perde a posse da coleção e o seu acesso.
+Tipos afins representam valores que são de propriedade exclusiva. Se uma variável que possui 
+uma coleção for passada por valor a uma função, ou se sua coleção for atribuída a outra 
+variável, a variável original perde a posse da coleção e o seu acesso. Para exemplificar 
+o funcionamento dessa característica, a figura~\ref{rustmovedcollection} demonstra um 
+dos possíveis erros gerados pelo \textit{borrow-checker}, componente do Rust responsável 
+por detectar erros relacionados ao sistema de posse~\cite{rustdocs}. Nesse problema, o 
+vetor $v$ tem uma certa coleção inicialmente atribuída a este. Um outro vetor $v2$ é 
+declarado recebendo a coleção originalmente atribuída a $v$, este então perde a posse 
+de sua coleção e não pode mais acessá-la, por isso as linhas 10 e 11 caracterizam um erro 
+na linguagem, porque $v$ é uma variável desalocada e na linha 10 um método está sendo 
+chamado para ela, enquanto que na linha 11 a variável está sendo indexada.
+
+\begin{figure}[h]
+    \centering
+    \captionof{figure}{O problema de acesso a uma variável cuja coleção foi movida a 
+    outra.}
+    \includegraphics[width =.8\textwidth]{../figuras/rust-moved-value-error}
+    \par\medskip
+    Fonte: Autoria própria.
+    \label{rustmovedcollection}
+\end{figure}
+
+Já na figura~\ref{rustcopyerror} há dois casos: em~\ref{fig:copyerror} ocorre um outro 
+erro da linguagem, quando uma coleção é passada por valor a uma função e esta coleção não 
+é retornada ao final da função. A variável que foi passada por valor também perde a posse 
+e o acesso à sua coleção e por isso a linha 16 caracteriza um erro, quando se tenta 
+atribuir a variável $v$ desalocada à $v2$. A figura~\ref{fig:copyfixed} mostra como esse 
+problema pode ser resolvido, declarando na assinatura da função \textit{print\_vector} a variável 
+$v1$ como uma referência a uma coleção, desta maneira, a variável original será passada como 
+referência à função e não perderá a posse da sua coleção.
+
+\begin{figure}[h!]
+    \centering
+    \captionof{figure}{O problema de conteúdo movido e uma possível maneira de 
+    corrigi-lo.}
+    \begin{subfigure}[b]{0.40\textwidth}
+        \includegraphics[width=\textwidth]{../figuras/rust-copy-trait-error}
+        \caption{}
+        \label{fig:copyerror}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.40\textwidth}
+        \includegraphics[width=\textwidth]{../figuras/rust-copy-trait-error-fixed}
+        \caption{}
+        \label{fig:copyfixed}
+    \end{subfigure}
+    \par\medskip
+    Fonte: Autoria própria.
+    \label{rustcopyerror}
+\end{figure}
+
+\medskip
 
 Escopos e privacidade são dois conceitos mais presentes em outras linguagens. Os escopos 
-definem uma região na qual os ponteiros que estão nela são validos somente nesta região e 
+definem uma região na qual os ponteiros que estão nela são válidos somente nesta região e 
 o compilador garante que os ponteiros não vão extender seu ciclo de vida para além dela. No 
 Rust essas regiões são definias por escopos léxicos. Por fim a privacidade é um conceito 
 presente em muitas outras linguagens, campos e funções podem ser marcados como sendo públicos 
@@ -213,20 +261,20 @@ jogos mais completo geralmente permite uma rápida prototipagem de novos projetos
 requer uma habilidade menor por parte dos programadores e minimiza seus esforços 
 através de abstrações.
 
-A implementação de um motor de jogos é feito através do desenvolvimento separado de 
+A implementação de um motor de jogos é feita através do desenvolvimento separado de 
 diversos componentes. Cada componente é responsável por uma parte específica da parte 
-lógica do jogo, ao oposto do que era feito na programação tradicional de jogos, cujo 
+lógica do jogo, o oposto do que era feito na programação tradicional de jogos, cujo 
 objetivo primário era maximizar o desempenho para o hardware utilizado. Essa preocupação 
 com o desempenho, juntamente com o curto intervalo de tempo que os desenvolvedores tinham 
 para terminar os projetos geralmente resultava em códigos que não ficavam conforme os 
-preceitos de boa engenharia de software segundo Kruchten~\cite{Kruchten2006}.
+preceitos de boa engenharia de software segundo Kruchten et al.~\cite{Kruchten2006}.
 
 Dada a complexidade que é desenvolver um motor de jogos, considerando todos os aspectos que 
-esta deve abranger, desenvolver um código monolítico sem estrutura arquitetural e sem se 
+este deve abranger, desenvolver um código monolítico sem estrutura arquitetural e sem se 
 preocupar com o design geral do sistema, implica em um \textit{software} cujos componentes 
 são todos dependentes entre si. O resultado dessa dependência é um sistema frágil, no qual 
 pequenas mudanças em alguma parte do código pode afetar outras partes de maneiras não 
-óbvias, além de desencorajar os programadores de alterar o código ou refatorá-lo para 
+óbvias, além de desencorajar os programadores a alterar o código ou refatorá-lo para 
 aumentar sua qualidade~\cite{Keenan2011}.
 
 Por esse motivo, é importante que um motor de jogos esteja devidamente modularizado para 
@@ -242,7 +290,7 @@ al.~\cite{Anderson2008}, um problema que ainda persiste atualmente é a falta de 
 na literatura a respeito da modelagem da arquitetura de motores de jogos, sendo que a 
 maior parte da pesquisa disponível foca somente nos componentes separados, como 
 renderização, inteligência artificial (IA) ou rede. Ainda é salientado pelo autor que 
-ainda não há um consenso sobre os limites que separam um jogo do seu motor, portanto 
+não há um consenso sobre os limites que separam um jogo do seu motor, portanto 
 há espaço a ser explorado nessa área.
 
 A quantidade de componentes presentes em um motor de jogos é altamente dependente da 
@@ -272,7 +320,7 @@ propriedades que são relevantes para a computação gráfica apenas.
 
 Verth e Bishop~\cite{Verth:2008} e Mortenson~\cite{mortenson1999mathematics} fizeram uma 
 cobertura de toda a matemática essencial utilizada em motores de jogos. O restante 
-da seção cobrirá apenas os tópicos mais essenciais e para uma abordagem mais completa do 
+da seção cobrirá apenas os tópicos essenciais e para uma abordagem mais completa do 
 assunto, esses trabalhos deverão ser consultados. Todos os conceitos apresentados aqui 
 são utilizados para a elaboração da biblioteca matemática presente neste trabalho.
 
@@ -286,8 +334,9 @@ vértices da superfície de um objeto, que consequentemente determinará seu format
 espaço, a qual geralmente se refere ao centro do objeto. Se os pontos de um objeto 
 forem alterados, o modelo desse objeto também será alterado.
 
-Vetores (no campo da geometria) são entidades que possuem uma direção e um comprimento, 
-chamado de magnitude e representam a diferença entre dois pontos. São utilizados para 
+Vetores (no campo da geometria) são entidades que possuem uma direção, um comprimento, 
+chamado de magnitude, e um sentido (por exemplo, da esquerda para direita ou de baixo 
+para cima), os vetores representam a diferença entre dois pontos. São utilizados para 
 armazenar grandezas (como velocidade, gravidade, aceleração, atrito, etc.) e direções.
 Há alguns casos específicos de vetores que recebem nomeações 
 diferentes, por exemplo vetores cuja magnitude é igual a 1 são chamados de vetores 
@@ -998,8 +1047,8 @@ são feitas através de aritmética de matrizes.
 \subsection{Coordenadas do Objeto}
 
 O sistema de coordenadas do objeto é considerado o sistema de coordenadas inicial, não 
-processado deste. Neste sistema as coordenadas são locais e o ponto de referência é o 
-centro do objeto. Quando se define uma malha de polígonos, os vértices estão nesse 
+processado de um objeto. Neste sistema as coordenadas são locais e o ponto de referência 
+é o centro do objeto. Quando se define uma malha de polígonos, os vértices estão nesse 
 sistema de coordenadas.
 
 \subsection{Coordenadas do Mundo}
@@ -1054,7 +1103,7 @@ pirâmide, menor eles irão aparentar na cena.
 Nesse estágio é feita uma normalização das coordenadas 3D para um intervalo entre 
 $[-1,1]$ para cada um dos eixos. Nessa normalização, $-1$ e $1$ representam os extremos 
 do dispositivo tanto na vertical quanto na horizontal.
-Esse estágio não é dependente de nenhum argumento da aplicação e é feito automaticamente 
+Esse estágio não é dependente de nenhum argumento da aplicação e é gerenciado 
 pelo componente do hardware responsável.
 
 \subsection{Coordenadas da Tela}
@@ -1062,7 +1111,7 @@ pelo componente do hardware responsável.
 As coordenadas chegam nesse estágio somente na fase final de renderização, que é o 
 processo de rasterização (seção~\ref{renderingpipelinesec}), as coordenadas 3D 
 normalizadas são convertidas para coordenadas de janela 2D e assim como o estágio 
-anterior, este estágio é feito automaticamente pelo hardware. Após esse estágio, os 
+anterior, este estágio é gerenciado pelo hardware. Após esse estágio, os 
 pixels terão suas coordenadas definidas para serem devidamente dispostos na tela da 
 aplicação.
 
@@ -1081,14 +1130,14 @@ Triângulos também são polígonos atômicos (dividir um triângulo em dois sempre re
 em dois polígonos) e qualquer forma pode ser representada como uma subdivisão de 
 triângulos, ou aproximada, caso seja muito complexa~\cite{hughes2014computer}.
 Além disso, triângulos mantém sua integridade de forma sobre a maior parte de 
-transformações afins e projeções de perspectiva, e a maior parte dos hardwares 
-comerciais de aceleração gráfica são otimizados para rasterização de 
+transformações afins e projeções de perspectiva, e a maior parte dos dispositivos de 
+hardware comerciais de aceleração gráfica são otimizados para rasterização de 
 triângulos~\cite{gregory2009game}.
 
 \section{Iluminação}
 
-Iluminação em aplicações gráficas consiste na simulação do modelo de iluminação que temos 
-do mundo real. Existem várias fontes de luzes diferentes e também diferentes tipos de 
+Iluminação em aplicações gráficas consiste na simulação do modelo de iluminação que há 
+no mundo real. Existem várias fontes de luzes diferentes e também diferentes tipos de 
 luz, por exemplo, uma fonte de luz pode ser unidirecional ou multidirecional.
 
 Objetos que estão mais próximos de uma fonte de luz tendem a ter uma intensidade maior 
@@ -1130,7 +1179,7 @@ normais para iluminação, \textit{mappings}, utilizar coordenadas de textura para
 aplicar uma certa textura, entre outros.
 
 Existem vários tipos diferentes de shader, cada um é responsável por uma etapa 
-diferente do \textit{pipeline} de renderização. A seguir será listada os diferentes 
+diferente do \textit{pipeline} de renderização. A seguir serão listados os diferentes 
 tipos de shader, na ordem em que suas funções são realizadas pelo \textit{pipeline} de 
 renderização~\cite{shreiner2013opengl}~\cite{hughes2014computer}:
 \begin{itemize}
@@ -1148,7 +1197,7 @@ renderização~\cite{shreiner2013opengl}~\cite{hughes2014computer}:
         maneira, os \textit{fragment shaders} irão determinar a cor final de um pixel 
         na tela, por isso neste shader serão computadas interpolações de cores, a 
         iluminação aplicada sobre o vértice e as texturas, se houver alguma.
-    \item Compute Shader: neste shader será feita o cálculo de informação arbitrária, 
+    \item Compute Shader: neste shader será feito o cálculo de informação arbitrária, 
         geralmente utilizado para tarefas que não estão diretamente relacionadas com a 
         renderização de triângulos ou pixels.
 \end{itemize}
@@ -1170,15 +1219,15 @@ ser diferente de outros objetos.
 \label{lowlevelrenderer}
 
 O renderizador gráfico de baixo nível é responsável pelos elementos mais técnicos da 
-renderização. Sua preocupação é lidar com as primitivas geométricas da maneira mais 
-eficiente o possível sem comprometer suas integridades~\cite{gregory2009game}.
+renderização. Sua preocupação é lidar com as primitivas geométricas da maneira o mais 
+eficiente possível sem comprometer suas integridades~\cite{gregory2009game}.
 
 Uma de suas funções é lidar com a comunicação entre a aplicação gráfica e a GPU, esta 
 estará constantemente recebendo dados da aplicação durante toda a sua execução. Esta 
 comunicação é feita através de uma API gráfica, como por exemplo, a API gráfica 
 utilizada para o motor de jogos deste trabalho, o OpenGL~\cite{shreiner2013opengl}, 
 que apesar de possuir uma vasta quantidade de comandos diferentes para uma rica 
-manipulação dos recursos da GPU, geralmente necessidade de uma grande quantidade de 
+manipulação dos recursos da GPU, geralmente há necessidade de uma grande quantidade de 
 código para fazer até mesmo as rotinas mais simples de uma aplicação gráfica. Por isso, 
 além de utilizar uma API gráfica, esse componente responsável pela renderização de 
 baixo nível também geralmente inclui um \textit{wrapper} para os comandos da API, 
@@ -1227,7 +1276,7 @@ A primeira etapa, a de aplicação, é executada na CPU\@. Esta é a parte a qual o
 desenvolvedor possui total controle, e na qual a maior parte das otimizações podem ser 
 feitas para a melhora do desempenho do pipeline. 
 
-Alguns exemplos de computações que são feitas nesse estágio são: gerenciamento de inputs, 
+Alguns exemplos de computações que são feitas nesse estágio são: gerenciamento de \textit{inputs}, 
 detecção de colisão, animações de texturas, animações através de transformações, ajuste 
 de parâmetros que são utilizados nas outras etapas, etc. Ao final dessa fase, toda a 
 geometria e parâmetros computados são passados à fase de geometria.\ essa passagem de 
@@ -1289,7 +1338,7 @@ fragmento. As propriedades dos fragmentos de cada triângulo são geradas utilizan
 dados interpolados entre os três vértices.
 
 No \textit{pixel shading}, são feitas todas as computações de \textit{shading} pixel 
-por pixel, usando os dados interpolados como input, resultando em uma ou mais cores 
+por pixel, usando os dados interpolados como \textit{input}, resultando em uma ou mais cores 
 para serem passadas à próxima etapa. Esta etapa, ao contrário das outras que são 
 feitas por funções fixas do hardware dedicado, é feita por núcleos programáveis da 
 GPU, nomeadamente pelo \textit{fragment shader}. Esse shader será responsável por 
@@ -1323,30 +1372,29 @@ os conteúdos do \textit{buffer} de cores.
 O \textit{loop} do jogo é onde os componentes funcionam em conjunto para proporcionar o que 
 define um jogo: uma aplicação interativa em tempo real. 
 Sistemas interativos em tempo real podem ser divididos em três módulos principais: 
-recebimento de inputs, processamento e apresentação dos 
+recebimento de \textit{inputs}, processamento e apresentação dos 
 resultados~\cite{dalmau2004core}.
 
 Jogos possuem restrições de tempo para realizar todas as 
 suas rotinas, se o sistema não for capaz de fazer seu trabalho dentro do limite de 
-tempo irá falhar. Uma vez que sistemas em tempo real são supostos a fazer suas tarefas 
+tempo irá falhar. Uma vez que sistemas em tempo real são supostos fazer suas tarefas 
 em tempo real, se um jogo não for capaz de fazer isso, o usuário (nesse caso o 
 jogador) não receberá um \textit{feedback} contínuo, e o jogo não fornecerá a 
 interatividade que deveria. Um \textit{loop} de jogo pode ser implementado com a 
 finalidade de satisfazer essas restrições~\cite{Joselli2010}.
 
-Nos jogos eletrônicos, o sistema de inputs corresponde ao gerenciamento do dispositivo 
-de inputs, como mouse, teclado ou controlador de jogo; o processamento é responsável 
+Nos jogos eletrônicos, o sistema de \textit{inputs} corresponde ao gerenciamento do dispositivo 
+de \textit{inputs}, como mouse, teclado ou controlador de jogo; o processamento é responsável 
 por tomar as decisões que afetam o estado do jogo, e a apresentação é responsável por 
 mostrar os resultados desses dois outros estágios, através de áudio e 
 vídeo~\cite{valente2005real}. 
 
 Elaborar um \textit{loop} de jogo significa organizar esses três módulos, e seus submódulos na 
 certa para deixar a simulação o mais fiel o possível da experiência desejada. 
-Considerando os módulos citados, o \textit{loop} do jogo pode ser dividido da seguinte maneira, 
-na seguinte ordem:
-
+Considerando os módulos citados, o \textit{loop} do jogo pode ser dividido da seguinte 
+maneira:
 \begin{itemize}
-    \item Detecção e gerenciamento de inputs
+    \item Detecção e gerenciamento de \textit{inputs}
     \item Estágio de processamento
     \item Estágio de apresentação
 \end{itemize}
@@ -1368,7 +1416,7 @@ O desempenho de um jogo, além de ser dependente das otimizações feitas a nível d
 software, é também dependente da configuração de hardware da plataforma na qual será 
 executado. Portanto, um mesmo jogo pode rodar com um FPS diferente dependendo da 
 plataforma utilizada, visto que a atualização do estado do jogo é dependente da 
-quantidade de quadros construídos, uma mesma sequência de eventos podem ter um 
+quantidade de quadros construídos, uma mesma sequência de eventos pode ter um 
 resultado diferente dependendo do poder computacional do hardware. 
 
 Para evitar esse problema, é necessário tornar o estágio de processamento independente 
@@ -1379,7 +1427,7 @@ conhecido como \textit{delta time}, indicando uma diferença de tempo.
 
 Além da separação do estágio de processamento em sub-tarefas, é importante salientar 
 que nem todas possuem a mesma necessidade de atualização que outras. Por exemplo, a IA 
-não precisa ser atualizada com a mesma frequência do que as simulações físicas, 
+não precisa ser atualizada com a mesma frequência que a simulação física, 
 é necessário somente quando um agente precisa tomar uma decisão. A renderização por 
 outro lado, proporcionará um resultado melhor quanto mais atualizada esta for, desde 
 que não comprometa o desempenho geral do sistema. Por isso, uma forma de otimizar o 
@@ -1388,9 +1436,9 @@ desempenho é atualizar cada um dos componentes somente quando necessário.
 \section{Interpolações}
 
 Na seção~\ref{gameloopsec}, foi discutido o problema da atualização do estado do jogo em 
-relação à taxa de quadros por segundo com a qual a aplicação está rodando, e como esse 
-problema podia ser solucionado adicionando um parâmetro que indicasse o tempo decorrido 
-entre o último quadro e o atual.
+relação à taxa de quadros por segundo com a qual a aplicação está sendo executada, e 
+como esse problema podia ser solucionado adicionando um parâmetro que indicasse o tempo 
+decorrido entre o último quadro e o atual.
 
 Interpolação é um dos recursos utilizados na solução deste problema, e é utilizada para 
 qualquer caso em que se queira passar uma noção de locomoção ou movimento entre os 
@@ -1485,7 +1533,7 @@ interpolação, a slerp é dada por:
         \theta = \arccos(q_1 \cdotp q_2) \\
         t_1 = \sin((1 - t) \cdotp \theta / \sin \theta) \\
         t_2 = \sin(t \cdotp \theta / \sin \theta) \\
-        q_i = (t_1 * q_1) + (t_2 * q_2)
+        q_i = (t_1 \cdotp q_1) + (t_2 \cdotp q_2)
     \end{aligned}
 \end{equation}
 
@@ -1509,7 +1557,7 @@ Os motores de jogos revolucionaram o modo como os jogos são feitos na indústria 
 da clara separação entre o conteúdo técnico e o criativo de um jogo. Foi explicado o 
 surgimento deste conceito, a filosofia de implementação de um motor de jogo, a 
 importância da integração apropriada de seus componentes e também foram apresentados 
-alguns exemplos de componentes comum em motores de jogos.
+alguns exemplos de componentes comuns em motores de jogos.
 Foram apresentados diversos conceitos matemáticos que são amplamente utilizados na 
 área de computação gráfica, e também as diferentes estruturas comumente utilizadas e 
 suas respectivas funcionalidades e métodos.
@@ -1544,7 +1592,7 @@ implementação da interpolação linear para vetores e quaternions.
 \chapter{Trabalhos Relacionados}
 \label{relatedworkscap}
 
-Neste capítulo serão apresentados alguns trabalhos na literatura que estão relacionados 
+Neste capítulo serão apresentados alguns trabalhos encontrados na literatura que estão relacionados 
 com a proposta deste trabalho. A maioria dos trabalhos apresentados concentra-se em criar 
 funcionalidades únicas para um motor de jogos e também nas melhores práticas para o 
 desenvolvimento de motores de jogos, porém nenhum destes trabalhos explora o uso da 
@@ -1553,7 +1601,7 @@ Apesar de nenhum deles estar diretamente relacionado com a proposta deste trabal
 autores também tinham como um dos objetivos desenvolver um motor de jogos eficiente e 
 bem estruturado.
 
-Freitas~\cite{deFreitas2012GEC} propôs um modelo de motor de jogos com uma 
+\citeonline{deFreitas2012GEC} propôs um modelo de motor de jogos com uma 
 arquitetura baseada em componentes, na qual as entidades do jogo são definidas através 
 da agregação de componentes, em contraste com os modelos clássicos os quais utilizam 
 hierarquia de classes e heranças múltiplas, que leva a problemas como forte 
@@ -1569,13 +1617,13 @@ Este modelo de arquitetura permite então a criação de entidades com uma maior
 flexibilidade, adaptabilidade e independência, além de não apresentar os problemas do 
 uso de herança.
 
-O trabalhos deles prossegue então, para explicar seus diferenciais, como a utilização de 
+O trabalho deles prossegue então, para explicar seus diferenciais, como a utilização de 
 entidades que permitem a sua reconfiguração dinâmica em diferentes 
 momentos da aplicação. Consequentemente isso permite flexibilidade e extensibilidade 
 até mesmo em tempo de execução. Por fim eles apresentam as decisões de design que os 
 permitiram atingir esses objetivos.
 
-Anderson~\cite{Anderson2008} levanta em seu trabalho alguns problemas ainda pendentes 
+\citeonline{Anderson2008} discute em seu trabalho alguns problemas ainda pendentes 
 em se tratando de desenvolvimento de motores de jogos, e incentiva a pesquisa no campo 
 de arquitetura e design de motores de jogos. 
 
@@ -1602,15 +1650,15 @@ jogos.
 
 O terceiro problema mencionado é sobre as decisões de modelagem do motor de jogos, e 
 como diferentes gêneros de jogos afetam essas decisões, pois algumas estratégias em 
-específico beneficiam somente uma classe específica de jogos. É levantada então a 
+específico beneficiam somente uma certa classe de jogos. É levantada então a 
 questão da possibilidade de definição de um motor de jogos que é eficiente para qualquer 
 jogo independente do seu tipo.
 
 O quarto problema mencionado é sobre o impacto que as rotinas de baixo-nível dos motores 
 de jogos causam na modelagem de alto-nível do mesmo, comentando sobre a constante 
-evolução da tecnologia utilizada em hardwares ou nas interfaces do software e suas 
-capacidades, e como essas mudanças podem afetar a evolução de um ou múltiplos 
-componentes do motor de jogos.
+evolução da tecnologia utilizada em dispositivos de hardware ou nas interfaces do 
+software e suas capacidades, e como essas mudanças podem afetar a evolução de um ou 
+múltiplos componentes do motor de jogos.
 
 O último problema mencionado é sobre as melhores convenções e práticas de programação 
 que devem ser utilizadas na modelagem de um motor de jogos. Como os motores de jogos 
@@ -1620,7 +1668,7 @@ objetivos no motor de jogos não foram bem definidos no início do projeto, ou se 
 arquitetura não foi bem estruturada. Os autores ponderam então se existe um conjunto de 
 melhores práticas para evitar ou reduzir estes problemas.
 
-Keenan~\cite{Keenan2011} salienta a importância da definição de uma boa arquitetura para 
+\citeonline{Keenan2011} salientam a importância da definição de uma boa arquitetura para 
 o desenvolvimento de um motor de jogos. Em seu trabalho, ele menciona os problemas 
 relacionados com a má estruturação do motor de jogos, e como a criação de um sistema 
 flexível e modularizado pode evitar esses problemas, além de proporcionar outras 
@@ -1631,7 +1679,7 @@ componentes separados do motor de jogos, mas sim a utilização das melhores práti
 programação e modelagem para a construção de um motor de jogos com uma arquitetura 
 robusta.
 
-Zhu~\cite{Zhu2016ECG} propõem uma nova metodologia para o desenvolvimento de jogos, 
+\citeonline{Zhu2016ECG} propõem uma nova metodologia para o desenvolvimento de jogos, 
 chamada de \textit{Engine- Cooperative Game Modeling} (ECGM), um modelo híbrido 
 que combina duas outras metodologias: \textit{Model-Driven Game Development} (MDGD) e a 
 cadeia de ferramentas do motor de jogos, com ênfase nos aspectos técnicos. A motivação 
@@ -1641,6 +1689,28 @@ jogos.
 No restante do trabalho, é descrito o funcionamento desta metodologia proposta, e como 
 ela pode fornecer uma melhoria na modelagem dos projetos ao utilizar o MDGD levando em 
 consideração a cadeia de ferramentas tipicamente utilizadas em motores de jogos.
+
+Um trabalho mais relacionado ao tema modelagem orientada a dados é o proposto 
+por~\citeonline{Fontana2017}, no qual a MOD é utilizada no desenvolvimento de uma 
+ferramenta \textit{opensource} de projeto físico de circuitos integrados. No trabalho 
+são discutidos os principais conceitos da MOD, como esta pode ser utiliada para aprimorar 
+a qualidade do \textit{software} e como pode ser utilizada no contexta de porblemas de 
+projeto físico, que assim como jogos, também precisa lidar com uma substancial quantidade 
+de dados.
+
+Para validar os fundamentos discutidos, foi desenvolvido um sistema utilizando um padrão de 
+projeto conhecido como modelo entidade-componente, que consiste em decompor um problema 
+em um conjunto de entidades e seus componentes (chamados de propriedades). Os resultados 
+obtidos foram comparados com um outra sistema com uma abordagem orientada a objetos para 
+testas o desempenho do sistema com MOD.\@ As métricas escolhidas foram o tempo de execução e 
+a quantidade de \textit{cache misses} para dois problemas diferentes. 
+
+Os resultados obtidos pelos autores mostram que um problema em um cenário com boa 
+localidade de data, isto é, cenários que requerem poucas propriedades de cada entidade, a 
+MOD é cerca de 90\% mais rápida que a orientação a dados. Enquanto que em um cenário com 
+uma má localidade de data, que requer o acesso a uma quantidade superior de propriedades 
+diferentes das diferentes entidades do sistema, a MOD apresenta um desempenho apenas 6\% 
+pior em média.
 
 \section{Considerações Finais do Capítulo}
 
@@ -1660,7 +1730,7 @@ parcialmente relacionados.
 Além disso nenhum dos trabalhos encontrados deu ênfase nos problemas que podem surgir 
 do uso da programação orientada a objetos em jogos, e quais são as alternativas ou 
 práticas que podem contornar esses problemas. Apesar de alguns trabalhos mencionarem 
-sobre maneiras de melhorar a arquitetura e projeto de um motor de jogos, ou proporcionar 
+maneiras de melhorar a arquitetura e projeto de um motor de jogos, ou proporcionar 
 uma maior flexibilidade e extensibilidade, nenhum deles discute sobre como melhorar a 
 estrutura desses componentes, principalmente levando em consideração a evolução do 
 hardware, conforme mencionado por Anderson~\cite{Anderson2008}.
@@ -1758,7 +1828,7 @@ $3 \times 3$ e $4 \times 4$, porém somente esses dois tipos de matrizes quadrada
 presentes pois são as únicas necessárias para a implementação da aplicação.
 
 As matrizes possuem suporte à acesso individual a cada elemento e também a manipulação 
-direta destes. Além disso, possui as seguintes funcionalidades:
+direta destes. Além disso, possuem as seguintes funcionalidades:
 \begin{itemize}
     \item Adição, subtração e igualdade entre matrizes.
     \item Multiplicação por escalar.
@@ -1825,6 +1895,22 @@ igualdade entre dois pontos flutuantes pode ser calculada da seguinte maneira:
 
 Onde $x$ e $y$ são os operandos, $d$ é a diferença entre eles e $T$ é o limitante de 
 pontos flutuantes.
+
+Por exemplo, considerando dois números de ponto flutuante: $x = 2.0$ e $y = 2.000001$, a 
+determinação do limitante $T$ irá também determinar se esses dois números são iguais ou
+não. Para um $T = 10^{-5}$, teria-se:
+
+\begin{equation}
+    \begin{aligned}
+        d = |x - y| = 0.000001 = 10^{-6}\\
+        x = y \iff 10^{-6} < 10^{-5} \\
+        x,\ y,\ d,\ T \in \mathbb{R}
+    \end{aligned}
+\end{equation}
+
+\vspace{.5cm}
+
+Neste caso, para a escolha de $T = 10^{-5}$, os números $x$ e $y$ são iguais.
 
 Construir matrizes manualmente é um processo demorado e propício a erros, por isso, a 
 biblioteca matemática possui diversas funções que criam matrizes prontas que são 
@@ -1911,7 +1997,7 @@ comportamento incluem:
         causando os efeitos de \textit{zoom in} e \textit{zoom out}.
 \end{itemize}
 
-Podem existir mais de uma câmera na mesma cena e suas visões podem aparecer 
+Pode existir mais de uma câmera na mesma cena e suas visões podem aparecer 
 simultaneamente na tela, geralmente é feito um esquema de divisão de tela para que isso 
 seja possível.
 
@@ -1935,14 +2021,14 @@ As ligações permitem uma fácil construção de hierarquia, e também torna trivial 
 como uma mudança de posição de um subgrupo inteiro de objetos.
 
 A figura~\ref{scenegraphexample} demonstra um exemplo de um grafo de cena que está 
-parcialmente representando um carro utilizando hierarquia, nele há um nó que 
+representando parcialmente um carro utilizando hierarquia, nele há um nó que 
 representa uma roda, este nó possui quatro instâncias e estas compartilham uma mesma 
 malha que descreve a geometria da roda. Os nós da roda são filhos do nó que representa 
 o carro como um todo.
 
 \begin{figure}[h]
     \centering
-    \captionof{figure}{Exemplo de um grafo de cena parcialmente descrevendo um objeto 
+    \captionof{figure}{Exemplo de um grafo de cena descrevendo parcialmente um objeto 
     que representa um carro.}
     \includegraphics[width =.6\textwidth]{../figuras/scenegraph}
     \par\medskip
@@ -2036,13 +2122,13 @@ necessário para modelar alguns dos componentes presentes no motor.
 
 Como um motor de jogos é apenas um recurso utilizado para a criação de uma aplicação 
 gráfica, foi necessário propor uma estratégia para a verificação da modelagem orientada 
-a dados como uma forma de otimização de desempenho, e também para a comparação com os 
-jeitos mais tradicionais de se implementar um jogo.
+a dados como uma forma de otimização de desempenho, e também para a comparação com as 
+abordagens mais tradicionais de se implementar um jogo.
 
 Todas as operações matemáticas apresentadas e explicadas na seção~\ref{secmathconcepts} 
 são utilizadas em uma biblioteca matemática, essa por sua vez é extensivamente 
 utilizada nos outros módulos do motor. As funcionalidades de cada uma das estruturas 
-utilizadas foram listadas. Além disso, algumas funcionalidades e convenções não 
+utilizadas foram listadas. Além disso, algumas funcionalidades e convenções 
 relacionadas com nenhuma das estruturas também foram listadas.
 
 O componente gráfico é uma parte extensa do motor de jogos e que precisa lidar com 

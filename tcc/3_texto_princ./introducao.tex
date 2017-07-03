@@ -1,7 +1,7 @@
 \chapter{Introdução}
 \label{intro}
 
-Nas últimas décadas, os microprocessadores tiveram um enorme avanço em termos de performance. A função deste componente
+Nas últimas décadas, os microprocessadores tiveram um enorme avanço em termos de desempenho. A função deste componente
 essencial para os computadores modernos, que por vezes também é chamado de CPU (\textit{Central Process Unit}), é 
 a de processar as instruções e os dados de todos os programas presentes no computador~\cite{Clements:2006:PCH:1214951}.
 
@@ -28,9 +28,10 @@ figura~\ref{memhier} demonstra essa hierarquia em ordem decrescente de velocidad
 As camadas do sistema de memória estão descritas a seguir: 
 
 \begin{itemize}
-    \item Registradores: são as porções da memória com o acesso mais rápido, porém em menor quantidade e com 
-        pouca capacidade de armazenamento. São localizadas dentro do processador, e os compiladores são os responsáveis 
-        por administrar os dados que ficam armazenados nos registradores~\cite{Clements:2006:PCH:1214951}.
+    \item Registradores: são as porções da memória com o acesso mais rápido, porém em 
+        menor quantidade, com pouca capacidade de armazenamento e um alto custo de 
+        fabricação, são localizados dentro do processador. Geralmente os programadores 
+        não possuem controle sobre os registradores~\cite{Clements:2006:PCH:1214951}.
     \item Cache: localizado próximo ao processador, fornece velocidade de acesso rápida e armazena código e dados utilizados 
         recentemente. Quando o processador tenta acessar algum dado presente no cache, ocorre um acerto do cache 
         (\textit{cache hit}), quando o dado não se encontra no cache, ocorre um erro do cache (\textit{cache miss}), e o dado 
@@ -51,7 +52,7 @@ processadores têm aprimorado a uma taxa de 60 porcento ao ano, enquanto que o te
 taxa de menos de 10 porcento ao ano~\cite{Patterson:1997:CIR:623274.624083}. Mesmo com o rápido crescimento tecnológico, essas 
 estatísticas de crescimento não sofreram alterações nas décadas de 2000 e 2010.
 
-Essa disparidade de crescimento tem aumentado a lacuna de performance entre processador-memória, pois 
+Essa disparidade de crescimento tem aumentado a lacuna de desempenho entre processador-memória, pois 
 a latência de acesso a memória pelo processador está cada vez maior. Sempre que ocorre um \textit{cache miss}, o processador 
 precisa ficar alguns ciclos ocioso enquanto aguarda o dado necessário ser buscado na memória 
 principal~\cite{Mahapatra:1999:PBP:357783.331677}, como a velocidade de 
@@ -59,10 +60,11 @@ acesso à memória é relativamente muito menor do que a velocidade de processament
 mais ciclos ociosos. Isso é conhecido como "Gargalo do Processador-Memória", e diante de tais limitações físicas, surge a 
 necessidade de boas práticas de programação para que ocorra a menor quantidade possível de \textit{cache misses}.
 
-Com esse problema em mente, ao analisar o design de programação orientado objetos, percebe-se que essa abordagem, enquanto que 
-mais legível e com código mais reutilizável, sofre muitas vezes em termos de eficiência de memória, pois seu design é centrado 
-em torno do problema e suas possíveis soluções, e não em torno dos dados. Ou seja, fornece abstração dos dados porém a 
-custo do desempenho.
+Com esse problema em mente, ao analisar o \textit{design} de programação orientada a 
+objetos, percebe-se que essa abordagem, enquanto que mais legível e com código mais 
+reutilizável, sofre muitas vezes em termos de eficiência de memória, pois seu 
+\textit{design} é centrado em torno do problema e suas possíveis soluções, e não em torno 
+dos dados. Ou seja, possui uma forte abstração dos dados porém a custo do desempenho.
 
 Quando uma classe de objetos possui dados, chamados de atributos, isto significa que essa classe está fornecendo um contexto 
 aos dados, e este pode comprometer o uso destes dados, pois ao adicionar métodos ao contexto, pode-se criar a necessidade 
@@ -74,12 +76,14 @@ objeto. Essa organização de dados não é benéfica ao processador, ao buscar objet
 atributos específicos destes, todos os outros dados pertencentes à classe também precisam ser carregados, deixando os caches 
 poluídos com dados desnecessários e aumentando a incoerência de cache.
 
-Com a premissa de amenizar o máximo possível estes problemas, a modelagem orientada a dados, como o nome sugere, encoraja a 
-mudança da perspectiva da programação dos objetos para os dados, seus tipos, como estão armazenados na memória e como serão 
-lidos e processados~\cite{fabiandod}. Para alcançar esses objetivos, essa técnica sugere dividir cada objeto em diferentes 
-componentes, e agrupar componentes do mesmo tipo na memória, sem se importar de qual objeto vieram. Isso resulta em largos 
-blocos de dados homogêneos, permitindo o processamento sequencial dos dados, e garantindo um aprimoramento significativo 
-no desempenho~\cite{fabiandod}.
+Com a premissa de amenizar o máximo possível estes problemas, a modelagem orientada a 
+dados (MOD), como o nome sugere, encoraja a mudança da perspectiva da programação dos 
+objetos para os dados, seus tipos, como estão armazenados na memória e como serão lidos e 
+processados~\cite{fabiandod}. Para alcançar esses objetivos, essa técnica sugere dividir 
+cada objeto em diferentes componentes, e agrupar componentes do mesmo tipo na memória, 
+sem se importar de qual objeto vieram. Isso resulta em largos blocos de dados homogêneos, 
+permitindo o processamento sequencial dos dados, e garantindo um aprimoramento 
+significativo no desempenho~\cite{fabiandod}.
 
 Esta abordagem de modelagem é mais condizente com a realidade de muitos programas complexos, pois raramente há apenas um ou uma pequena 
 quantidade de objetos de um determinado tipo, sendo necessário o processamento de todos eles. Mas esta abordagem não traz a 
@@ -98,7 +102,7 @@ como motor de jogos (do inglês \textit{Game Engine}), ou simplesmente como \text
 Um motor de jogos, apesar de não possuir uma definição absoluta, é geralmente entendida como o software responsável por lidar com 
 todos os módulos que juntos compõem um jogo eletrônico, como por exemplo, bibliotecas matemáticas (contendo operações de vetores, 
 matrizes, quaternions, métodos trigonométricos, etc.), gerência de memória, 
-estruturas de dados personalizadas, o motor de renderização, gerenciador de recursos, ferramentas para depuração e análise de performance, sistemas 
+estruturas de dados personalizadas, o motor de renderização, gerenciador de recursos, ferramentas para depuração e análise de desempenho, sistemas 
 de colisão e física, sistema de animações e partículas, sistema de detecção de inputs (mouse, teclado e outros controladores),
 sistema de áudio, sistema de rede para jogos online, entre outros~\cite{gregory2009game}.
 
@@ -111,7 +115,7 @@ animações, música, sons, texturas, etc.).
 
 O motor de renderização, também conhecido como motor gráfico, é um dos maiores e mais complexos componentes de um motor de 
 jogos. E apesar de não possuir apenas uma única maneira de projetá-los, a maioria dos motores de renderização modernos 
-seguem filosofias de design em comum~\cite{gregory2009game}. Esse componente será responsável por todos os métodos, 
+seguem filosofias de \textit{design} em comum~\cite{gregory2009game}. Esse componente será responsável por todos os métodos, 
 estruturas e otimizações que serão responsáveis pela renderização dos gráficos e animações do jogo. 
 
 Um dos elementos 
@@ -119,11 +123,16 @@ presentes no motor gráfico é uma interface de dispositivo gráficos, que será res
 e, consequentemente, com a renderização de baixo nível. Uma das bibliotecas capazes de realizar essa função é o OpenGL, uma 
 API gráfica para acessar os recursos da GPU, contendo um rico conjunto de comandos (mais de 500) que são utilizados para 
 especificar objetos, imagens e operações necessárias para a renderização de aplicações gráficas~\cite{shreiner2013opengl}.
+Existem outras alternativas ao OpenGL que também são populares no mercado, como por 
+exemplo o DirectX, desenvolvido pela Microsoft\textit{https://www.microsoft.com} e que ao 
+longo dos anos foi também foi projetado para oferecer uma vasta gama de 
+funcionalidades~\cite{zink2016practical}.
 
-A programação em OpenGL moderno também requer o uso e entendimento de outro conceito igualmente importante, os shaders, que 
-são pequenos programas que são especialmente compilados para a GPU e contém instruções que são executadas diretamente 
-nesta~\cite{shreiner2013opengl}. Shaders em OpenGL utilizam uma linguagem de programação própria, o GLSL (\textit{OpenGL 
-Shading Language})~\cite{shreiner2013opengl}.
+A programação em OpenGL moderno também requer o uso e entendimento de outro conceito 
+igualmente importante, os \textit{shaders}, que são pequenos programas que são 
+especialmente compilados para a GPU e suas instruções são executadas diretamente 
+nos núcleos da GPU~\cite{shreiner2013opengl}. Shaders em OpenGL utilizam uma linguagem de 
+programação própria, o GLSL (\textit{OpenGL Shading Language})~\cite{shreiner2013opengl}.
 
 Além dessa camada de renderização de baixo nível, o motor gráfico também conta com componentes essenciais de mais alto nível 
 que são responsáveis pela gerência da geometria das malhas, como um grafo de cenas, que além de manipular as malhas estabelece 
@@ -131,12 +140,13 @@ a hierarquia entre elas e define subdivisões espaciais~\cite{gregory2009game}. T
 como por exemplo a remoção parcial de objetos que não são considerados para contribuir à imagem final, essa técnica é 
 conhecida como \textit{culling}~\cite{akenine2008real}.
 
-Todos esses elementos, técnicas e otimizações do motor gráfico no fim constroem o que é conhecido como \textit{pipeline} de 
-renderização. A principal função desse \textit{pipeline} é renderizar uma imagem bidimensional, 
-dada uma câmera virtual, objetos tridimensionais, fontes de luz, equações de sombreamento, texturas, entre 
+Todos esses elementos, técnicas e otimizações do motor gráfico no fim constroem o que é 
+conhecido como \textit{pipeline} de renderização. A principal função desse 
+\textit{pipeline} é renderizar uma imagem bidimensional, dada uma câmera virtual, objetos 
+tridimensionais, fontes de luz, equações de sombreamento, texturas, entre 
 outros~\cite{akenine2008real}.
 
-Considerando os problemas supracitados a respeito do gargalo de performance do processador-memória, e das desvantagens da 
+Considerando os problemas supracitados a respeito do gargalo de desempenho do processador-memória, e das desvantagens da 
 programação orientada a objetos, este trabalho propõe a implementação de um motor de jogos desde o princípio com o objetivo de 
 explorar o potencial da modelagem orientada a dados, um conceito pouco difundido entre a comunidade de programadores, 
 e seus benefícios para aplicações gráficas, uma área na qual a orientação a objetos está fortemente impregnada. Uma vez
@@ -161,8 +171,8 @@ Abaixo encontra-se uma lista dos principais objetivos a serem alcançados com est
 \begin{itemize}
     \item Verificar o estado atual no que diz respeito às implementações de motores de jogos modernos;
     \item Explorar o potencial e limitações da linguagem de programação Rust para aplicações gráficas;
-    \item Utilizar o conceito de design orientado a dados para proporcionar uma melhora
-        na performance dos motores gráficos através da coerência de cache.
+    \item Utilizar o conceito de \textit{design} orientado a dados para proporcionar uma melhora
+        no desempenho dos motores gráficos através da coerência de cache.
     \item Analisar o desempenho do motor de jogos, através do desenvolvimento de uma 
         aplicação que utilize suas funcionalidades em duas versões, uma orientada a 
         objetos e outra orientada a dados, comparando essas duas versões.
