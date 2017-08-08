@@ -106,9 +106,8 @@ Turma 2013/2 -- Joinville/SC
    principalmente jogos eletrônicos, são notórias por sofrerem deste problema pela grande quantidade de elementos 
    diferentes que as constituem. Este trabalho propõe a implementação de um motor de jogo (uma \textit{engine}), utilizando um 
    conceito relativamente novo de programação, a modelagem orientada a dados, com a finalidade de amenizar este problema de 
-   acesso constante à memória, escrita na linguagem Rust, linguagem a qual visa velocidade e uso eficiente e seguro da 
-   memória.
-    \textbf{Palavras-chave:} \textit{\textit{Modelagem Orientada a Dados (MOD). Engine. Rust} }
+   acesso constante à memória.
+    \textbf{Palavras-chave:} \textit{\textit{Modelagem Orientada a Dados (MOD). Motor de Jogos. Coerência de Cache} }
 \end{abstract}
 
 %------------------------------------------------
@@ -247,25 +246,18 @@ programação orientada a objetos, este trabalho propõe a implementação de um
 explorar o potencial da modelagem orientada a dados, um conceito pouco difundido entre a comunidade de programadores, 
 e seus benefícios para aplicações gráficas, uma área na qual a orientação a objetos está fortemente impregnada. Uma vez
 que uma \textit{engine} completa é uma aplicação consideravelmente grande e complexa, este trabalho irá se concentrar na implementação
-do motor gráfico e suas otimizações. Para a implementação da \textit{engine}, foi escolhida a linguagem de programação Rust.
-
-Rust é uma linguagem de programação de baixo nível, com tipagem estática e forte. A linguagem foi projetada com os objetivos 
-de ser rápida, fácil de ser paralelizada e ter segurança de memória, prevenindo a ocorrência de condições de corrida, estouros 
-de pilha, e acessos a posições de memória não inicializadas ou desalocadas~\cite{Matsakis:2014:RL:2692956.2663188}. Além disso, 
-como a linguagem é relativamente nova e grande parte das aplicações gráficas são escritas em C ou C++, esse trabalho pode ser 
-considerado um bom meio para testar o desempenho da linguagem.
+do motor gráfico e suas otimizações.
 
 %------------------------------------------------
 \section{Objetivos}
 \label{obj}
 
-\textbf{Objetivo geral}: Implementar uma \textit{engine} na linguagem de programação Rust e analisar sua eficiência e performance.\\
+\textbf{Objetivo geral}: Implementar um motor de jogos e analisar sua eficiência e performance.\\
 
 \noindent\textbf{Objetivos específicos}: 
 Abaixo encontra-se uma lista dos principais objetivos a serem alcançados com este trabalho.
 \begin{itemize}
     \item Verificar o estado atual no que diz respeito às implementações das \textit{engine}s modernas;
-    \item Explorar o potencial e limitações da linguagem de programação Rust para aplicações gráficas;
     \item Utilizar o conceito de design orientado a dados para proporcionar uma melhora
         na performance dos motores gráficos através da coerência de cache.
     \item Comparar a performance da \textit{engine} implementada com outras que fornecem funcionalidades semelhantes mas
@@ -280,9 +272,9 @@ Abaixo encontra-se uma lista dos principais objetivos a serem alcançados com es
 \label{met}
 
 Após a etapa de revisão bibliográfica sobre 
-os conceitos necessários para a implementação da \textit{engine} e o estudo aprofundado da linguagem Rust e suas 
-características avançadas, a aplicação será desenvolvida em etapas e o método utilizado será a implementação
-dos componentes da \textit{engine} sequencialmente, no qual estes serão testados individualmente.
+os conceitos necessários para a implementação do motor de jogos, a aplicação será desenvolvida em etapas e o 
+método utilizado será a implementação dos componentes do motor de jogos sequencialmente, no qual estes 
+serão testados individualmente.
 
 A etapa seguinte será a integração dos componentes para a construção do pipeline gráfico e implementação 
 das outras funcionalidades. Com a \textit{engine} tendo todos os seus componentes e características funcionando devidamente,
@@ -295,12 +287,8 @@ Para a realização deste trabalho, as seguintes etapas deverão ser cumpridas:
 \begin{enumerate}[label=\textnormal{(\arabic*)}]
     \item Revisão bibliográfica, sobre trabalhos relacionados ao desenvolvimento de motores gráficos e design 
         orientado a dados.
-    \item Estudo minucioso da linguagem Rust, suas características avançadas e sua filosofia sobre 
-        codificação e gestão de memória;
     \item Implementação e teste de uma biblioteca matemática minimalista, contendo operações para vetores, 
         matrizes, quaternions e métodos trigonométricos.
-    \item Revisão da biblioteca OpenGL, sua integração com a linguagem Rust, o fluxo base de uma 
-        \textit{engine} e também da linguagem de alto nível para shaders GLSL;
     \item Implementação e teste de uma estrutura para manipulação da câmera e do pipeline gráfico;
     \item Implementação e teste do grafo de cena e do leitor de malhas externas.
     \item Projetar o sistema de iluminação;
