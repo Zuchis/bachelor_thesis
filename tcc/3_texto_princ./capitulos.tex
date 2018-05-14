@@ -110,134 +110,6 @@ componentes do mesmo tipo são agrupados juntos na memória, independentemente do 
 de qual vieram. Essa organização resulta em blocos largos de dados homogêneos, 
 permitindo o uso eficiente de memória através processamento de dados contíguos. 
 
-\section{Linguagem de Programação Rust}
-
-Rust é uma linguagem de programação nova cuja primeira versão estável foi lançada em 2015.
-É desenvolvida pelo grupo de pesquisa \textit{Mozilla}~\cite{rustdocs}, foi projetada 
-para ser uma linguagem de sistemas de propósito geral e multiparadigma, tomando influências 
-tanto de linguagens imperativas quanto de linguagens funcionais. Exemplos de 
-características de linguagens funcionais como Haskell ou ML adotadas pela linguagem 
-Rust incluem: tipos de dados algébricos, casamento de padrões e polimorfismo restringido. 
-A diferença é que Rust é capaz de oferecer essas funcionalidades com um completo 
-controle do \textit{layout} da memória e de sua alocação, assim como C e 
-C++~\cite{holk2013}.
-
-Os objetivos nos quais a linguagem foca são: segurança, velocidade e concorrência, sem a 
-utilização de um \textit{garbage collector}, permitindo a escrita de código de baixo 
-nível eficiente com diversas verificações de segurança em tempo de compilação que não causam 
-sobrecargas e ainda elimina todas as condições de concorrência~\cite{rustdocs}. 
-
-Um dos motivos pelo qual a linguagem foi desenvolvida foi uma resposta ao fato de que C e 
-C++, mesmo sendo rápidas, não são seguras em termos de uso da memória. Apesar de ter 
-sido estabilizada apenas há pouco tempo, seus objetivos permitem o desenvolvimento de 
-programas robustos e a linguagem tem apresentado excelente desempenho. Seu código tem 
-segurança de memória por padrão (a linguagem não permite duas referências mutáveis para 
-uma mesma variável, elmininando assim, as condições de corrida), mais rápido que C++, 
-mais fácil de manter e excelente em concorrência~\cite{Beingessner2016}.
-
-A linguagem atinge seus objetivos de velocidade e segurança de memória através de dois 
-conceitos: abstrações sem custo e posse. Esses dois conceitos serão explicados 
-a seguir.
-
-\subsection{Abstrações Sem Custo}
-
-Rust possui uma alta capacidade de otimização na compilação para permitir a construção de 
-abstrações de alto nível que são transformadas em código de nível mais baixo. Além disso 
-a linguagem possui um sistema de traços, o qual possui um alto poder de expressividade 
-que permite a construção de abstrações.
-
-O sistema de traços é uma característica da linguagem. Um traço pode ter uma ou mais 
-funcionalidades, se for declarado que um certo tipo de variável possui esse traço, isso 
-diz ao compilador do Rust que aquele tipo deve fornecer as funcionalidades descritas 
-no traço~\cite{rustdocs}.
-
-\begin{figure}[h]
-    \centering
-    \captionof{figure}{Demonstração do sistema de traços do Rust.}
-    \includegraphics[width =.8\textwidth]{../figuras/rusttraitsystem}
-    \par\medskip
-    Fonte: \cite{rustdocs}.
-    \label{traitsystemdemo}
-\end{figure}
-
-A figura~\ref{traitsystemdemo} demonstra um exemplo de uso do sistema de traços. Neste 
-exemplo, há uma estrutura chamada \textit{Circle}, e um traço chamado \textit{HasArea}, 
-esse traço possui a função \textit{area}. Através da palavra-chave \textit{impl}, o 
-traço \textit{HasArea} é implementado para a estrutura do exemplo, outras estruturas 
-poderiam ser criadas e para estas esse traço também poderia ser implementado.
-
-Quando uma dessas funções de um traço é chamada para algum tipo de dado específico, o 
-compilador gera uma variante daquela função a qual terá ligação estática total, 
-permitindo a aplicação de otimizações, como por exemplo a aplicação de 
-\textit{inlining}~\cite{holk2013}.
-
-\subsection{Sistema de Posse}
-
-O modelo de posse da linguagem possui dois aspectos principais: controlar onde e quando os 
-dados vivem, e controlar onde e quando uma mudança pode ocorrer. Esses aspectos são 
-garantidos por três funcionalidades principais: tipos afins, escopo e 
-privacidade~\cite{Beingessner2016}.
-
-Tipos afins representam valores que são de propriedade exclusiva. Se uma variável que possui 
-uma coleção for passada por valor a uma função, ou se sua coleção for atribuída a outra 
-variável, a variável original perde a posse da coleção e o seu acesso. Para exemplificar 
-o funcionamento dessa característica, a figura~\ref{rustmovedcollection} demonstra um 
-dos possíveis erros gerados pelo \textit{borrow-checker}, componente do Rust responsável 
-por detectar erros relacionados ao sistema de posse~\cite{rustdocs}. Nesse problema, o 
-vetor $v$ tem uma certa coleção inicialmente atribuída a este. Um outro vetor $v2$ é 
-declarado recebendo a coleção originalmente atribuída a $v$, este então perde a posse 
-de sua coleção e não pode mais acessá-la, por isso as linhas 10 e 11 caracterizam um erro 
-na linguagem, porque $v$ é uma variável desalocada e na linha 10 um método está sendo 
-chamado para ela, enquanto que na linha 11 a variável está sendo indexada.
-
-\begin{figure}[h]
-    \centering
-    \captionof{figure}{O problema de acesso a uma variável cuja coleção foi movida a 
-    outra.}
-    \includegraphics[width =.8\textwidth]{../figuras/rust-moved-value-error}
-    \par\medskip
-    Fonte: Autoria própria.
-    \label{rustmovedcollection}
-\end{figure}
-
-Já na figura~\ref{rustcopyerror} há dois casos: em~\ref{fig:copyerror} ocorre um outro 
-erro da linguagem, quando uma coleção é passada por valor a uma função e esta coleção não 
-é retornada ao final da função. A variável que foi passada por valor também perde a posse 
-e o acesso à sua coleção e por isso a linha 16 caracteriza um erro, quando se tenta 
-atribuir a variável $v$ desalocada à $v2$. A figura~\ref{fig:copyfixed} mostra como esse 
-problema pode ser resolvido, declarando na assinatura da função \textit{print\_vector} a variável 
-$v1$ como uma referência a uma coleção, desta maneira, a variável original será passada como 
-referência à função e não perderá a posse da sua coleção.
-
-\begin{figure}[h!]
-    \centering
-    \captionof{figure}{O problema de conteúdo movido e uma possível maneira de 
-    corrigi-lo.}
-    \begin{subfigure}[b]{0.40\textwidth}
-        \includegraphics[width=\textwidth]{../figuras/rust-copy-trait-error}
-        \caption{}
-        \label{fig:copyerror}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.40\textwidth}
-        \includegraphics[width=\textwidth]{../figuras/rust-copy-trait-error-fixed}
-        \caption{}
-        \label{fig:copyfixed}
-    \end{subfigure}
-    \par\medskip
-    Fonte: Autoria própria.
-    \label{rustcopyerror}
-\end{figure}
-
-\medskip
-
-Escopos e privacidade são dois conceitos mais presentes em outras linguagens. Os escopos 
-definem uma região na qual os ponteiros que estão nela são válidos somente nesta região e 
-o compilador garante que os ponteiros não vão extender seu ciclo de vida para além dela. No 
-Rust essas regiões são definias por escopos léxicos. Por fim a privacidade é um conceito 
-presente em muitas outras linguagens, campos e funções podem ser marcados como sendo públicos 
-ou privados, e apenas o código que está dentro de certos limites pode ter acesso a qualquer 
-coisa que esteja marcada como privada.
-
 \section{Motor de Jogos}
 \label{secgameengine}
 
@@ -1562,12 +1434,6 @@ Foram apresentados diversos conceitos matemáticos que são amplamente utilizados 
 área de computação gráfica, e também as diferentes estruturas comumente utilizadas e 
 suas respectivas funcionalidades e métodos.
 
-Rust é uma linguagem de programação nova e promissora por apresentar um desempenho 
-semelhante às linguagens C e C++ porém apresenta um nível maior de de segurança de 
-memória. Foi feita uma breve introdução da linguagem, juntamente com seus objetivos 
-e foram explicadas algumas características que garantem que a linguagem consiga 
-cumpri-los.
-
 Foram apresentados os \textit{pipelines} de visualização e renderização, dois 
 conceitos importantes em aplicações gráficas que consistem em etapas que processam os 
 dados desde o seu carregamento no sistema até serem transformados em pixels na tela, 
@@ -1741,9 +1607,8 @@ não foi possível encontrar trabalhos que tivessem ênfase especificamente neste t
 \chapter{Proposta de Trabalho}
 \label{proposalcap}
 
-Neste capítulo será explicada a proposta deste trabalho, um motor de jogos escrito em Rust 
-com modelagem orientada a dados visando à otimização da comunicação entre o processador e 
-a memória.
+Neste capítulo será explicada a proposta deste trabalho, um motor de jogos com modelagem 
+orientada a dados visando à otimização da comunicação entre o processador e a memória.
 Além de utilizar os conceitos da modelagem orientada a dados, também é necessário 
 utilizar conceitos de Computação Gráfica, Álgebra Linear e Geometria Analítica, Teoria 
 de Grafos, Processamento de Imagens, Física, entre outros.
