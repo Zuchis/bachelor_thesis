@@ -59,7 +59,7 @@ isso, os objetos pertencentes ao domínio do problema são representados por
 identificadores únicos que são utilizados para acessar suas propriedades. Essas 
 propriedades são \textit{arrays} de dados que são armazenados na memória de maneira 
 contígua, e para utilizar essa técnica de maneira eficiente, é essencial administrar 
-esses \textit{arrays} das propriedades para garantir que permancem contíguos conforme 
+esses \textit{arrays} das propriedades para garantir que permaneçam contíguos conforme 
 novos dados são adicionados e removidos~\cite{Fontana2017}.
 
 Ao se modelar o código através de uma abordagem orientada a objetos, esta modelagem 
@@ -74,7 +74,9 @@ A MOD utiliza uma abordagem diferente, prevendo onde os dados são mais vistos ou
 esperados através da determinação do fluxo de dados, utiliza o \textit{input} 
 mais provável para direcionar a escolha do algoritmo. Com isso, ao se utilizar essa 
 abordagem pode-se separar os dados mais utilizados dos menos utilizados de tal forma 
-que estes não sejam desnecessariamente carregados da memória.
+que estes não sejam desnecessariamente carregados da memória. Não 
+saber como esses dados estão armazenados na memória pode ser 
+prejudicial para o desempenho do programa.
 
 \begin{figure}[h]
     \centering
@@ -109,6 +111,20 @@ Na figura~\ref{fig:dod} há uma separação do objeto em componentes diferentes, e
 componentes do mesmo tipo são agrupados juntos na memória, independentemente do objeto 
 de qual vieram. Essa organização resulta em blocos largos de dados homogêneos, 
 permitindo o uso eficiente de memória através processamento de dados contíguos. 
+
+Outra proposta da MOD, além da divisão dos objetos em diferentes 
+componentes, é utilizar a ordenação de dados ao invés de armazenar 
+o estado de um objeto. O motivo de evitar o armazenamento do estado 
+de um objeto se deve pela necessidade de condicionais para checar 
+esse estado.
+
+O uso de condicionais dentro de um \textit{loop} pode causar 
+\textit{branching}, que é o ato da troca da atual sequência de 
+instruções do programa por uma outra sequência, caracterizando um 
+desvio do comportamento padrão de execução das instruções em 
+ordem~\cite{knuthart}. Tal desvio é causado pela execução de uma instrução que 
+causa tal comportamento, instruções com condicionais são exemplos 
+de instruções que causam \textit{branching}.
 
 \section{Motor de Jogos}
 \label{secgameengine}
