@@ -1647,12 +1647,16 @@ hardware, conforme mencionado por Anderson~\cite{Anderson2008}.
 Devido ao fato da modelagem orientada a dados ainda não ser um conceito muito difundido, 
 não foi possível encontrar trabalhos que tivessem ênfase especificamente neste tópico.
 
-\chapter{Proposta de Trabalho}
+\chapter{Otimizações para motores de jogos através de modelagem 
+orientada a dados}
 \label{proposalcap}
 
-Neste capítulo será explicada a proposta deste trabalho, um motor de jogos com modelagem 
-orientada a dados visando à otimização da comunicação entre o processador e a memória.
-Além de utilizar os conceitos da modelagem orientada a dados, também é necessário 
+Para testar as otimizações proporcionadas pela modelagem orientada 
+a dados, um motor de jogos foi desenvolvido em duas versões 
+diferentes: uma utilizando os conceitos da programação orientada a 
+objetos, e outra utilizando modelagem orientada a dados,
+visando à otimização da comunicação entre o processador e a memória.
+Além de utilizar os conceitos da MOD, também é necessário 
 utilizar conceitos de Computação Gráfica, Álgebra Linear e Geometria Analítica, Teoria 
 de Grafos, Processamento de Imagens, Física, entre outros.
 
@@ -1660,7 +1664,7 @@ Conforme explicado na seção~\ref{secgameengine}, um motor de jogos é uma combina
 diversos componentes diferentes que juntos compõem a parte lógica de um jogo digital. As 
 seções seguintes discutirão sobre os componentes implementados que foram julgados 
 necessários para o desenvolvimento do motor de jogos que é o objeto de estudo deste 
-trabalho.
+trabalho, bem como as diferenças entre as implementações.
 
 Além dos componentes, também serão explicadas as estratégias empregadas para a 
 implementação de outros elementos importantes discutidos previamente no 
@@ -1669,15 +1673,20 @@ capítulo~\ref{theorycap} que fazem parte da estrutura de um motor de jogos, como
 
 Como um motor de jogos por si só não é suficiente para se gerar análises e resultados, 
 pois seu objetivo é dar suporte ao desenvolvimento de uma outra aplicação, além do 
-desenvolvimento do motor, será necessário o desenvolvimento de uma aplicação 
-que utilize as funcionalidades deste para realmente verificar sua eficiência.
+desenvolvimento do motor, foi necessário o desenvolvimento de uma aplicação 
+que utilize as funcionalidades do motor para realmente 
+verificar sua eficiência. A aplicação desenvolvida é idêntica para 
+as duas versões do motor.
 
-Para que seja possível um meio de comparação, será desenvolvida uma aplicação simples em 
-duas versões diferentes, uma delas será feita com programação orientada a objetos, e na 
-outra será utilizada modelagem orientada a dados. Isso permitirá a comparação entre 
-essas duas abordagens e a análise de eficiência da MOD, bem como a demonstração de como 
-uma aplicação com orientação a objetos pode ser convertida para um equivalente com 
-orientação a dados.
+A análise de desempenho das principais funções da aplicação 
+permitirá a comparação entre as duas abordagens e a eficiência da 
+MOD. Além das alterações necessárias nos componentes do motor, há 
+também alterações a serem feitas na aplicação de teste 
+desenvolvida, estas serão apresentadas para demonstrar a conversão 
+entre as abordagens. Apesar das diferenças, nem todos os componentes 
+sofreram alterações entre as duas versões, por este motivo não 
+serão apresentadas alterações para todos os componentes descritos 
+nesse capítulo.
 
 \section{Biblioteca Matemática}
 
