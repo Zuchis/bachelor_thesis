@@ -123,13 +123,35 @@ O uso de condicionais dentro de um \textit{loop} pode causar
 instruções do programa por uma outra sequência, caracterizando um 
 desvio do comportamento padrão de execução das instruções em 
 ordem~\cite{knuthart}. Tal desvio é causado pela execução de uma instrução que 
-causa tal comportamento, instruções com condicionais são exemplos 
-de instruções que causam \textit{branching}.
+causa ramificação na execução do programa, instruções com condicionais 
+são exemplos de instruções que causam \textit{branching}.
 
 O \textit{branching} é um dos fatores que dificultam o uso de uma técnica conhecida 
 por cache \textit{prefetching}, utilizada pelos processadores para aprimorar o 
 desempenho, algumas instruções ou dados são buscados da memória principal e movidos 
-para o cache antes que seja necessário usá-los~\cite{smith1982}
+para o cache antes que seja necessário usá-los~\cite{smith1982}. Para que o 
+\textit{prefetching} ocorra, é necessário que o algoritmo responsável pela 
+técnica preveja qual ramo será o executado. Caso a escolha esteja errada, 
+o erro de previsão causa penalidades no desempenho, e o processador precisa 
+despejar as instruções ou dados que haviam sido buscadas de 
+antemão~\cite{tianprefetch}.
+
+Se uma referência a um \textit{array} é precedida por uma instrução com 
+condicionais, há dois problemas para se realizar o \textit{prefetching} dos 
+dados do \textit{array}: o primeiro problema é que o teste condicional da 
+instrução pode ser verdadeiro somente para um subconjunto do \textit{array} 
+e realizar um \textit{prefetching} no \textit{array} poderia resultar na 
+transferência desnecessárias de dados para o cache. O segundo problema é 
+que o teste condicional pode estar impedindo o referenciamento de dados 
+não existentes no \textit{array}, e realizar o \textit{prefetching} para 
+esses dados poderia resultar em comportamento 
+inesperado~\cite{vanderwieldataprefetch}.
+
+Para evitar o uso de instruções com condicionais, principalmente em 
+métodos que são utilizados com frequência, pode-se separar os dados entre 
+aqueles que passam no teste condicional e aqueles que não passam, desta 
+forma a verificação com condicionais se torna desnecessária, e o fluxo de 
+execução das instruções não é interrompido por \textit{branching}.
 
 \section{Motor de Jogos}
 \label{secgameengine}
