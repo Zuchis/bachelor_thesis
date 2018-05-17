@@ -1688,6 +1688,40 @@ sofreram alterações entre as duas versões, por este motivo não
 serão apresentadas alterações para todos os componentes descritos 
 nesse capítulo.
 
+\begin{figure}[h]
+    \centering
+    \captionof{figure}{UML simplificado contendo os principais componentes do motor.}
+    \includegraphics[width =.8\textwidth]{../figuras/uml_engine}
+    \par\medskip
+    Fonte: autoria própria
+    \label{umlengine}
+\end{figure}
+
+A figura~\ref{umlengine} contém um diagrama de classes com as principais
+classes do motor e as relações entre estas na versão orientada a objetos. Os 
+componentes do motor juntos contém o mínimo necessário para executar uma 
+aplicação gráfica 3D utilizando openGL. O componente gráfico é composto pelas 
+classes ProgramaShader, GrafoCena, NoGrafo, Camera e Malha. O componente da 
+física é composto pela classe Objeto. 
+
+Para o gerenciador de recursos foi 
+utilizado o padrão de \textit{singletons} de design de software, no qual as 
+classes que são \textit{singletons} restringem a instanciação de objetos da 
+classe para exatamente um. As classes do tipo Manager apresentadas na 
+figura~\ref{umlengine} são \textit{singletons} que controlam o armazenamento e 
+acesso aos principais recursos da aplicação, que são as malhas, objetos, grafos 
+de cena, cameras e shaders.
+
+O primeiro passo feito para realizar a conversão do motor para uma abordagem 
+orientada a dados, conforme descrito na sessão~\ref{secdataorienteddesign}, 
+foi analisar o fluxo de dados necessário para que cada um dos componentes 
+funcionem apropriadamente, e especificar quais são os dados gerados 
+por cada componente. Depois de determinar o fluxo, o próximo passo foi 
+descrever as transformações de dados que cada componente precisa 
+realizar.
+
+Após analisar os componentes do motor e a aplicação desenvolvida
+
 \section{Biblioteca Matemática}
 
 Utilizando os conceitos discutidos na seção~\ref{secmathconcepts}, a intenção é 
