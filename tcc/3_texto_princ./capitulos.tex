@@ -71,7 +71,7 @@ prototipagem dos programas pois essas soluções podem ser escritas diretamente da
 modelagem para o código~\cite{fabiandod}.
 
 A MOD utiliza uma abordagem diferente, prevendo onde os dados são mais vistos ou 
-esperados através da determinação do fluxo de dados, utiliza o \textit{input} 
+esperados através da determinação do fluxo de dados, utiliza o caso 
 mais provável para direcionar a escolha do algoritmo. Com isso, ao se utilizar essa 
 abordagem pode-se separar os dados mais utilizados dos menos utilizados de tal forma 
 que estes não sejam desnecessariamente carregados da memória. Não 
@@ -152,6 +152,33 @@ métodos que são utilizados com frequência, pode-se separar os dados entre
 aqueles que passam no teste condicional e aqueles que não passam, desta 
 forma a verificação com condicionais se torna desnecessária, e o fluxo de 
 execução das instruções não é interrompido por \textit{branching}.
+
+O desvio excessivo da ordem de execução padrão de um programa 
+também pode ser evitado tratando sempre o caso mais comum primeiro.
+ Isso significa que, ao descrever uma transformação sobre um 
+\textit{input} de dados, essa transformação deve levar em 
+consideração qual será o caso mais comum para esse \textit{input}, 
+em termos de estado e de quantidade. 
+
+Em aplicações desenvolvidas com programação orientada a objetos, 
+as transformações de dados geralmente são feitas através dos 
+métodos implementados de cada classe. Esses métodos estão no 
+escopo do objeto e por isso não possuem acesso aos atributos dos 
+outros objetos da mesma classe. Consequentemente as instruções 
+descritas nos métodos operam somente sobre os atributos do objeto 
+que fez a chamada do método.
+
+Essa abordagem é irrealista no contexto de jogos e aplicações 
+gráficas, pois em poucas situações o caso mais comum será um 
+único objeto. Se o caso mais
+comum de \textit{input} para uma transformação é um conjunto 
+de objetos, então essa transformação 
+deve conter instruções que operam sobre o conjunto inteiro de 
+objetos e somente sobre as propriedades que são realmente 
+necessárias, otimizando o fluxo de instruções e o acesso à 
+memória~\cite{fabiandod}. Transformações sobre um único objeto 
+quando vários são necessários causa poluição desnecessária do 
+cache.
 
 \section{Motor de Jogos}
 \label{secgameengine}
@@ -1720,7 +1747,64 @@ por cada componente. Depois de determinar o fluxo, o próximo passo foi
 descrever as transformações de dados que cada componente precisa 
 realizar.
 
-Após analisar os componentes do motor e a aplicação desenvolvida
+Após analisar os componentes do motor e a aplicação desenvolvida, 
+pode-se observar que o fluxo de dados ocorre na seguinte ordem:\\
+\begin{enumerate}
+    \item Os recursos externos são carregados no sistema (\textit{shaders} e malhas).
+    \item Os objetos e o grafo de cena são criados e alocados.
+    \item Inicia-se o ciclo principal do programa:
+        \begin{enumerate}
+           \item Atualização dos objetos.
+           \item Verificação de colisões.
+           \item A câmera atualiza a matriz de visualização e projeção.
+           \item O grafo de cena é renderizado.
+        \end{enumerate}
+\end{enumerate}
+
+Com o fluxo de dados definido, é necessário analisar as 
+transformações necessárias dos dados. A parte relevante do 
+sistema a ser analisada é o ciclo principal, pois é a única parte 
+do fluxo de dados que será executada em tempo real.
+
+A primeira etapa do ciclo principal é a atualização dos objetos. 
+Primeiramente a aceleração do objeto é atualizada através de 
+fórmulas arbitrárias, posteriormente a velocidade é atualizada 
+utilizando a aceleração. Com a velocidade atualizada a última 
+parte é atualizar a translação e a rotação, ambas são atualizadas 
+através da velocidade.
+
+A segunda etapa é a verificação de colisões, isso é feito 
+utilizando as dimensões de uma caixa retangular e o componente 
+de translação do objeto. O procedimento de verificação de colisão 
+simplesmente testa se o componente de translação do objeto não 
+ultrapassa as bordas da caixa.
+
+A terceira etapa consiste na atualização das matrizes de 
+visualização e projeção da cena. A atualização ocorre somente uma 
+vez por frame, e como há somente uma câmera na cena, essa etapa 
+não possui muito potencial para otimização.
+
+A última etapa é a renderização do grafo de cena. Para cada nó 
+presente no grafo, essa etapa é 
+dividida em três partes: cálculo das coordenadas do objeto, 
+conversão dessas coordenadas para coordenadas do mundo, e a 
+renderização do grafo.
+
+O cálculo das coordenadas do objeto é feito 
+através da multiplicação entre a translação, rotação e escala do 
+objeto atribuído ao nó. A conversão das 
+coordenadas do objeto para as coordenadas do mundo é feita utilizando 
+as coordenadas do objeto e a hierarquia do grafo de cena. Por fim 
+a última parte é a renderização propriamente dita, na qual não 
+há processamento de dados, somente chamadas de métodos da API do 
+openGL sobre dados já processados. Os dados necessários para a 
+renderização de um nó são a malha atribuída ao objeto deste nó, 
+o programa de shader atribuído ao nó e as coordenadas convertidas.
+
+Com o fluxo de dados definido, assim como as transformações sobre 
+os dados necessárias, é possível determinar quais são os dados 
+mínimos necessários para a execução de aplicação e como 
+agrupá-los.
 
 \section{Biblioteca Matemática}
 
