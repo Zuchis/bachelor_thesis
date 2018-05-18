@@ -1829,15 +1829,29 @@ execução da aplicação com uma abordagem orientada a dados. As classes de program
 shader e malha foram separadas em duas partes: interfaces para a criação de shaders 
 e malhas a partir de arquivos externos, e estruturas simples contendo somente dados 
 primitivos utilizados no ciclo principal. As estruturas de nós e objetos possuem 
-\textit{containers} para os atributos principais das respectivas classes da versão 
-orientada a objetos. A classe de objeto foi dividida em duas estruturas: uma para 
-os dados da matriz de transformação (translação, rotação e escala), e a outra 
-para dados de física (velocidade e aceleração).
+\textit{containers} de $N$ elementos para os atributos principais das respectivas 
+classes da versão orientada a objetos. A classe de objeto foi dividida em duas 
+estruturas: uma para os dados da matriz de transformação (translação, rotação e 
+escala), e a outra para dados de física (velocidade e aceleração).
+
+Cada entidade no sistema possui seu identificador único representado 
+por um número inteiro positivo e seus atributos são espalhados pelas estruturas 
+que contém \textit{containers}. Ou seja, a referência ao item $0$ 
+de qualquer um dos \textit{containers} apresentados na 
+figura~\ref{dodengine} refere-se à mesma entidade. Através desse 
+ID único de uma entidade os componentes são capazes de transformar 
+e mover os dados entre si.
+
+A seguir serão descritos com detalhes os componentes um a um 
+presentes nos motores implementados. Para os componentes que 
+possuem diferenças de implementação entre as duas versões também 
+serão discutidas quais foram as mudanças necessárias para o 
+desenvolvimento da versão orientada a dados.
 
 \section{Biblioteca Matemática}
 
-Utilizando os conceitos discutidos na seção~\ref{secmathconcepts}, a intenção é 
-desenvolver uma biblioteca matemática o mais minimalista o possível, contendo somente 
+Utilizando os conceitos discutidos na seção~\ref{secmathconcepts}, foi 
+desenvolvido uma biblioteca matemática o mais minimalista o possível, contendo somente 
 as estruturas e funções necessárias para se realizar os testes e obter os resultados 
 desejados deste trabalho. 
 
@@ -2018,7 +2032,7 @@ parâmetros não relacionados aos objetos geométricos, como a matriz de visualizaç
 projeção, parâmetros das fontes de iluminação, alteração da resolução da tela, entre 
 outros.
 
-Para o motor a ser desenvolvido neste trabalho, há apenas a implementação do 
+Para o motor desenvolvido neste trabalho, há apenas a implementação do 
 \textit{vertex shader} e do \textit{fragment shader}, pois estes são os únicos que são 
 indispensáveis para a construção do \textit{pipeline} de renderização, o restante dos 
 \textit{shaders} possuem implementações padrões já fornecidas pelo 
@@ -2045,7 +2059,7 @@ A câmera estabelece o modo como a cena é visualizada pelo espectador. É basicame
 constituída de dois componentes, a matriz de visualização, que irá determinar de qual 
 posição a cena será vista e a partir dessa posição, de qual ângulo a cena será vista. 
 Há também a matriz de projeção, que irá aplicar uma das técnicas de projeção sobre a 
-cena e irá também cortar da renderização os objetos que estão fora do campo de visão 
+cena e irá também remover da renderização os objetos que estão fora do campo de visão 
 da câmera. 
 
 Uma câmera pode ser configurada de maneiras diferentes, e os parâmetros dependerão de 
