@@ -177,8 +177,10 @@ deve conter instruções que operam sobre o conjunto inteiro de
 objetos e somente sobre as propriedades que são realmente 
 necessárias, otimizando o fluxo de instruções e o acesso à 
 memória~\cite{fabiandod}. Transformações sobre um único objeto 
-quando vários são necessários causa poluição desnecessária do 
-cache.
+causam poluição desnecessária do cache quando estas precisam 
+ser feitas sobre vários objetos em sequência, principalmente 
+quando somente uma parcela dos atributos do objeto é 
+necessária.
 
 \section{Motor de Jogos}
 \label{secgameengine}
@@ -1805,6 +1807,32 @@ Com o fluxo de dados definido, assim como as transformações sobre
 os dados necessárias, é possível determinar quais são os dados 
 mínimos necessários para a execução de aplicação e como 
 agrupá-los.
+
+Seguindo a premissa da MOD de descrever as transformações de 
+dados sempre para o caso mais provável, as estruturas de dados 
+utilizadas para o motor na versão orientada a dados foram 
+feitas considerando que em uma aplicação sempre haverá 
+várias instâncias de \textit{shaders}, malhas, objetos 
+e nós do grafo de cena.
+
+\begin{figure}[h]
+    \centering
+    \captionof{figure}{Estruturas utilizadas na verão orientada a dados do motor.}
+    \includegraphics[width =.8\textwidth]{../figuras/dodengine}
+    \par\medskip
+    Fonte: autoria própria
+    \label{dodengine}
+\end{figure}
+
+A figura~\ref{dodengine} apresenta as estruturas utilizadas no ciclo principal de 
+execução da aplicação com uma abordagem orientada a dados. As classes de programa de 
+shader e malha foram separadas em duas partes: interfaces para a criação de shaders 
+e malhas a partir de arquivos externos, e estruturas simples contendo somente dados 
+primitivos utilizados no ciclo principal. As estruturas de nós e objetos possuem 
+\textit{containers} para os atributos principais das respectivas classes da versão 
+orientada a objetos. A classe de objeto foi dividida em duas estruturas: uma para 
+os dados da matriz de transformação (translação, rotação e escala), e a outra 
+para dados de física (velocidade e aceleração).
 
 \section{Biblioteca Matemática}
 
