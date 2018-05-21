@@ -2024,7 +2024,7 @@ interface para a manipulação das variáveis contidas nos \textit{shaders}, defini
 ordem de renderização dos objetos da cena, entre outros. 
 
 A parte gráfica é a última a ser atualizada em um quadro, antes da renderização da 
-cena. As atualizações dessa parte visual consiste em alterações nas propriedades dos 
+cena. As atualizações dessa parte visual consistem em alterações nas propriedades dos 
 objetos que estão na cena, como suas matrizes de transformação, cores, texturas, 
 programa de \textit{shader} que irão utilizar, suas malhas e seus efeitos de 
 pré-processamento ou pós-processamento. Além disso, há atualizações de outros 
@@ -2077,6 +2077,11 @@ comportamento incluem:
 Pode existir mais de uma câmera na mesma cena e suas visões podem aparecer 
 simultaneamente na tela, geralmente é feito um esquema de divisão de tela para que isso 
 seja possível.
+
+Por ser uma classe consideravelmente simples, não há diferença na classe de câmera 
+entre as versões do motor. Conforme visto na figura~\ref{dodengine}, uma câmera 
+armazena dois inteiros positivos, um para armazenar o índice do bloco de variáveis 
+uniformes, e outro para 
 
 \subsection{Grafo de Cena}
 
