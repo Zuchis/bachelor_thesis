@@ -182,6 +182,18 @@ ser feitas sobre vários objetos em sequência, principalmente
 quando somente uma parcela dos atributos do objeto é 
 necessária.
 
+O esquema de armazenamento apresentado na 
+figura~\ref{fig:dod} é um meio de se armazenar uma sequência de 
+dados na memória conhecido como \textit{Structure of Arrays} (SoA), 
+no qual os dados de um registro são separados em \textit{arrays} 
+paralelos, um para cada atributo do registro. Desta maneira, uma 
+estrutura armazena os dados de todos os registros, em contraste 
+com a outra abordagem apresentada na figura~\ref{fig:ood} conhecida 
+como \textit{Array of Structures} (AoS), no qual o armazenamento 
+dos dados dos registros é feito de maneira intercalada (todas 
+as propriedades do registro são alocadas sequencialmente na memória).
+Uma lista de objetos é um exemplo de AoS.
+
 \section{Motor de Jogos}
 \label{secgameengine}
 
