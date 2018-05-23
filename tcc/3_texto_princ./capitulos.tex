@@ -2081,7 +2081,10 @@ seja possível.
 Por ser uma classe consideravelmente simples, não há diferença na classe de câmera 
 entre as versões do motor. Conforme visto na figura~\ref{dodengine}, uma câmera 
 armazena dois inteiros positivos, um para armazenar o índice do bloco de variáveis 
-uniformes, e outro para 
+uniformes, e outro para armazenar o \textit{vertex array object} da câmera, que é 
+um índice para a posição da memória da GPU na qual os dados das matrizes estão 
+armazenados. A classe de câmera possui apenas dois métodos: um para alterar a matriz 
+de visualização, e outro para alterar a matriz de projeção.
 
 \subsection{Grafo de Cena}
 
@@ -2102,13 +2105,7 @@ malha, programa de \textit{shader}, entre outros atributos~\cite{hughes2014compu
 As ligações permitem uma fácil construção de hierarquia, e também torna trivial coisas 
 como uma mudança de posição de um subgrupo inteiro de objetos.
 
-A figura~\ref{scenegraphexample} demonstra um exemplo de um grafo de cena que está 
-representando parcialmente um carro utilizando hierarquia, nele há um nó que 
-representa uma roda, este nó possui quatro instâncias e estas compartilham uma mesma 
-malha que descreve a geometria da roda. Os nós da roda são filhos do nó que representa 
-o carro como um todo.
-
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
     \captionof{figure}{Exemplo de um grafo de cena descrevendo parcialmente um objeto 
     que representa um carro.}
@@ -2118,6 +2115,30 @@ o carro como um todo.
     em: 05/06/2017.
     \label{scenegraphexample}
 \end{figure}
+
+A figura~\ref{scenegraphexample} demonstra um exemplo de um grafo de cena que está 
+representando parcialmente um carro utilizando hierarquia, nele há um nó que 
+representa uma roda, este nó possui quatro instâncias e estas compartilham uma mesma 
+malha que descreve a geometria da roda. Os nós da roda são filhos do nó que representa 
+o carro como um todo.
+
+O grafo de cena é utilizado para gerenciar o posicionamento dos objetos da aplicação e 
+também para controlar a renderização destes através da chamada da função \textit{draw}. 
+Na versão orientada a objetos do motor, o grafo de cena é divido em duas classes diferentes, uma 
+para armazenar a raiz do grafo e a câmera utilizada, e outra para armazenar os dados de 
+um nó do grafo, esta segunda classe possui a maioria das propriedades e funcionalidades 
+do grafo de cena. Além do método \textit{draw}, um nó pode criar um nó filho, 
+armazenando-o em um vetor de filhos. Outras propriedades do nó incluem: um programa de 
+\textit{shader}, um objeto, um ponteiro para o nó pai e uma \textit{string} de 
+identificação.
+
+Na abordagem orientada a dados, as duas classes que representam o grafo de cena foram 
+reduzidas a somente uma estrutura, que contém \textit{arrays} contíguos das mesmas 
+propriedades da versão orientada a objetos, isso significa que os objetos foram 
+decompostos em propriedades alocadas em \textit{arrays} separadamente. A raiz do grafo 
+sempre será o primeiro elemento em todos os \textit{arrays}, a câmera foi desacoplada 
+do grafo e seu armazenamento foi movido para outra parte. O vetor de filhos foi 
+removido e a hierarquia é definida somente pela referência ao nó pai de cada nó.
 
 \subsection{Otimizações de Renderização}
 
