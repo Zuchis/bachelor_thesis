@@ -2172,31 +2172,54 @@ sempre será o primeiro elemento em todos os \textit{arrays}, a câmera foi desaco
 do grafo e seu armazenamento foi movido para outra parte. O vetor de filhos foi 
 removido e a hierarquia é definida somente pela referência ao nó pai de cada nó.
 
-O método \textit{draw} é o principal do grafo de cena, por ser utilizado no loop principal 
-da aplicação para controlar a renderização do grafo. Na figura
-
-\begin{lstlisting}[frame=single]            
-void draw() {
-    if (object == nullptr) {
-        throw RenderException("Nó sem objeto");
-    }
-    if (shaderProgram == nullptr) {
-        shaderProgram = getProgramFromParent();
-        if (shaderProgram == nullptr) {
-            throw RenderException("Nó sem shader");
-        }
-    }
-    shaderProgram->use();
-    shaderProgram->setUniform("Matrix",this->getModelMatrix());
-    object->draw();
-    if (!children.empty()){
-        int i;
-        for (i = 0; i < (int)children.size(); i++) {
-            children[i]->draw();
-        }
-    }
-}
+\begin{lstlisting}[frame=single, caption={Método draw versão OO}, label=oodraw]
+1  void draw() {
+2      if (object == nullptr) {
+3          throw RenderException("Nó sem objeto");
+4      }
+5      if (shaderProgram == nullptr) {
+6          shaderProgram = getProgramFromParent();
+7          if (shaderProgram == nullptr) {
+8              throw RenderException("Nó sem shader");
+9          }
+10     }
+11     Matrix4 modelMatrix = this->getModelMatrix();
+12     shaderProgram->use();
+13     shaderProgram->setUniform("Matrix", modelMatrix);
+14     object->drawObject();
+15     if (!children.empty()){
+16         int i;
+17         for (i = 0; i < (int)children.size(); i++) {
+18             children[i]->draw();
+19         }
+20     }
+21 }
 \end{lstlisting}
+
+O método \textit{draw} é o principal do grafo de cena, por ser 
+utilizado no loop principal da aplicação para controlar a 
+renderização do grafo. O código~\ref{oodraw} apresenta a 
+implementação do método \textit{draw} na versão OO do motor.
+
+As linhas 2 e 5 contém instruções com condicionais verificando o 
+estado do nó, a primeira para verificar se o nó está sem objeto, 
+e a segunda para verificar sem o nó está sem shader. Na linha 11 
+é chamado um método recursivo para se obter a matriz de 
+transformação do nó a partir do nó pai, sendo que a matriz de 
+transformação do nó raiz é a matriz identidade.
+
+Nas linhas 12 e 13 são chamados dois métodos do programa de shader, 
+o primeiro para especificar ao \textit{openGL} que aquele programa de shader 
+será utilizado. O segundo método altera o valor da variável 
+uniforme "Matrix" contida no programa para o valor da matriz 
+de transformação calculado para o nó.
+
+Na linha 14 é chamado o método \textit{drawObject} do objeto, 
+que é um \textit{wrapper} para a função de renderizar triângulos 
+do \textit{openGL}, a qual necessita dos dados da malha vinculada 
+ao objeto. A linha 15 contém uma condicional para verificar o 
+estado do vetor de filhos, e se o nó possuir pelo menos um filho, 
+é iniciado o processo recursivo de renderização dos filhos.
 
 \subsection{Otimizações de Renderização}
 
