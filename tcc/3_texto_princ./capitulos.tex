@@ -194,6 +194,24 @@ dos dados dos registros é feito de maneira intercalada (todas
 as propriedades do registro são alocadas sequencialmente na memória).
 Uma lista de objetos é um exemplo de AoS.
 
+É relevante observar que não há uma abordagem melhor para todos os 
+casos. As duas abordagens possuem suas vantagens e desvantagens, 
+cabe ao desenvolvedor ter o conhecimento sobre o uso dos dados 
+para determinar qual abordagem deverá ser utilizada. Quanto menos 
+propriedades de um objeto forem necessárias para uma certa 
+transformação de dados, mais eficiente o SoA se torna para essa 
+transformação, caso contrário, o AoS pode ser uma abordagem mais 
+apropriada.
+
+O SoA é mais eficiente para transformações com poucas propriedades 
+pois ao se mover os dados da memória ao cache, este será menos 
+poluído com dados não relacionados caso a estrutura possua 
+muitas propriedades não necessárias para a transformação. 
+Caso muitas propriedades sejam necessárias para uma transformação, 
+a SoA se torna menos eficiente, pois as propriedades dos objetos 
+estarão alocadas mais distantes uma da outra, tornando o acesso 
+aos dados mais lento~\cite{Fontana2017}.
+
 \section{Motor de Jogos}
 \label{secgameengine}
 
@@ -1837,7 +1855,8 @@ e nós do grafo de cena.
 \end{figure}
 
 A figura~\ref{dodengine} apresenta as estruturas utilizadas no ciclo principal de 
-execução da aplicação com uma abordagem orientada a dados. As classes de programa de 
+execução da aplicação com uma abordagem orientada a dados, utilizando o layout SoA 
+discutido na seção~\ref{secdataorienteddesign}. As classes de programa de 
 shader e malha foram separadas em duas partes: interfaces para a criação de shaders 
 e malhas a partir de arquivos externos, e estruturas simples contendo somente dados 
 primitivos utilizados no ciclo principal. As estruturas de nós e objetos possuem 
@@ -2135,7 +2154,7 @@ malha que descreve a geometria da roda. Os nós da roda são filhos do nó que repr
 o carro como um todo.
 
 O grafo de cena é utilizado para gerenciar o posicionamento dos objetos da aplicação e 
-também para controlar a renderização destes através da chamada da função \textit{draw}. 
+também para controlar a renderização destes através da chamada do método \textit{draw}. 
 Na versão orientada a objetos do motor, o grafo de cena é divido em duas classes diferentes, uma 
 para armazenar a raiz do grafo e a câmera utilizada, e outra para armazenar os dados de 
 um nó do grafo, esta segunda classe possui a maioria das propriedades e funcionalidades 
@@ -2146,11 +2165,38 @@ identificação.
 
 Na abordagem orientada a dados, as duas classes que representam o grafo de cena foram 
 reduzidas a somente uma estrutura, que contém \textit{arrays} contíguos das mesmas 
-propriedades da versão orientada a objetos, isso significa que os objetos foram 
-decompostos em propriedades alocadas em \textit{arrays} separadamente. A raiz do grafo 
+propriedades da versão orientada a objetos, conforme discutido na 
+seção~\ref{proposalcap}, essa estrutura segue o \textit{layout} de armazenamento de 
+dados SoA. A raiz do grafo 
 sempre será o primeiro elemento em todos os \textit{arrays}, a câmera foi desacoplada 
 do grafo e seu armazenamento foi movido para outra parte. O vetor de filhos foi 
 removido e a hierarquia é definida somente pela referência ao nó pai de cada nó.
+
+O método \textit{draw} é o principal do grafo de cena, por ser utilizado no loop principal 
+da aplicação para controlar a renderização do grafo. Na figura
+
+\begin{lstlisting}[frame=single]            
+void draw() {
+    if (object == nullptr) {
+        throw RenderException("Nó sem objeto");
+    }
+    if (shaderProgram == nullptr) {
+        shaderProgram = getProgramFromParent();
+        if (shaderProgram == nullptr) {
+            throw RenderException("Nó sem shader");
+        }
+    }
+    shaderProgram->use();
+    shaderProgram->setUniform("Matrix",this->getModelMatrix());
+    object->draw();
+    if (!children.empty()){
+        int i;
+        for (i = 0; i < (int)children.size(); i++) {
+            children[i]->draw();
+        }
+    }
+}
+\end{lstlisting}
 
 \subsection{Otimizações de Renderização}
 
