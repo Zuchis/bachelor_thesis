@@ -2222,7 +2222,59 @@ estado do vetor de filhos, e se o nó possuir pelo menos um filho,
 é iniciado o processo recursivo de renderização dos filhos.
 
 \begin{lstlisting}[frame=single, caption={Método draw versão OD}, label=oddraw]
+01  void calcularLocais(transl, rots, escalas, out_locais) {
+02      for (i = 1; i < nObjetos; i++) {
+03      out_locais[i] =  math::translate(transl[i]) *
+04                          rots[i].toMatrix() *
+05                          math::scale(escalas[i]);
+06      }
+07  }
+08  void calcularGlobais(locais, pais, out_globais) {
+09      for (i = 1; i < nObjetos; i++) {
+10      out_globais[i] = out_globais[pais[i]] * locais[i];
+11      }
+12  }
+13  void renderizarNos(globais, shaders, malhas) {
+14      for (i = 1; i < nObjetos; i++) {
+15      glUseProgram(shaders[i].programID);
+16      glUniformMatrix4fv(shaders[i].matrixID, ..., globais[i]);
+17      glBindVertexArray(malhas[i].vaoId);
+18      glDrawArrays(GL_TRIANGLES, 0, meshes[i].nVertices);
+19      }
+20  }
+21
+22  void draw() {
+23      calcularLocais(...);
+24      calcularGlobais(...);
+25      renderizarNos(...);
+26  }
 \end{lstlisting}
+
+O código~\ref{oddraw} apresenta o método \textit{draw} para a 
+versão OD do motor, alterado de acordo com as mudanças feitas nas 
+estruturas do motor. Para evitar que muitas propriedades das 
+entidades sejam utilizadas em uma transformação, o método foi 
+dividido em três partes diferentes: cálculo das coordenadas locais 
+(coordenadas do objeto), cálculo das coordenadas globais (coordenadas 
+do mundo), e a renderização propriamente dita. Nota-se que todas 
+as subfunções consistem em loops que percorrem as propriedades de 
+todas as entidades, além disso, o elemento 0 de todas as 
+propriedades nunca é processado por ser reservado para a raiz.
+
+O cálculo das coordenadas locais (linhas 01 a 07) é feito 
+multiplicando-se a translação, rotação e escala de cada objeto e 
+armazenando os valores resultantes no vetor de saída 
+\textit{out\_locais}. O cálculo das coordenadas globais (linhas 08 a 
+12) é feito com as coordenadas locais calculadas na etapa anterior 
+e o vetor de pais, responsável por manter a hierarquia do grafo. O 
+cálculo em si é um \textit{loop} simples que multiplica a matriz de 
+coordenadas locais do nó pela matriz de coordenadas globais do pai. 
+
+O \textit{loop} sequencial para o cálculo de globais funciona pois 
+o grafo e sua hierarquia é construído de tal forma que um nó nunca 
+terá um número identificador maior do que os dos seus filhos. Desta 
+maneira, apenas globais já processadas serão acessadas (a global 
+do nó raiz é a matriz identidade).
 
 \subsection{Otimizações de Renderização}
 
