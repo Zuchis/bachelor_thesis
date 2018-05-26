@@ -2276,6 +2276,12 @@ terá um número identificador maior do que os dos seus filhos. Desta
 maneira, apenas globais já processadas serão acessadas (a global 
 do nó raiz é a matriz identidade).
 
+A última subfunção \textit{renderizarNos} não contém processamento 
+de dados, apenas chamadas de funções do \textit{openGL} para renderizar 
+os objetos dos nós do grafo. Esta última etapa utiliza três propriedades 
+dos nós: a matriz de coordenadas globais, os dados do shader e dados da 
+malha.
+
 \subsection{Otimizações de Renderização}
 
 Como o processo de renderização é computacionalmente caro, é necessário que esse 
@@ -2298,6 +2304,28 @@ conter objetos com formas complexas, por isso é importante que os parâmetros que
 definem as dimensões do \textit{frustum} de visualização sejam adequadamente ajustados, 
 para que objetos muito distantes ou fora do ângulo de visualização da câmera não sejam 
 renderizados.
+
+\section{Componente Físico}
+
+O componente físico do motor consiste nas estruturas dos objetos, e métodos para 
+controlar suas atualizações, alterar os valores das velocidades e acelerações, e 
+calcular colisões dentro de uma caixa. No \textit{loop} de jogo descrito na 
+seção~\ref{gameloopsec}, o componente físico tende a ser o primeiro componente 
+do motor a ser atualizado na etapa de processamento do \textit{loop}, logo 
+após a detecção e gerenciamento de \textit{inputs} do jogador.
+
+Na versão OO do motor, a classe de objeto contém todos os seus dados, as propriedades 
+relacionadas à geometria, que são a translação, rotação e escala, à parte visual, 
+constituída pela malha, e à parte física, constituída pela velocidade e aceleração. 
+Além das propriedades, a classe de objetos possui quatro métodos principais: 
+chamada para a renderização da malha, cálculo da matriz de transformação, 
+atualização do objeto e verificação de colisão com uma caixa. O gerenciador de objetos, 
+apresentado como uma das classes com sufixo \textit{Manager} na figura~\ref{umlengine}, 
+é a classe responsável por administrar a atualização dos objetos e colisões contra a 
+caixa.
+
+\begin{lstlisting}[frame=single, caption={Métodos para atualização dos objetos versão OD}, label=ooupdate]
+\end{lstlisting}
 
 \section{Gerenciador de Recursos}
 
