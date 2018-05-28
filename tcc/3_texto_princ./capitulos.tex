@@ -2531,3 +2531,24 @@ para lidar com atualização de objetos e colisões contra uma caixa.
 Por fim, um outro componente foi apresentado, o gerenciador de 
 recursos, que fornece uma interface para acessar todo o conteúdo 
 criativo, que é externo ao motor de jogos.
+
+\chapter{Análises e Resultados}
+\label{resultscap}
+
+Neste capítulo serão apresentados os resultados obtidos na 
+comparação entre as duas versões do motor. A parte comparada 
+entre as duas versões consiste nos métodos utilizados no 
+ciclo principal da aplicação, que são as funções chamadas 
+uma vez por objeto em todos os quadros, o que significa que 
+quase todo o processamento feito no CPU é realizado através 
+destas funções. Além da análise de desempenho, será 
+discutido quais foram os principais desafios para a 
+conversão entre as abordagens.
+
+Para cada uma das funções, foi medido o tempo médio de execução 
+para 1000 execuções da função, variando a quantidade de objetos 
+na cena entre (aqui vai ficar o intervalo :D ) para analisar 
+a escalabilidade de cada uma das abordagens.
+
+Para a execução dos testes, foram utilizadas as seguintes 
+especificações técnicas: (specs do pc)
