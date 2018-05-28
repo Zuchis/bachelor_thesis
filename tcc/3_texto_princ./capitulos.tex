@@ -1715,6 +1715,10 @@ a dados, um motor de jogos foi desenvolvido em duas versões
 diferentes: uma utilizando os conceitos da programação orientada a 
 objetos, e outra utilizando modelagem orientada a dados,
 visando à otimização da comunicação entre o processador e a memória.
+A versão com abordagem de programação orientada a objetos será 
+referida como primeira versão, ou versão OO (orientada a objetos). A 
+outra versão com a abordagem de modelagem orientada a dados será referida 
+como segunda versão, ou versão OD (orientada a dados).
 Além de utilizar os conceitos da MOD, também é necessário 
 utilizar conceitos de Computação Gráfica, Álgebra Linear e Geometria Analítica, Teoria 
 de Grafos, Processamento de Imagens, Física, entre outros.
@@ -2118,6 +2122,7 @@ armazenados. A classe de câmera possui apenas dois métodos: um para alterar a ma
 de visualização, e outro para alterar a matriz de projeção.
 
 \subsection{Grafo de Cena}
+\label{scenegraphsection}
 
 Consiste em uma estrutura para definir a hierarquia dos objetos de uma cena e as 
 propriedades de cada um. Essa estrutura é um grafo acíclico direcionado cujos nós 
@@ -2324,8 +2329,98 @@ apresentado como uma das classes com sufixo \textit{Manager} na figura~\ref{umle
 é a classe responsável por administrar a atualização dos objetos e colisões contra a 
 caixa.
 
-\begin{lstlisting}[frame=single, caption={Métodos para atualização dos objetos versão OD}, label=ooupdate]
+\quad
+
+\begin{lstlisting}[frame=single, caption={Métodos para atualização dos objetos versão OO}, label=ooupdate]
+01 virtual void update() {
+02   math::clampVector(speed + accel, MIN_SPEED, MAX_SPEED);
+03
+04   translation = translation + speed;
+05
+06   Quaternion Y = Quaternion(speed.x, (.0f, 1.0f, .0f, 1.0f));
+07   Quaternion X = Quaternion(-speed.y, (1.0f, .0f, .0f, 1.0f));
+08
+09   rotation = X * Y * rotation;
+10 }
+11 void updateObjects() {
+13   auto it = objects.begin();
+14
+15   for(it = objects.begin(); it != objects.end(); it++) {
+16       it->second->update();
+17   }
+18 }
 \end{lstlisting}
+
+O código~\ref{ooupdate} contém os dois métodos utilizados para atualizar os objetos 
+da cena. O primeiro é o método \textit{update}, contido na classe de objetos, atualiza 
+as propriedades da classe relacionadas à geometria e física. O segundo método 
+\textit{updateObjects} é chamado pela classe \textit{ObjectManager} que controla a 
+atualização dos objetos. O método simplesmente percorre o conjunto de objetos e 
+invoca o método \textit{update} de cada um deles.
+
+\newpage
+
+\begin{lstlisting}[frame=single, caption={Métodos para atualização dos objetos versão OD}, label=odupdate]
+01  void updateSpeeds(Vector3* speeds, Vector3* accels) {
+02    for (i = 1; i < totalObjects; i++) {
+03      math::clampVector(
+04          speeds[i] + accels[i], 
+05          MIN_SPEED, 
+06          MAX_SPEED);
+07    }
+08  }
+09  void updateTranslations(Vector3* transls, Vector3* speeds) {
+10    for (i = 1; i < totalObjects; i++) {
+11      transls[i] = transls[i] + speeds[i];
+12    }
+13  }
+14  void updateRotations(Quaternion* rotations, Vector3* speeds) {
+15    for (i = 1; i < totalObjects; i++) {
+16      Vector3 *speed = &speeds[i]
+17      Quaternion *rotation = &rotations[i]
+18      Quaternion Y = Quaternion(speed.x, (.0f, 1f, .0f, 1f));
+19      Quaternion X = Quaternion(-speed.y, (1f, .0f, .0f, 1f));
+20
+21      rotation = X * Y * rotation;
+22    }
+23  }
+24  void update() {
+25      updateSpeeds(...);
+26      updateTranslations(...);
+27      updateRotations(...);
+28  }
+\end{lstlisting}
+
+O código~\ref{ooupdate} apresenta a conversão para a versão OD. Percebe-se que a 
+conversão segue o mesmo modelo aplicado para a conversão do grafo de cena na 
+seção~\ref{scenegraphsection}, as propriedades do objeto foram separadas em 
+\textit{arrays} contíguos e as funções foram adaptadas conforme as mudanças das 
+estruturas. A função \textit{update} foi dividida em três subfunções: 
+\textit{updateSpeeds}, \textit{updateTranslations} e \textit{updateRotations}, 
+para atualizar as velocidades, translações e rotações respectivamente.
+
+\begin{lstlisting}[frame=single, caption={Chamada da verificação de colisão versão OO}, label=oocolision]
+01 void calcularColisoes(Caixa caixa) {
+02   auto it = objects.begin();
+03
+04   for(it = objects.begin(); it != objects.end(); it++) {
+05       it->second->colidiu(caixa);
+06   }
+07 }
+\end{lstlisting}
+
+\begin{lstlisting}[frame=single, caption={Chamada da verificação de colisão versão OD}, label=odcolision]
+01 void calcularColisoes(transls, speeds, caixa) {
+02   for(i = 1; i < totalObjects; i++) {
+03       colidiu(transls[i], speeds[i], caixa);
+04   }
+05 }
+\end{lstlisting}
+
+Os códigos~\ref{oocolision} e~\ref{odcolision} apresentam as chamadas para a função de 
+verificação de colisão das versões OO e OD, respectivamente. O método \textit{colidiu} 
+verifica se o vetor de translação do objeto não ultrapassou os limites da caixa, e 
+inverte os valores de velocidade, caso alguma colisão tenha ocorrido.
 
 \section{Gerenciador de Recursos}
 
@@ -2380,6 +2475,14 @@ Para carregar os \textit{shaders}, além de especificar o caminho do diretório on
 vértice se encontra, há um outro parâmetro que especifica qual é o tipo do 
 \textit{shader} que está sendo carregado, isso é necessário para que a sua compilação 
 seja adequada.
+
+O gerenciamento dos recursos na versão OO do motor é feito pelas classes 
+\textit{Managers} conforme discutido na seção~\ref{proposalcap}. Os \textit{Managers}
+gerenciam o armazenamento dos recursos e fornece uma interface para manipulá-los, 
+o \textit{Manager} dos objetos por exemplo fornece métodos para atualizar os 
+objetos e calcular as colisões.
+
+Na 
 
 \section{Considerações Finais do Capítulo}
 
