@@ -2476,24 +2476,40 @@ vértice se encontra, há um outro parâmetro que especifica qual é o tipo do
 \textit{shader} que está sendo carregado, isso é necessário para que a sua compilação 
 seja adequada.
 
-O gerenciamento dos recursos na versão OO do motor é feito pelas classes 
+O gerenciamento dos recursos na primeira versão do motor é feito pelas classes 
 \textit{Managers} conforme discutido na seção~\ref{proposalcap}. Os \textit{Managers}
 gerenciam o armazenamento dos recursos e fornece uma interface para manipulá-los, 
 o \textit{Manager} dos objetos por exemplo fornece métodos para atualizar os 
 objetos e calcular as colisões.
 
-Na 
+Na segunda versão do motor, os métodos das classes foram separados 
+entre métodos para criação de recursos e métodos utilizados no ciclo 
+principal. Os métodos de criação de recursos foram movidos para uma 
+interface separada e incluem: carregamento 
+de arquivos externos, compilação de \textit{shaders} e criação de 
+objetos e nós. Os métodos do ciclo principal são os métodos que 
+sofreram alterações entre as duas abordagens do motor e foram 
+discutidos nas seções anteriores. Como as estruturas da segunda 
+versão contém \textit{arrays} com todos os dados dos objetos 
+presentes na cena, não foi necessário uma segunda estrutura 
+para gerenciar o seu armazenamento.
 
 \section{Considerações Finais do Capítulo}
 
-Foi apresentada a proposta deste trabalho, um motor de jogos com modelagem orientada a 
-dados, algumas das estratégias escolhidas para a sua implementação e o que é 
-necessário para modelar alguns dos componentes presentes no motor.
+Foram apresentadas as duas abordagens de implementação para 
+um motor de jogos, uma seguindo o modelo de desenvolvimento 
+com programação orientada a objetos, e outra utilizando uma 
+abordagem com modelagem orientada a dados conforme discutido 
+na seção~\ref{secdataorienteddesign}.
+Além do desenvolvimento de uma segunda versão, as estratégias 
+utilizadas para a conversão das as estruturas e métodos entre 
+as duas abordagens foram discutidas.
 
 Como um motor de jogos é apenas um recurso utilizado para a criação de uma aplicação 
-gráfica, foi necessário propor uma estratégia para a verificação da modelagem orientada 
-a dados como uma forma de otimização de desempenho, e também para a comparação com as 
-abordagens mais tradicionais de se implementar um jogo.
+gráfica, foi necessário desenvolver uma aplicação idêntica para as 
+duas versões do motor, com o objetivo de investigar a 
+modelagem orientada a dados como uma forma de otimização de 
+desempenho, comparando as duas abordagens.
 
 Todas as operações matemáticas apresentadas e explicadas na seção~\ref{secmathconcepts} 
 são utilizadas em uma biblioteca matemática, essa por sua vez é extensivamente 
@@ -2509,6 +2525,9 @@ Foi apresentado o conceito de uma câmera, e possíveis configurações diferentes q
 esta pode ter. Também foi apresentada uma estrutura para lidar com a hierarquia de 
 objetos de uma cena e suas propriedades, o grafo de cena, e duas técnicas de otimização 
 de renderização utilizadas neste trabalho.
-Por fim, um outro componente foi apresentado, o gerenciador de recurso, que fornece uma 
-interface para acessar todo o conteúdo criativo, que é externo ao motor de jogos, e
-também os \textit{inputs} para o motor.
+
+Além do componente gráfico, foi implementado um componente físico 
+para lidar com atualização de objetos e colisões contra uma caixa.
+Por fim, um outro componente foi apresentado, o gerenciador de 
+recursos, que fornece uma interface para acessar todo o conteúdo 
+criativo, que é externo ao motor de jogos.
