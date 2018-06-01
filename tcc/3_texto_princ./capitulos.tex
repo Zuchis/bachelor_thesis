@@ -2578,6 +2578,13 @@ especificações técnicas: \\
     \item GCC 7.2.0
 \end{itemize}
 
+Para evitar interferência nas medidas de desempenho, as otimizações 
+do compilador foram desativadas. Além disso, como a intenção deste 
+trabalho é investigar otimizações para a comunicação entre o 
+processador e a memória, as funções que realizam comunicação entre 
+o CPU e o GPU ou processamento no GPU também foram desativadas
+para o cálculo de tempo da função \textit{draw}.
+
 \section{Problema A: renderização de objetos sem hierarquia}
 
 No problema A os objetos presentes na cena não possuem uma real 
@@ -2585,6 +2592,16 @@ hierarquia entre eles, todos os nós do grafo de cena são filhos
 do nó raiz. Em um cenários destes um grafo de cena normalmente 
 não seria necessário, porém a estrutura foi mantida para 
 demonstrar o impacto do acesso à memória no desempenho.
+
+Este cenário é o melhor possível para a versão OO do motor, pois 
+a execução do método \textit{draw} se torna semelhante entre as 
+duas abordagens, alterando somente a maneira como os dados estão 
+alocados na memória. Analisando o código~\ref{oddraw} pode-se 
+observar que o método \textit{draw} para a versão OD do motor 
+utiliza uma quantidade considerável de propriedades dos nós 
+para renderizá-los, isso causa um impacto negativo no desempenho
+da segunda versão, que usa o modelo de alocação \textit{Sructure 
+of Arrays}. 
 
 \begin{table}[h!]
 \centering
@@ -2618,15 +2635,108 @@ demonstrar o impacto do acesso à memória no desempenho.
 \end{tabular}
 \end{table}
 
-\section{Problema B: renderização de objetos com três níveis de hierarquia}
+As tabelas~\ref{oodv1table} e~\ref{dodv1table} mostram os tempos 
+médios de execução dos três métodos para as versões OO e OD, 
+respectivamente. O método \textit{draw} é consideravelmente mais 
+custoso do que os outros dois métodos, pois é a etapa na qual a 
+maior parte das multiplicações de matrizes ocorrem. Analisando os 
+valores do desvio padrão, pode-se concluir que não houve muita 
+variação de tempo para todas as funções em todos os casos.
 
-lorem ipsum sit dolor amet.lorem ipsum sit dolor amet.lorem ipsum sit dolor amet.
-lorem ipsum sit dolor amet.lorem ipsum sit dolor amet.lorem ipsum sit dolor amet.
-lorem ipsum sit dolor amet.lorem ipsum sit dolor amet.lorem ipsum sit dolor amet.
-lorem ipsum sit dolor amet.lorem ipsum sit dolor amet.lorem ipsum sit dolor amet.
-lorem ipsum sit dolor amet.lorem ipsum sit dolor amet.lorem ipsum sit dolor amet.
-lorem ipsum sit dolor amet.lorem ipsum sit dolor amet.lorem ipsum sit dolor amet.
-lorem ipsum sit dolor amet.lorem ipsum sit dolor amet.lorem ipsum sit dolor amet.
+Conforme mencionado, a versão OD sofreu impacto no desempenho da 
+função \textit{draw}, pois além de utilizar a maior quantidade de 
+propriedades das entidades, a subfunção de calcular as coordenadas 
+globais acessa em todas as iterações desta o elemento 0 do vetor 
+de coordenadas globais, realizando uma leitura não sequencial do 
+vetor. Nota-se que é a única função a qual a versão OD obteve um 
+resultado inferior, tendo um desempenho em média 4\% mais lento em 
+comparação à versão OO.
+
+A função de atualização de objetos utiliza uma quantidade menor 
+de propriedades em relação à função de renderização. As tabelas 
+indicam que o tempo médio de execução das duas abordagens é 
+quase idêntico.
+
+A função de detecção de colisão utiliza somente duas propriedades 
+das entidades. O tempo médio de execução desta função na versão 
+OD do motor foi consideravelmente menor do que na versão OO, tendo 
+um desempenho com uma ordem de magnitude mais rápido em todos os 
+casos. Isso demonstra como o desempenho para essa abordagem é 
+inversamente proporcional ao número de propriedades utilizadas.
+
+\newpage
+
+\begin{figure}[h!]
+    \centering
+    \captionof{figure}{Gráficos comparativos do problema A para os 
+    três métodos do ciclo principal das duas abordagens.}
+    \begin{subfigure}[b]{\textwidth}
+        \includegraphics[width=\textwidth]{../figuras/drawv1graph}
+        \caption{Método \textit{draw}.}
+        \label{drawv1graph}
+    \end{subfigure}
+    \begin{subfigure}[b]{\textwidth}
+        \begin{subfigure}[b]{.5\textwidth}
+            \includegraphics[width=\textwidth]{../figuras/updatev1graph}
+            \caption{Método \textit{update}}
+            \label{updatev1graph}
+        \end{subfigure}
+        \begin{subfigure}[b]{.5\textwidth}
+            \includegraphics[width=\textwidth]{../figuras/colisionv1graph}
+            \caption{Método de vef. de colisão}
+            \label{colisionv1graph}
+        \end{subfigure}
+    \end{subfigure}
+    \par\medskip
+    \label{v1graphs}
+\end{figure}
+
+Os gráficos~\ref{drawv1graph},~\ref{updatev1graph} 
+e~\ref{colisionv1graph} corroboram o comportamento descrito nessa 
+seção, onde o ganho de desempenho da versão OD aumenta conforme 
+o número de propriedades requeridas para uma função diminui.
+
+\section{Problema B: renderização de objetos com quatro níveis de hierarquia}
+
+No problema B os objetos da cena seguem um padrão de hierarquia, 
+diferentemente do problema A, onde todos os nós do grafo de cena 
+são filhos do nó raiz. A hierarquia construída no problema B segue 
+um padrão no qual uma árvore é formada a cada quatro objetos onde 
+cada objeto está em um nível diferente da árvore. A quantidade de 
+níveis de hierarquia foi julgada factível pois um objeto com 
+quatro níveis de hierarquia não é algo incomum em jogos 3D modernos.
+
+\begin{figure}[h]
+    \centering
+    \captionof{figure}{Esquema de hierarquia de nós do problema B.}
+    \includegraphics[width =.7\textwidth]{../figuras/problemBscheme}
+    \par\medskip
+    Fonte: autoria própria
+    \label{problemBscheme}
+\end{figure}
+
+A figura~\ref{problemBscheme} exemplifica o esquema de hierarquia 
+de nós do problema B para um exemplo de entrada com 12 objetos na 
+cena. Esse esquema de hierarquia diminui consideravelmente a 
+eficiência do método \textit{draw} da versão OO do motor, que 
+devido a sua natureza recursiva, sofre muitas interrupções no 
+fluxo de execução do programa. 
+
+\begin{table}[h!]
+\centering
+\caption{Tempo médio de execução das funções para a versão OO.}
+\label{oodv2table}
+\begin{tabular}{ccccccc}
+                                      & \multicolumn{2}{c}{Draw}                                     & \multicolumn{2}{c}{Att. objetos}                             & \multicolumn{2}{c}{Verif. colisões}        \\
+\multicolumn{1}{l}{Número de objetos} & \multicolumn{1}{l}{Média} & \multicolumn{1}{l}{Desv. padrão} & \multicolumn{1}{l}{Média} & \multicolumn{1}{l}{Desv. padrão} & Média   & \multicolumn{1}{l}{Desv. padrão} \\
+100                                   & 1.02ms                    & 0.01                             & 0.03ms                    & 0.002                            & 0.004ms & $7 x 10^{-3}$                    \\
+200                                   & 1.94ms                    & 0.08                             & 0.08ms                    & 0.003                            & 0.01ms  & 0.004                            \\
+400                                   & 3.76ms                    & 0.06                             & 0.21ms                    & 0.01                             & 0.02ms  & 0.006                            \\
+800                                   & 7.46ms                    & 0.05                             & 0.42ms                    & 0.03                             & 0.036ms & 0.001                            \\
+1600                                  & 14.93ms                   & 0.09                             & 0.8ms                     & 0.02                             & 0.064ms & 0.001                            \\
+3200                                  & 29.87ms                   & 0.14                             & 1.5ms                     & 0.02                             & 0.131ms & 0.007
+\end{tabular}
+\end{table}
 
 \begin{table}[h!]
 \centering
@@ -2643,3 +2753,40 @@ lorem ipsum sit dolor amet.lorem ipsum sit dolor amet.lorem ipsum sit dolor amet
 3200                                  & 15.29ms                   & 0.06                             & 1.31ms                    & 0.01                             & 0.01ms          & $2 x 10^{-3}$
 \end{tabular}
 \end{table}
+
+Os resultados contidos nas tabelas~\ref{oodv2table} 
+e~\ref{dodv2table} indicam que o cálculo sequencial de coordenadas 
+globais na versão OD do motor é uma alternativa mais resiliente à 
+mudanças na hierarquia do grafo de cena, permanecendo com um tempo 
+médio de execução estável após a mudança. O método \textit{draw}
+da versão OO por outro lado, teve um acréscimo considerável no 
+tempo de execução, com uma média de 51\% mais lento do que a 
+versão OO no problema A e a versão OD no problema B. Como a única 
+diferença entre o problema A e o problema B está na hierarquia de 
+nós, não houveram mudanças significativas no tempo de execução 
+das funções de atualização de objetos e detecção de colisões.
+
+\begin{figure}[h!]
+    \centering
+    \captionof{figure}{Gráfico comparativo das funções \textit{draw} das duas versões para o problema B.}
+    \includegraphics[width =\textwidth]{../figuras/drawv2graph}
+    \par\medskip
+    Fonte: autoria própria
+    \label{drawv2graph}
+\end{figure}
+
+A figura~\ref{drawv2graph} contém apenas o gráfico de tempo 
+para a função \textit{draw} do problema B, pois foi a única em 
+que houve mudanças significativas em relação ao problema A. O 
+tempo médio de execução para a versão OD permaneceu quase 
+inalterado, enquanto que para a versão OO, apesar de ter 
+mantido o comportamento linear, houve um acréscimo considerável.
+
+\section{Considerações finais do capítulo}
+
+Neste capítulo foi testado o desempenho da modelagem orientada 
+a dados, a abordagem de programação estudada neste trabalho. 
+Analisando os resultados obtidos no capítulo~\ref{resultscap} e 
+os conceitos discutidos na seção~\ref{secdataorienteddesign}, 
+pode ser concluído que a MOD não garante uma melhora no desempenho, 
+porém fornece um maior controle sobre este. 
