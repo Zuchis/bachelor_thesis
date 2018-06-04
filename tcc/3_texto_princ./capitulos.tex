@@ -2789,4 +2789,31 @@ a dados, a abordagem de programação estudada neste trabalho.
 Analisando os resultados obtidos no capítulo~\ref{resultscap} e 
 os conceitos discutidos na seção~\ref{secdataorienteddesign}, 
 pode ser concluído que a MOD não garante uma melhora no desempenho, 
-porém fornece um maior controle sobre este. 
+porém fornece um maior controle sobre este. Tendo o conhecimento de 
+como os dados estão armazenados na memória e como estes serão 
+utilizados permite ao desenvolvedor implementar os procedimentos 
+da aplicação maximizando a eficiência da comunicação entre o 
+CPU e a memória.
+
+A conversão do motor da abordagem orientada a objetos para a versão 
+orientada a dados apresentou alguns desafios. O primeiro, já mencionado 
+no capítulo~\ref{relatedworkscap}, foi a falta de material a respeito 
+de MOD. O segundo desafio foi desenvolver a versão OD com uma mentalidade 
+diferente do modelo de classe e objeto, o qual os desenvolvedores de 
+jogos já estão mais familiarizados.
+
+Por fim, o maior desafio está no fato de que a abordagem orientada a dados 
+requer uma constante preocupação sobre como os dados estão alocados na 
+memória e como estes são acessados, o que requer uma escolha para as 
+estruturas de dados utilizadas. Isso pode ser facilitado ao se 
+determinar o fluxo de dados e quais são as transformações necessárias 
+nestes, dividindo-as em subfunções nas quais só sejam usadas propriedades 
+próximas uma da outra na memória. Porém esse processo de escolha 
+das estruturas e das transformações não é trivial e em muitos casos a 
+divisão não é possível, pois muitas propriedades precisam ser utilizadas ao 
+mesmo tempo.
+
+Conforme visto na seção~\ref{secdataorienteddesign}, há duas maneiras de se 
+alocar os dados: o padrão AoS e o SoA, os quais possuem suas respectivas 
+vantagens e desvantagens, cabendo ao desenvolvedor determinar qual padrão 
+é mais adequado para cada conjunto de dados específico. 
