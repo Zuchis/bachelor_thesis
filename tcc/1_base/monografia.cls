@@ -364,9 +364,6 @@
              \rule{9.0cm}{0.1mm} \\
              {\@examinadordois \\ \footnotesize\@ttexaminadordois}\\
              \vfill
-             \rule{9.0cm}{0.1mm} \\
-             {\@examinadortres \\ \footnotesize\@ttexaminadortres}\\
-         
 }
 \def\assinaturadois{%
              \rule{9.0cm}{0.1mm} \\
@@ -378,9 +375,6 @@
              \rule{9.0cm}{0.1mm} \\
              {\@examinadordois { - }\@ttexaminadordois}\\ 
              \vspace{2cm}
-             \rule{9.0cm}{0.1mm} \\
-             {\@examinadortres { - }\@ttexaminadortres}\\ 
-            
 }
 \def\keywords#1{\gdef\@keywords{#1}}
 

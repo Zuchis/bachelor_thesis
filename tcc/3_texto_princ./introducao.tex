@@ -150,27 +150,19 @@ Considerando os problemas supracitados a respeito do gargalo de desempenho do pr
 programação orientada a objetos, este trabalho propõe a implementação de um motor de jogos desde o princípio com o objetivo de 
 explorar o potencial da modelagem orientada a dados, um conceito pouco difundido entre a comunidade de programadores, 
 e seus benefícios para aplicações gráficas, uma área na qual a orientação a objetos está fortemente impregnada. Uma vez
-que um motor de jogos completo é uma aplicação consideravelmente grande e complexa, este trabalho irá se concentrar na implementação
-do motor gráfico e suas otimizações. Para a implementação do motor de jogos, foi escolhida a linguagem de programação Rust.
-
-Rust é uma linguagem de programação de baixo nível, com tipagem estática e forte. A linguagem foi projetada com os objetivos 
-de ser rápida, fácil de ser paralelizada e ter segurança de memória, prevenindo a ocorrência de condições de corrida, estouros 
-de pilha, e acessos a posições de memória não inicializadas ou desalocadas~\cite{Matsakis:2014:RL:2692956.2663188}. Além disso, 
-como a linguagem é relativamente nova e grande parte das aplicações gráficas são escritas em C ou C++, esse trabalho pode ser 
-considerado um bom meio para testar o desempenho da linguagem.
+que um motor de jogos completo é uma aplicação consideravelmente grande e complexa, neste trabalho concentrou-se na implementação
+do motor gráfico e suas otimizações.
 
 \section{Objetivos}
 \label{obj}
 
 \textbf{Objetivo geral}: Investigar o potencial da modelagem orientada a dados para o 
-desenvolvimento de um motor de jogos na linguagem de programação Rust e analisar sua 
-eficiência e desempenho.\\
+desenvolvimento de um motor de jogos e analisar sua eficiência e desempenho.\\
 
 \noindent\textbf{Objetivos específicos}: 
 Abaixo encontra-se uma lista dos principais objetivos a serem alcançados com este trabalho.
 \begin{itemize}
     \item Verificar o estado atual no que diz respeito às implementações de motores de jogos modernos;
-    \item Explorar o potencial e limitações da linguagem de programação Rust para aplicações gráficas;
     \item Utilizar o conceito de \textit{design} orientado a dados para proporcionar uma melhora
         no desempenho dos motores gráficos através da coerência de cache.
     \item Analisar o desempenho do motor de jogos, através do desenvolvimento de uma 
@@ -184,22 +176,24 @@ Abaixo encontra-se uma lista dos principais objetivos a serem alcançados com est
 \section{Metodologia}
 \label{met}
 
-Após a etapa de revisão bibliográfica sobre 
-os conceitos necessários para a implementação do motor de jogos e o estudo aprofundado da linguagem Rust e suas 
-características avançadas, a aplicação será desenvolvida em etapas e o método utilizado será a implementação
-dos componentes do motor sequencialmente, no qual estes serão testados individualmente.
+Após a etapa de revisão bibliográfica sobre os conceitos necessários para 
+a implementação do motor de jogos, a aplicação foi desenvolvida em etapas 
+e o método utilizado foi a implementação dos componentes do motor sequencialmente, 
+no qual estes serão testados individualmente.
 
-A etapa seguinte será a integração dos componentes para a construção do \textit{pipeline} gráfico e implementação 
-das outras funcionalidades. Com o motor de jogos tendo todos os seus componentes e características funcionando devidamente,
-serão feitas análises e comparações de seu desempenho e eficiência, não somente do motor implementado, mas será 
-também pesquisado na literatura outros motores de jogos já implementados e quais foram as medidas utilizadas para medir seus 
-desempenhos. Por fim um \textit{postmortem} será escrito no TCC, explicando o que foi e o que não foi bem sucedido.
+A etapa seguinte foi a integração dos componentes para a construção de um motor de 
+jogos utilizando programação orientada a objetos. Com o motor de jogos tendo todos 
+os seus componentes e características funcionando devidamente, uma segunda versão 
+do motor de jogos foi desenvolvida, utilizando os conceitos estudados da modelagem 
+orientada a dados. Com as duas versões implementadas, foram feitas análises e comparações 
+do desempenho e eficiência das duas versões.
 
 \section{Organização do Trabalho}
 \label{paperstructure}
 
 Este trabalho está organizado da seguinte forma, no Capítulo 2 estão contidos os 
 fundamentos para o desenvolvimento do trabalho, o Capítulo 3 detalha alguns trabalhos 
-relacionados com o tema deste projeto, já o Capítulo 4 apresenta o projeto dos sistemas 
-a serem desenvolvidos e por fim, no Capítulo 5 estão contidas as considerações finais, 
-seguidas pelas referências bibliográficas.
+relacionados com o tema deste projeto, já o Capítulo 4 apresenta o projeto dos motores 
+desenvolvidos e as diferenças entre os dois. No capítulo~\ref{resultscap} estão os resultados 
+de desempenho e comparações entre as duas abordagens e por fim, no Capítulo 6 estão contidas 
+as considerações finais, seguidas pelas referências bibliográficas.
