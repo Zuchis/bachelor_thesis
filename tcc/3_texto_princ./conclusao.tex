@@ -39,19 +39,56 @@ proporciona um alto grau de modularidade, permitindo a colaboração de equipes co
 1000 membros no desenvolvimento dos projetos.
 
 A implementação de um motor de jogos requer conhecimentos de diversas áreas diferentes, 
-como computação gráfica, álgebra linear, geometria analítica, inteligência artificial, 
-processamento de imagens, física, entre outros. Isso faz com que esse tipo de programa 
+como Computação Gráfica, Álgebra Linear, Geometria Analítica, Inteligência Artificial, 
+Processamento de Imagens, Física, entre outros. Isso faz com que esse tipo de programa 
 seja consideravelmente interdisciplinar. Além disso o processo de desenvolvimento em si 
 do sistema é complexo, não basta somente  implementação individual dos componentes que o 
 constitui, mas também a concepção da arquitetura do motor, que irá determinar como esses 
 componentes se comunicam entre si, processo necessário para a construção do loop de jogo.
 
-O loop de jogo é o funcionamento principal da aplicação e sua estruturação é ditada pela 
+O loop de jogo é o funcionamento principal da aplicação e sua estruturação é dependente da 
 integração dos diferentes componentes do motor de jogos. É dividido em três partes 
 maiores: detecção e gerenciamento de inputs, o processamento dos dados do jogo e a 
 apresentação dos resultados. Esse loop deve ser adequadamente implementado para evitar 
 que ele fique dependente da taxa de quadros por segundo, medida utilizada para o 
-desempenho da aplicação. Escolher a arquitetura certa para o loop de jogo não é uma 
-tarefa trivial, principalmente porque as implementações dos motores de jogos varia 
-consideravelmente, pois estas se adaptam com a complexidade dos projetos desenvolvidos 
-nestas. Para este trabalho, a estruturação do loop de jogo é um trabalho em andamento.
+desempenho da aplicação. 
+
+O uso da modelagem orientado a dados não garante uma melhora no 
+desempenho, porém ao se seguir seus princípios, determinar o fluxo 
+de dados da aplicação, agrupar dados relacionados na memória e 
+implementar as funções de modo a descrever as transformações 
+desejadas nos dados, têm-se um controle maior sobre o desempenho, 
+pois se há o conhecimento de como os dados estão alocados e como 
+são acessados na memória principal, isso facilita ao desenvolvedor 
+implementar as funções de modo a otimizar a comunicação entre o 
+processador e memória.
+
+Determinar como os dados serão agrupados, alocados e acessados 
+na memória é o maior desafio da modelagem orientada a dados. Para 
+um desenvolvedor que já está familiarizado com a programação 
+orientada a objetos, a conversão de uma abordagem para a outra pode 
+não proporcionar os resultados desejados se as escolhas das 
+estruturas não forem adequadas. O problema da MOD para a escolha das 
+estruturas é que não há um padrão a se seguir, cada grupo de dados 
+requer uma análise separada, isso ainda é dificultado pelo fato de 
+que na MOD as estruturas não representam os objetos do mundo real 
+de uma maneira tão direta quanto a programação orientada a objetos.
+
+Os dois padrões de alocação de dados visto nesse trabalho, o AoS e 
+o SoA, apresentaram vantagens e desvantagens nos resultados 
+apresentados no capítulo~\ref{resultscap}, por isso pode-se concluir 
+que nenhum destes é preferível à MOD, são necessários análises e 
+testes para determinar qual padrão é mais adequado para cada caso. A 
+tendência observada nos resultados foi que SoA tem seu desempenho 
+inversamente proporcional ao número de propriedades utilizadas de 
+uma entidade, tendo um desempenho ligeiramente mais lento do que 
+o AoS para o método do motor que utiliza a maior quantidade de 
+propriedades no problema A. 
+
+Porém o modelo de leitura sequencial do 
+SoA na versão OD do motor permitiu a implementação de um método de 
+renderização mais robusto à mudanças na cena, o qual manteve um 
+tempo de execução estável perante às mudanças na hierarquia dos 
+objetos na cena no problema B, diferentemente da versão OO do motor, 
+na qual houve um aumento cerca de 51\% no tempo de execução em 
+relação ao problema A.
