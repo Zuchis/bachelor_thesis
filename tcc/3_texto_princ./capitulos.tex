@@ -47,9 +47,8 @@ utilizados, algo que os compiladores não possuem.
 Além disso é reconhecido pelos autores o fato de um \textit{cache miss} causar a perda de 
 ciclos e, consequentemente, a perda de operações de ponto flutuante. Para demonstração do 
 problema e sua solução através da reestruturação de código, são mostrados no artigo 
-dois algoritmos diferentes. Um deles é de particular interesse para esse trabalho, que 
-é a multiplicação entre matrizes pois conforme visto na seção~\ref{secmathconcepts}, 
-operações de álgebra linear são extensivamente utilizadas em aplicações gráficas.
+dois algoritmos diferentes que têm seus desempenhos consideravelmente aumentados 
+após a mudança nas estruturas de dados utilizadas.
 
 Como as otimizações feitas pelo compilador são limitadas, é necessário estruturar o 
 código de maneira inteligente para que o acesso à memória seja o menos frequente  
@@ -292,8 +291,8 @@ neste trabalho pertencem a uma destas áreas. Visto que ambas estas áreas são vas
 muito além do escopo deste trabalho, o restante desta seção tratará dos conceitos e 
 propriedades que são relevantes para a computação gráfica apenas.
 
-Verth e Bishop~\cite{Verth:2008} e Mortenson~\cite{mortenson1999mathematics} fizeram uma 
-cobertura de toda a matemática essencial utilizada em motores de jogos.
+Verth e Bishop~\cite{Verth:2008} e Mortenson~\cite{mortenson1999mathematics} fazem uma 
+cobertura da matemática essencial utilizada em motores de jogos.
 Todas as funções e estruturas utilizadas na biblioteca matemática do motor 
 são explicadas detalhadamente nos livros desses autores.
 
@@ -654,14 +653,14 @@ resultados~\cite{dalmau2004core}.
 
 Jogos possuem restrições de tempo para realizar todas as 
 suas rotinas, se o sistema não for capaz de fazer seu trabalho dentro do limite de 
-tempo irá falhar. Uma vez que sistemas em tempo real são supostos fazer suas tarefas 
-em tempo real, se um jogo não for capaz de fazer isso, o usuário (nesse caso o 
+tempo irá falhar. Uma vez que sistemas interativos devem fazer suas tarefas 
+em tempo real. Se um jogo não for capaz de fazer isso, o usuário (nesse caso o 
 jogador) não receberá um \textit{feedback} contínuo, e o jogo não fornecerá a 
 interatividade que deveria. Um \textit{loop} de jogo pode ser implementado com a 
 finalidade de satisfazer essas restrições~\cite{Joselli2010}.
 
 Nos jogos eletrônicos, o sistema de \textit{inputs} corresponde ao gerenciamento do dispositivo 
-de \textit{inputs}, como mouse, teclado ou controlador de jogo; o processamento é responsável 
+de entrada, como mouse, teclado ou controle de jogo; o processamento é responsável 
 por tomar as decisões que afetam o estado do jogo, e a apresentação é responsável por 
 mostrar os resultados desses dois outros estágios, através de áudio e 
 vídeo~\cite{valente2005real}. 
@@ -714,7 +713,7 @@ desempenho é atualizar cada um dos componentes somente quando necessário.
 
 Na seção~\ref{gameloopsec}, foi discutido o problema da atualização do estado do jogo em 
 relação à taxa de quadros por segundo com a qual a aplicação está sendo executada, e 
-como esse problema podia ser solucionado adicionando um parâmetro que indicasse o tempo 
+como esse problema pode ser solucionado adicionando um parâmetro que indica o tempo 
 decorrido entre o último quadro e o atual.
 
 Interpolação é um dos recursos utilizados na solução deste problema, e é utilizada para 
@@ -1003,9 +1002,6 @@ uma maior flexibilidade e extensibilidade, nenhum deles discute sobre como melho
 estrutura desses componentes, principalmente levando em consideração a evolução do 
 hardware, conforme mencionado por Anderson~\cite{Anderson2008}.
 
-Devido ao fato da modelagem orientada a dados ainda não ser um conceito muito difundido, 
-não foi possível encontrar trabalhos que tivessem ênfase especificamente neste tópico.
-
 \chapter{Otimizações para motores de jogos através de modelagem 
 orientada a dados}
 \label{proposalcap}
@@ -1024,7 +1020,7 @@ utilizar conceitos de Computação Gráfica, Álgebra Linear e Geometria Analítica, 
 de Grafos, Processamento de Imagens, Física, entre outros.
 
 Conforme explicado na seção~\ref{secgameengine}, um motor de jogos é uma combinação de 
-diversos componentes diferentes que juntos compõem a parte lógica de um jogo digital. As 
+diversos componentes diferentes que compõem a parte lógica de um jogo digital. As 
 seções seguintes discutirão sobre os componentes implementados que foram julgados 
 necessários para o desenvolvimento do motor de jogos que é o objeto de estudo deste 
 trabalho, bem como as diferenças entre as implementações.
@@ -1034,12 +1030,13 @@ implementação de outros elementos importantes discutidos previamente no
 capítulo~\ref{theorycap} que fazem parte da estrutura de um motor de jogos, como o 
 \textit{pipeline} de renderização e o loop de jogo.
 
-Como um motor de jogos por si só não é suficiente para se gerar análises e resultados, 
-pois seu objetivo é dar suporte ao desenvolvimento de uma outra aplicação, além do 
-desenvolvimento do motor, foi necessário o desenvolvimento de uma aplicação 
-que utilize as funcionalidades do motor para realmente 
-verificar sua eficiência. A aplicação desenvolvida é idêntica para 
-as duas versões do motor.
+Como um motor de jogos por si só não é suficiente para se gerar análises e resultados,
+além do desenvolvimento do motor, foi necessário o desenvolvimento de dois cenários 
+diferentes em ambas as versões do motor que utilizasse as suas funcionalidades e 
+verificar a sua eficiência nos diferentes casos. As aplicações desenvolvidas 
+são idênticas para as duas versões do motor. O primeiro cenário possui um bom padrão 
+de acesso à memória para a verão orientada a objetos e um mal padrão de acesso para a 
+versão orientada a dados, o segundo cenário é o inverso.
 
 A análise de desempenho das principais funções da aplicação 
 permitirá a comparação entre as duas abordagens e a eficiência da 
@@ -1191,7 +1188,7 @@ as estruturas e funções necessárias para se realizar os testes e obter os result
 desejados deste trabalho. 
 
 A biblioteca é uma das partes do motor mais extensivamente utilizada pois uma 
-considerável parcela dos componentes necessitam de sua utilização. Além disso, todas as 
+considerável parcela dos componentes necessitam dela. Além disso, todas as 
 malhas e outros dados que são enviados aos \textit{shaders} programáveis são armazenados em 
 estruturas dessa biblioteca, como as matrizes de transformação, visualização e projeção, 
 fontes de luz, texturas, etc.
@@ -1377,7 +1374,7 @@ Da parte manipulável do \textit{pipeline} de renderização, o motor permite a
 alteração direta das posições dos objetos na cena, a hierarquia dos objetos, suas 
 malhas e seus programas de \textit{shader}. Além disso, é também possível a alteração 
 dos parâmetros das matrizes de visualização e projeção e também os parâmetros de 
-iluminação através de variáveis uniforme.
+iluminação através de variáveis uniformes.
 
 As variáveis uniformes são utilizadas para qualquer parâmetro existente nos 
 \textit{shaders} que se deseja modificar ao longo da execução da aplicação. Suas 
@@ -1772,7 +1769,7 @@ vértices do triângulo, o segundo índice é da coordenada de textura do vértice e 
 terceiro índice é a normal do vértice.
 
 Para carregar os \textit{shaders}, além de especificar o caminho do diretório onde o 
-vértice se encontra, há um outro parâmetro que especifica qual é o tipo do 
+\textit{shader} se encontra, há um outro parâmetro que especifica qual é o tipo do 
 \textit{shader} que está sendo carregado, isso é necessário para que a sua compilação 
 seja adequada.
 
@@ -1905,33 +1902,35 @@ of Arrays}.
 
 \begin{table}[h!]
 \centering
-\caption{Tempo médio de execução das funções para a versão OO.}
+\caption{Tempo médio de execução das funções em milissegundos no problema A para a versão OO.}
 \label{oodv1table}
-\begin{tabular}{ccccccc}
-                                      & \multicolumn{2}{c}{Draw}                                     & \multicolumn{2}{c}{Att. objetos}                             & \multicolumn{2}{c}{Verif. colisões}        \\
-\multicolumn{1}{l}{Número de objetos} & \multicolumn{1}{l}{Média} & \multicolumn{1}{l}{Desv. padrão} & \multicolumn{1}{l}{Média} & \multicolumn{1}{l}{Desv. padrão} & Média   & \multicolumn{1}{l}{Desv. padrão} \\
-100                                   & 0.51ms                    & 0.35                             & 0.03ms                    & 0.006                            & 0.005ms & 0.02                             \\
-200                                   & 1.00ms                    & 0.001                            & 0.08ms                    & 0.002                            & 0.01ms  & 0.005                            \\
-400                                   & 1.86ms                    & 0.05                             & 0.18ms                    & 0.05                             & 0.02ms  & 0.03                             \\
-800                                   & 3.69ms                    & 0.06                             & 0.26ms                    & 0.04                             & 0.032ms & 0.04                             \\
-1600                                  & 7.35ms                    & 0.4                              & 0.50ms                    & 0.02                             & 0.066ms & 0.1                              \\
-3200                                  & 14.72ms                   & 0.2                              & 0.99ms                    & 0.01                             & 0.132ms & 0.06
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+                                        & \multicolumn{2}{c|}{Draw}                                      & \multicolumn{2}{c|}{Att. objetos}                              & \multicolumn{2}{c|}{Verif. colisões}                \\ \hline
+\multicolumn{1}{|l|}{Número de objetos} & \multicolumn{1}{l|}{Média} & \multicolumn{1}{l|}{Desv. padrão} & \multicolumn{1}{l|}{Média} & \multicolumn{1}{l|}{Desv. padrão} & Média           & \multicolumn{1}{l|}{Desv. padrão} \\ \hline
+100                                     & \textbf{0.51}              & 0.35                             & 0.03                    & 0.006                                 & 0.005           & 0.02                              \\ \hline
+200                                     & \textbf{1.00}              & 0.001                            & 0.08                    & 0.002                                 & 0.01            & 0.005                             \\ \hline
+400                                     & \textbf{1.86}              & 0.05                             & 0.18                    & 0.05                                  & 0.02            & 0.03                              \\ \hline
+800                                     & \textbf{3.69}              & 0.06                             & 0.26                    & 0.04                                  & 0.032           & 0.04                              \\ \hline
+1600                                    & \textbf{7.35}              & 0.4                              & 0.50                    & 0.02                                  & 0.066           & 0.1                               \\ \hline
+3200                                    & \textbf{14.72}             & 0.2                              & 0.99                    & 0.01                                  & 0.132           & 0.06                              \\ \hline
 \end{tabular}
 \end{table}
 
 \begin{table}[h!]
 \centering
-\caption{Tempo médio de execução das funções para a versão OD.}
+\caption{Tempo médio de execução das funções em milissegundos no problema A para a versão OD.}
 \label{dodv1table}
-\begin{tabular}{ccccccc}
-                                      & \multicolumn{2}{c}{Draw}                                     & \multicolumn{2}{c}{Att. objetos}                             & \multicolumn{2}{c}{Verif. colisões}                \\
-\multicolumn{1}{l}{Número de objetos} & \multicolumn{1}{l}{Média} & \multicolumn{1}{l}{Desv. padrão} & \multicolumn{1}{l}{Média} & \multicolumn{1}{l}{Desv. padrão} & Média           & \multicolumn{1}{l}{Desv. padrão} \\
-100                                   & 0.62ms                    & 0.05                             & 0.02ms                    & 0.005                            & $6 x 10^{-3}$ms & $7 x 10^{-3}$                    \\
-200                                   & 1.04ms                    & 0.01                             & 0.04ms                    & 0.003                            & 0.001ms         & $2 x 10^{-3}$                    \\
-400                                   & 1.96ms                    & 0.05                             & 0.11ms                    & 0.01                             & 0.002ms         & 0.001                            \\
-800                                   & 3.84ms                    & 0.05                             & 0.22ms                    & 0.03                             & 0.004ms         & 0.002                            \\
-1600                                  & 7.65ms                    & 0.06                             & 0.45ms                    & 0.01                             & 0.008ms         & $2 x 10^{-3}$                    \\
-3200                                  & 15.28ms                   & 0.1                              & 0.91ms                    & 0.01                             & 0.016ms         & $6 x 10^{-3}$
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+                                        & \multicolumn{2}{c|}{Draw}                                      & \multicolumn{2}{c|}{Att. objetos}                              & \multicolumn{2}{c|}{Verif. colisões}                \\ \hline
+\multicolumn{1}{|l|}{Número de objetos} & \multicolumn{1}{l|}{Média} & \multicolumn{1}{l|}{Desv. padrão} & \multicolumn{1}{l|}{Média} & \multicolumn{1}{l|}{Desv. padrão} & Média           & \multicolumn{1}{l|}{Desv. padrão} \\ \hline
+100                                     & 0.62                       & 0.05                              & \textbf{0.02}              & 0.005                             & $\bm{6 x 10^{-3}}$   & $7 x 10^{-3}$                      \\ \hline
+200                                     & 1.04                       & 0.01                              & \textbf{0.04}              & 0.003                             & \textbf{0.001}           & $2 x 10^{-3}$                      \\ \hline
+400                                     & 1.96                       & 0.05                              & \textbf{0.11}              & 0.01                              & \textbf{0.002}           & 0.001                              \\ \hline
+800                                     & 3.84                       & 0.05                              & \textbf{0.22}              & 0.03                              & \textbf{0.004}           & 0.002                              \\ \hline
+1600                                    & 7.65                       & 0.06                              & \textbf{0.45}              & 0.01                              & \textbf{0.008}           & $2 x 10^{-3}$                      \\ \hline
+3200                                    & 15.28ms                    & 0.1                               & \textbf{0.91}              & 0.01                              & \textbf{0.016}           & $6 x 10^{-3}$                      \\ \hline
 \end{tabular}
 \end{table}
 
@@ -1963,8 +1962,6 @@ OD do motor foi consideravelmente menor do que na versão OO, tendo
 um desempenho com uma ordem de magnitude mais rápido em todos os 
 casos. Isso demonstra como o desempenho para essa abordagem é 
 inversamente proporcional ao número de propriedades utilizadas.
-
-\newpage
 
 \begin{figure}[h!]
     \centering
@@ -2024,33 +2021,35 @@ fluxo de execução do programa.
 
 \begin{table}[h!]
 \centering
-\caption{Tempo médio de execução das funções para a versão OO.}
+\caption{Tempo médio de execução das funções em milissegundos no problema B para a versão OO.}
 \label{oodv2table}
-\begin{tabular}{ccccccc}
-                                      & \multicolumn{2}{c}{Draw}                                     & \multicolumn{2}{c}{Att. objetos}                             & \multicolumn{2}{c}{Verif. colisões}        \\
-\multicolumn{1}{l}{Número de objetos} & \multicolumn{1}{l}{Média} & \multicolumn{1}{l}{Desv. padrão} & \multicolumn{1}{l}{Média} & \multicolumn{1}{l}{Desv. padrão} & Média   & \multicolumn{1}{l}{Desv. padrão} \\
-100                                   & 1.02ms                    & 0.01                             & 0.03ms                    & 0.002                            & 0.004ms & $7 x 10^{-3}$                    \\
-200                                   & 1.94ms                    & 0.08                             & 0.08ms                    & 0.003                            & 0.01ms  & 0.004                            \\
-400                                   & 3.76ms                    & 0.06                             & 0.21ms                    & 0.01                             & 0.02ms  & 0.006                            \\
-800                                   & 7.46ms                    & 0.05                             & 0.42ms                    & 0.03                             & 0.036ms & 0.001                            \\
-1600                                  & 14.93ms                   & 0.09                             & 0.8ms                     & 0.02                             & 0.064ms & 0.001                            \\
-3200                                  & 29.87ms                   & 0.14                             & 1.5ms                     & 0.02                             & 0.131ms & 0.007
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+                                        & \multicolumn{2}{c|}{Draw}                                      & \multicolumn{2}{c|}{Att. objetos}                              & \multicolumn{2}{c|}{Verif. colisões}                \\ \hline
+\multicolumn{1}{|l|}{Número de objetos} & \multicolumn{1}{l|}{Média} & \multicolumn{1}{l|}{Desv. padrão} & \multicolumn{1}{l|}{Média} & \multicolumn{1}{l|}{Desv. padrão} & Média           & \multicolumn{1}{l|}{Desv. padrão} \\ \hline
+100                                     & 1.02                       & 0.01                             & 0.03                      & 0.002                               & 0.004           & $7 x 10^{-3}$                     \\ \hline
+200                                     & 1.94                       & 0.08                             & 0.08                      & 0.003                               & 0.01            & 0.004                             \\ \hline
+400                                     & 3.76                       & 0.06                             & 0.21                      & 0.01                                & 0.02            & 0.006                             \\ \hline
+800                                     & 7.46                       & 0.05                             & 0.42                      & 0.03                                & 0.036           & 0.001                             \\ \hline
+1600                                    & 14.93                      & 0.09                             & 0.80                      & 0.02                                & 0.064           & 0.001                             \\ \hline
+3200                                    & 29.87                      & 0.14                             & 1.50                      & 0.02                                & 0.131           & 0.007                             \\ \hline
 \end{tabular}
 \end{table}
 
 \begin{table}[h!]
 \centering
-\caption{Tempo médio de execução das funções para a versão OD.}
+\caption{Tempo médio de execução das funções em milissegundos no problema B para a versão OD.}
 \label{dodv2table}
-\begin{tabular}{ccccccc}
-                                      & \multicolumn{2}{c}{Draw}                                     & \multicolumn{2}{c}{Att. objetos}                             & \multicolumn{2}{c}{Verif. colisões}                \\
-\multicolumn{1}{l}{Número de objetos} & \multicolumn{1}{l}{Média} & \multicolumn{1}{l}{Desv. padrão} & \multicolumn{1}{l}{Média} & \multicolumn{1}{l}{Desv. padrão} & Média           & \multicolumn{1}{l}{Desv. padrão} \\
-100                                   & 0.54ms                    & 0.02                             & 0.03ms                    & 0.002                            & $6 x 10^{-3}$ms & $2 x 10^{-4}$                    \\
-200                                   & 1.04ms                    & 0.01                             & 0.07ms                    & 0.006                            & 0.001ms         & $2 x 10^{-3}$                    \\
-400                                   & 1.95ms                    & 0.01                             & 0.18ms                    & 0.01                             & 0.004ms         & 0.003                            \\
-800                                   & 3.85ms                    & 0.04                             & 0.38ms                    & 0.02                             & 0.05ms          & 0.03                             \\
-1600                                  & 7.62ms                    & 0.03                             & 0.69ms                    & 0.01                             & 0.008ms         & $2 x 10^{-3}$                    \\
-3200                                  & 15.29ms                   & 0.06                             & 1.31ms                    & 0.01                             & 0.01ms          & $2 x 10^{-3}$
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+                                        & \multicolumn{2}{c|}{Draw}                                      & \multicolumn{2}{c|}{Att. objetos}                              & \multicolumn{2}{c|}{Verif. colisões}                       \\ \hline
+\multicolumn{1}{|l|}{Número de objetos} & \multicolumn{1}{l|}{Média} & \multicolumn{1}{l|}{Desv. padrão} & \multicolumn{1}{l|}{Média} & \multicolumn{1}{l|}{Desv. padrão} & Média                  & \multicolumn{1}{l|}{Desv. padrão} \\ \hline
+100                                     & \textbf{0.54}              & 0.02                              &\textbf{0.03}                      & 0.002                      &$\bm{6 x 10^{-3}}$      & $2 x 10^{-4}$                     \\ \hline
+200                                     & \textbf{1.04}              & 0.01                              &\textbf{0.07}                      & 0.006                      &\textbf{0.001}          & $2 x 10^{-3}$                     \\ \hline
+400                                     & \textbf{1.95}              & 0.01                              &\textbf{0.18}                      & 0.01                       &\textbf{0.004}          & 0.003                             \\ \hline
+800                                     & \textbf{3.85}              & 0.04                              &\textbf{0.38}                      & 0.02                       &\textbf{0.05}           & 0.03                              \\ \hline
+1600                                    & \textbf{7.62}              & 0.03                              &\textbf{0.69}                      & 0.01                       &\textbf{0.008}          & $2 x 10^{-3}$                     \\ \hline
+3200                                    & \textbf{15.29}             & 0.06                              &\textbf{1.31}                      & 0.01                       &\textbf{0.01}           & $2 x 10^{-3}$                     \\ \hline
 \end{tabular}
 \end{table}
 
