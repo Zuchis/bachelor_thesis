@@ -52,9 +52,29 @@ Universidade do Estado de Santa Catarina}
 \end{frame}
 
 \begin{frame}[t]{Motor de Jogos}
+    \begin{itemize}
+        \item Separação entre a parte técnica e criativa do jogo
+        \item Conjunto de componentes que interagem entre si
+        \item A interação cria os loops de jogo (inputs, atualização e renderização)
+        \item Motivação: modularização, rápida prototipagem e desenvolvimento, e portabilidade
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[t]{Motor de Jogos}
+    \begin{itemize}
+        \item Jogos são notórios por possuirem um grande volume de dados
+        \item Muitas entidades que necessitam de atualização e processamento
+        \item Muitos dados sendo lidos da memória
+        \item Se o agrupamento de dados não está coerente: poluição de cache
+    \end{itemize}
 \end{frame}
 
 \begin{frame}[t]{Como Solucionar}
+    \begin{itemize}
+        \item Não há como aumentar a capacidade dos caches...
+        \item O que resta aos desenvolvedores é organizar o código e estruturas de dados
+              de tal forma a otimizar a leitura dos dados para uma linha de cache.
+    \end{itemize}
 \end{frame}
 
 \section{Modelagem Orientada a Dados}
@@ -62,6 +82,16 @@ Universidade do Estado de Santa Catarina}
 \frame{\tableofcontents[currentsection]}
 
 \begin{frame}[t]{Origem e Popularização}
+    \begin{itemize}
+        \item Introduzido por John A. Sharp em 1980
+            \begin{itemize}
+                \item Seu objetivo era aprimorar o tempo de processamento e eficiência da memória
+                \item Organização dos dados para permitir uma leitura sequencial destes
+                \item Separação de dados quentes e frios
+            \end{itemize}
+        \item Popularizado como \textit{Data Oriented Design} por Mike Acton em 2009
+        \item Surgimento de motores de jogos utilizando os conceitos de DOD
+    \end{itemize}
 \end{frame}
 
 \begin{frame}[t]{Principais Ideias}
