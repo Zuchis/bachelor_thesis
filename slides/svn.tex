@@ -43,7 +43,7 @@ Universidade do Estado de Santa Catarina}
 
 \frame{\tableofcontents[currentsection]}
 
-\begin{frame}[t]{Problema}
+\begin{frame}{Problema}
     \begin{itemize}
         \item Processadores possuem um alto poder computacional, porém o acesso à memória é relativamente lento
         \item Gargalo de desempenho na velocidade de acesso à memória
@@ -51,7 +51,7 @@ Universidade do Estado de Santa Catarina}
     \end{itemize}
 \end{frame}
 
-\begin{frame}[t]{Motor de Jogos}
+\begin{frame}{Motor de Jogos}
     \begin{itemize}
         \item Separação entre a parte técnica e criativa do jogo
         \item Conjunto de componentes que interagem entre si
@@ -60,7 +60,7 @@ Universidade do Estado de Santa Catarina}
     \end{itemize}
 \end{frame}
 
-\begin{frame}[t]{Motor de Jogos}
+\begin{frame}{Motor de Jogos}
     \begin{itemize}
         \item Jogos são notórios por possuirem um grande volume de dados
         \item Muitas entidades que necessitam de atualização e processamento
@@ -69,7 +69,7 @@ Universidade do Estado de Santa Catarina}
     \end{itemize}
 \end{frame}
 
-\begin{frame}[t]{Como Solucionar}
+\begin{frame}{Como Solucionar}
     \begin{itemize}
         \item Não há como aumentar a capacidade dos caches...
         \item O que resta aos desenvolvedores é organizar o código e estruturas de dados
@@ -81,7 +81,7 @@ Universidade do Estado de Santa Catarina}
 
 \frame{\tableofcontents[currentsection]}
 
-\begin{frame}[t]{Origem e Popularização}
+\begin{frame}{Origem e Popularização}
     \begin{itemize}
         \item Introduzido por John A. Sharp em 1980
             \begin{itemize}
@@ -94,29 +94,105 @@ Universidade do Estado de Santa Catarina}
     \end{itemize}
 \end{frame}
 
-\begin{frame}[t]{Principais Ideias}
+\begin{frame}{Principais Ideias}
+    \begin{itemize}
+        \item Primeiro passo de um projeto: pense primeiro nos dados que serão utilizados, e depois no código
+        \item Hierarquia de classes não é importante, mas os padrões de acesso aos dados é.
+        \item Pense no fluxo de dados da aplicação, isto é: analisar como os dados são acessados, 
+              transformados, e sua finalidade.
+        \item Onde há um, há muitos (O fluxo de dados ocorre para várias entidades, e não somente uma).
+        \item Esteja ciente do \textit{overhead} de funções virtuais, ponteiros para funções, e ponteiros para 
+            métodos membros de classe.
+    \end{itemize}
 \end{frame}
 
 \begin{frame}[t]{Como Armazenar os Dados}
+    \begin{figure}
+        \begin{minipage}[b]{0.35\textwidth}
+        Arrays of Structures (AoS)
+        \centering
+            \includegraphics[width=\textwidth]{figuras/aosscheme}
+        \end{minipage}
+        \hspace{1.5cm}
+        \begin{minipage}[b]{0.35\textwidth}
+        \centering
+        Structures of Arrays (SoA)
+            \includegraphics[width=\textwidth]{figuras/soascheme}
+        \end{minipage}
+    \end{figure}
 \end{frame}
 
-\begin{frame}[t]{Branching e Prefetching}
+\begin{frame}{Como Armazenar os Dados}
+    \begin{minipage}[b]{0.4\textwidth}
+        Arrays of Structures (AoS)
+        \begin{itemize}
+            \item Esquema utilizado em POO
+            \item Cada instância de uma classe/entidade possui todas as propriedades desta
+            \item Pode levar a estruturas com dados poucos relacionados
+        \end{itemize}
+    \end{minipage}
+    \hspace{1.5cm}
+    \begin{minipage}[b]{0.4\textwidth}
+        Structures of Arrays (SoA)
+        \begin{itemize}
+            \item Uma estrutura representa todos os objetos
+            \item Propriedades separadas em \textit{arrays} diferentes
+            \item Se torna mais ineficiente quando há muito endereçamento com índices
+        \end{itemize}
+    \end{minipage}
+\end{frame}
+
+\begin{frame}{Como Armazenar os Dados}
+    \begin{itemize}
+        \item Não há um melhor esquema, depende de cada caso em específico
+        \item Podem ser utilizados em conjunto (como foi feito neste trabalho)
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Branching e Prefetching}
+    \begin{itemize}
+        \item Duas motivações para o uso da MOD é evitar \textit{branching} 
+              e facilitar \textit{prefetching} de dados e instruções
+        \item \textit{Branching} ocorre com a mudança no fluxo de execução (condicionais)
+        \item O \textit{prefetching} é facilitado pelo processamento sequencial, previsível 
+            dos dados, e sem interrupções no fluxo.
+    \end{itemize}
 \end{frame}
 
 \section{O Trabalho Desenvolvido}
 
 \frame{\tableofcontents[currentsection]}
 
-\begin{frame}[t]{Motivação}
+\begin{frame}{Motivação}
+    \centering
+    \LARGE{Verificar a eficiência da modelagem orientada a dados comparando-a 
+    com a abordagem tradicional orientada a objetos}
 \end{frame}
 
-\begin{frame}[t]{Aplicações Desenvolvidas}
+\begin{frame}{Aplicações Desenvolvidas}
+    \begin{itemize}
+        \item Duas aplicações foram desenvolvidas, uma com programação orientada a objetos (versão OO)
+            e outra com modelagem orientada a dados (versão OD)
+        \item Nem todos os componentes são diferentes
+        \item Aplicações foram testadas em dois cenários diferentes
+        \item Resultados gerados incrementando-se a quantidade de objetos em cena
+    \end{itemize}
 \end{frame}
 
-\begin{frame}[t]{Etapas de Conversão}
+\begin{frame}{Etapas de Conversão}
+    \begin{itemize}
+        \item Análise dos dados da aplicação e suas finalidades
+        \item Análise do fluxo destes dados
+        \item Conversão das estruturas de dados
+        \item Conversão dos métodos
+    \end{itemize}
 \end{frame}
 
-\begin{frame}[t]{Diferenças Entre as Abordagens}
+\begin{frame}{Diferenças Entre as Abordagens}
+    \begin{itemize}
+        \item As mudanças estão nas classes cujos métodos são executados por todas as instâncias por frame
+        \item Possuem o processamento mais intenso, diferença é mais aparente
+    \end{itemize}
 \end{frame}
 
 \begin{frame}[t]{Método de Renderização}
@@ -172,9 +248,6 @@ Universidade do Estado de Santa Catarina}
         \begin{minipage}[b]{0.35\textwidth}
             \includegraphics[width=\textwidth]{figuras/dodreadingorder}
         \end{minipage}
-        %\par\medskip
-        %Disponível em: <http://gamesfromwithin.com/data-oriented-design>. Acesso em: 27/05/2017.
-        %\label{oodvsdod}
     \end{figure}
 \end{frame}
 
