@@ -98,7 +98,7 @@ Universidade do Estado de Santa Catarina}
     \begin{itemize}
         \item Primeiro passo de um projeto: pense primeiro nos dados que serão utilizados, e depois no código
         \item Hierarquia de classes não é importante, mas os padrões de acesso aos dados é.
-        \item Pense no fluxo de dados da aplicação, isto é: analisar como os dados são acessados, 
+        \item Pense no fluxo de dados da aplicação, ou seja: analise como os dados são acessados, 
               transformados, e sua finalidade.
         \item Onde há um, há muitos (O fluxo de dados ocorre para várias entidades, e não somente uma).
         \item Esteja ciente do \textit{overhead} de funções virtuais, ponteiros para funções, e ponteiros para 
@@ -368,23 +368,22 @@ Universidade do Estado de Santa Catarina}
 
 \begin{frame}{Desafios}
     \begin{itemize}
-        \item Pouco material dispnível nas fontes pesquisadas
-        \item Determinar a melhor maneira de armazenar os dados
+        \item Pouco material disponível nas fontes pesquisadas
+        \item Difícil determinar a melhor maneira de armazenar os dados
         \item Preocupação constante com o padrão de acesso à memória
-        \item Não pensar em classes e o relacionamento entre elas 
-            não é intuitivo
+        \item Não é fácil deixar de pensar em classes e relacionamento entre elas
     \end{itemize}
 \end{frame}
 
 \begin{frame}{Conclusões a respeito de MOD}
     \begin{itemize}
         \item MOD não lhe garante aumento no desempenho, porém 
-            proporciona um bom controle sobre este
+            proporciona um bom controle sobre este;
         \item Quanto mais propriedades de uma entidade, mais 
             ineficiente se torna (problema do endereçamento por 
-            índice)
+            índice);
         \item Mudança para métodos de processamento sequencial mostrou 
-            ser uma alternativa muito melhor
+            ser uma alternativa muito melhor;
         \item Não há um melhor esquema de armazenamento (AoS e SoA), 
             o ideal é combiná-los.
     \end{itemize}
