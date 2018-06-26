@@ -195,65 +195,204 @@ Universidade do Estado de Santa Catarina}
     \end{itemize}
 \end{frame}
 
-\begin{frame}[t]{Método de Renderização}
+\begin{frame}{Diferenças Entre as Abordagens: Estruturas}
+    \begin{figure}
+    \centering
+        \begin{minipage}[b]{0.35\textwidth}
+            \includegraphics[width=\textwidth]{figuras/shaderood}
+        \end{minipage}
+        \hspace{1.5cm}
+        \begin{minipage}[b]{0.35\textwidth}
+            \includegraphics[width=\textwidth]{figuras/shaderdod}
+        \end{minipage}
+    \end{figure}
 \end{frame}
 
-\begin{frame}[t]{Método de Atualização}
+\begin{frame}{Diferenças Entre as Abordagens: Estruturas}
+    \begin{figure}
+    \centering
+        \begin{minipage}[b]{0.35\textwidth}
+            \includegraphics[width=\textwidth]{figuras/meshood}
+        \end{minipage}
+        \hspace{1.5cm}
+        \begin{minipage}[b]{0.35\textwidth}
+            \includegraphics[width=\textwidth]{figuras/meshdod}
+        \end{minipage}
+    \end{figure}
 \end{frame}
 
-\begin{frame}[t]{Detecção de Colisões}
+\begin{frame}{Diferenças Entre as Abordagens: Estruturas}
+    \begin{figure}
+    \centering
+        \begin{minipage}[b]{0.35\textwidth}
+            \includegraphics[width=\textwidth]{figuras/objectood}
+        \end{minipage}
+        \hspace{1.5cm}
+        \begin{minipage}[b]{0.35\textwidth}
+            \includegraphics[width=\textwidth]{figuras/objectdod}
+        \end{minipage}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Diferenças Entre as Abordagens: Estruturas}
+    \begin{figure}
+    \centering
+        \begin{minipage}[b]{0.35\textwidth}
+            \includegraphics[width=\textwidth]{figuras/nodeood}
+        \end{minipage}
+        \hspace{1.5cm}
+        \begin{minipage}[b]{0.35\textwidth}
+            \includegraphics[width=\textwidth]{figuras/nodedod}
+        \end{minipage}
+    \end{figure}
+\end{frame}
+
+\begin{frame}[t]{Método de Renderização versão OO}
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width =.8\textwidth]{figuras/ooddraw}
+        \par\medskip
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Método de Renderização versão OD}
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width =\textwidth]{figuras/doddraw}
+        \par\medskip
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Método de Atualização versão OO}
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width =\textwidth]{figuras/oodupdate}
+        \par\medskip
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Método de Atualização versão OD}
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width =\textwidth]{figuras/dodupdate}
+        \par\medskip
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Detecção de Colisões versão OO}
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width =\textwidth]{figuras/oodcolision}
+        \par\medskip
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Detecção de Colisões versão OD}
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width =\textwidth]{figuras/dodcolision}
+        \par\medskip
+    \end{figure}
 \end{frame}
 
 \section{Análises e Resultados}
 
 \frame{\tableofcontents[currentsection]}
 
-\begin{frame}[t]{Cenários Desenvolvidos}
+\begin{frame}{Cenários Desenvolvidos}
+    \begin{itemize}
+        \item Problema A: Renderização de objetos sem hierarquia (1 nível)
+        \item Problema B: Renderização de objetos com 4 níveis de hierarquia
+    \end{itemize}
 \end{frame}
 
-\begin{frame}[t]{Problema A: Médias}
+\begin{frame}{Cenários Desenvolvidos}
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width =.45\textwidth]{figuras/problemBscheme}
+        \par\medskip
+    \end{figure}
 \end{frame}
 
-\begin{frame}[t]{Problema A: Draw}
+\begin{frame}{Problema A: Draw}
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width =.8\textwidth]{figuras/drawv1graph}
+        \par\medskip
+    \end{figure}
 \end{frame}
 
-\begin{frame}[t]{Problema A: Update}
+\begin{frame}{Problema A: Update}
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width =.8\textwidth]{figuras/updatev1graph}
+        \par\medskip
+    \end{figure}
 \end{frame}
 
-\begin{frame}[t]{Problema A: Collision}
+\begin{frame}{Problema A: Collision}
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width =.8\textwidth]{figuras/colisionv1graph}
+        \par\medskip
+    \end{figure}
 \end{frame}
 
-\begin{frame}[t]{Problema B: Médias}
+\begin{frame}{Problema A: FPS}
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width =.8\textwidth]{figuras/fpsv1}
+        \par\medskip
+    \end{figure}
 \end{frame}
 
-\begin{frame}[t]{Problema B: Draw}
+\begin{frame}{Problema B: Draw}
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width =.8\textwidth]{figuras/drawv2graph}
+        \par\medskip
+    \end{figure}
 \end{frame}
 
-\begin{frame}[t]{Problema B: Update}
-\end{frame}
-
-\begin{frame}[t]{Problema B: Collision}
+\begin{frame}{Problema B: FPS}
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width =.8\textwidth]{figuras/fpsv2}
+        \par\medskip
+    \end{figure}
 \end{frame}
 
 \section{Conclusão}
 
 \frame{\tableofcontents[currentsection]}
 
-\begin{frame}[t]{Diferença de MOO e MOD}
-    \begin{figure}
-    \centering
-        \begin{minipage}[b]{0.35\textwidth}
-            \includegraphics[width=\textwidth]{figuras/objectreadingorder}
-        \end{minipage}
-        \begin{minipage}[b]{0.35\textwidth}
-            \includegraphics[width=\textwidth]{figuras/dodreadingorder}
-        \end{minipage}
-    \end{figure}
+\begin{frame}{Desafios}
+    \begin{itemize}
+        \item Pouco material dispnível nas fontes pesquisadas
+        \item Determinar a melhor maneira de armazenar os dados
+        \item Preocupação constante com o padrão de acesso à memória
+        \item Não pensar em classes e o relacionamento entre elas 
+            não é intuitivo
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Conclusões a respeito de MOD}
+    \begin{itemize}
+        \item MOD não lhe garante aumento no desempenho, porém 
+            proporciona um bom controle sobre este
+        \item Quanto mais propriedades de uma entidade, mais 
+            ineficiente se torna (problema do endereçamento por 
+            índice)
+        \item Mudança para métodos de processamento sequencial mostrou 
+            ser uma alternativa muito melhor
+        \item Não há um melhor esquema de armazenamento (AoS e SoA), 
+            o ideal é combiná-los.
+    \end{itemize}
 \end{frame}
 
 \begin{frame}{Fim}
     \centering
-    \LARGE{That's All Folks!}
+    \LARGE{Fim!}
 \end{frame}
 
 \end{document}
