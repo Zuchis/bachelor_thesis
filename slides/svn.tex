@@ -127,7 +127,6 @@ Universidade do Estado de Santa Catarina}
         Arrays of Structures (AoS)
         \begin{itemize}
             \item Esquema utilizado em POO
-            \item Cada instância de uma classe/entidade possui todas as propriedades desta
             \item Pode levar a estruturas com dados poucos relacionados
         \end{itemize}
     \end{minipage}
@@ -135,28 +134,9 @@ Universidade do Estado de Santa Catarina}
     \begin{minipage}[b]{0.4\textwidth}
         Structures of Arrays (SoA)
         \begin{itemize}
-            \item Uma estrutura representa todos os objetos
-            \item Propriedades separadas em \textit{arrays} diferentes
             \item Se torna mais ineficiente quando há muito endereçamento com índices
         \end{itemize}
     \end{minipage}
-\end{frame}
-
-\begin{frame}{Como Armazenar os Dados}
-    \begin{itemize}
-        \item Não há um melhor esquema, depende de cada caso em específico
-        \item Podem ser utilizados em conjunto (como foi feito neste trabalho)
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{Branching e Prefetching}
-    \begin{itemize}
-        \item Duas motivações para o uso da MOD é evitar \textit{branching} 
-              e facilitar \textit{prefetching} de dados e instruções
-        \item \textit{Branching} ocorre com a mudança no fluxo de execução (condicionais)
-        \item O \textit{prefetching} é facilitado pelo processamento sequencial, previsível 
-            dos dados, e sem interrupções no fluxo.
-    \end{itemize}
 \end{frame}
 
 \section{O Trabalho Desenvolvido}
@@ -173,9 +153,7 @@ Universidade do Estado de Santa Catarina}
     \begin{itemize}
         \item Duas aplicações foram desenvolvidas, uma com programação orientada a objetos (versão OO)
             e outra com modelagem orientada a dados (versão OD)
-        \item Nem todos os componentes são diferentes
         \item Aplicações foram testadas em dois cenários diferentes
-        \item Resultados gerados incrementando-se a quantidade de objetos em cena
     \end{itemize}
 \end{frame}
 
@@ -190,6 +168,7 @@ Universidade do Estado de Santa Catarina}
 
 \begin{frame}{Diferenças Entre as Abordagens}
     \begin{itemize}
+        \item Nem todos os componentes são diferentes
         \item As mudanças estão nas classes cujos métodos são executados por todas as instâncias por frame
         \item Possuem o processamento mais intenso, diferença é mais aparente
     \end{itemize}
@@ -303,6 +282,7 @@ Universidade do Estado de Santa Catarina}
     \begin{itemize}
         \item Problema A: Renderização de objetos sem hierarquia (1 nível)
         \item Problema B: Renderização de objetos com 4 níveis de hierarquia
+        \item Resultados gerados incrementando-se a quantidade de objetos em cena
     \end{itemize}
 \end{frame}
 
