@@ -3,7 +3,7 @@
 A evolução do hardware de computadores chegou a um problema, onde se tem processadores 
 extremamente rápidos porém uma velocidade de acesso à memória principal que foi incapaz de 
 acompanhar essa evolução. As aplicações de computador que fazem acesso muito frequente à 
-memória têm seu desempenho consideravelmente afetado por esse problema e precisa muitas 
+memória têm seu desempenho consideravelmente afetado por esse problema e precisam muitas 
 vezes recorrer ao paralelismo, o que pode gerar vários problemas incluindo concorrência e 
 imprevisibilidade dos dados, pois muitas vezes o paralelismo não estava planejado desde 
 o início do projeto.
@@ -16,7 +16,7 @@ leitura e armazenamento eficiente destes dados pois o bom desempenho em um jogo 
 essencial para garantir a experiência do jogador.
 
 Existem outras soluções para esse problema além do paralelismo, uma delas foi 
-apresentada neste trabalho: a modelagem orientada a dados. A MOD é um termo 
+apresentada neste trabalho: o projeto orientado a dados. DOD é um termo 
 relativamente novo, seu primeiro uso foi em 2009 por Noel Llopis~\cite{fabiandod}, mas 
 a utilização de seus conceitos já foi apresentada em trabalho mais antigos. Sua 
 principal filosofia é que programas devem focar em dados, e não em código. Isso 
@@ -27,33 +27,28 @@ de dados que são frequentemente requisitados pelo processador, daqueles que são 
 utilizados, dessa maneira, esses dados pouco utilizados não irão poluir os caches da 
 memória sem necessidade.
 
-Apesar de parecer promissora, pouco se sabe sobre a MOD na área de desenvolvimento de 
+Apesar de parecer promissora, pouco se sabe sobre DOD na área de desenvolvimento de 
 jogos e motores de jogos. Isso se deve a pouco material disponível na literatura e 
 também o fato de que a programação orientada a objetos está fortemente consolidada nessa 
 área.
 
-Um motor de jogos é uma maneira de se desenvolver jogos, e desde a sua introdução na 
-indústria em 1993, têm revolucionado a produção de jogos com uma substancial redução 
-de tempo, permitindo rápida prototipagem e desenvolvimento dos projetos, Também 
-proporciona um alto grau de modularidade, permitindo a colaboração de equipes com mais de 
-1000 membros no desenvolvimento dos projetos.
-
 A implementação de um motor de jogos requer conhecimentos de diversas áreas diferentes, 
 como Computação Gráfica, Álgebra Linear, Geometria Analítica, Inteligência Artificial, 
 Processamento de Imagens, Física, entre outros. Isso faz com que esse tipo de programa 
-seja consideravelmente interdisciplinar. Além disso o processo de desenvolvimento em si 
-do sistema é complexo, não basta somente  implementação individual dos componentes que o 
+seja consideravelmente interdisciplinar. Além disso o processo de desenvolvimento do 
+sistema em si é complexo, não basta somente  implementação individual dos componentes que o 
 constitui, mas também a concepção da arquitetura do motor, que irá determinar como esses 
-componentes se comunicam entre si, processo necessário para a construção do loop de jogo.
+componentes se comunicam entre si, processo necessário para a construção do \textit{loop} 
+de jogo.
 
-O loop de jogo é o funcionamento principal da aplicação e sua estruturação é dependente da 
+O \textit{loop} de jogo é o funcionamento principal da aplicação e sua estruturação é dependente da 
 integração dos diferentes componentes do motor de jogos. É dividido em três partes 
-maiores: detecção e gerenciamento de inputs, o processamento dos dados do jogo e a 
+maiores: detecção e gerenciamento de \textit{inputs}, o processamento dos dados do jogo e a 
 apresentação dos resultados. Esse loop deve ser adequadamente implementado para evitar 
 que ele fique dependente da taxa de quadros por segundo, medida utilizada para o 
 desempenho da aplicação. 
 
-O uso da modelagem orientado a dados não garante uma melhora no 
+O uso do projeto orientado a dados não garante uma melhora no 
 desempenho, porém ao se seguir seus princípios, determinar o fluxo 
 de dados da aplicação, agrupar dados relacionados na memória e 
 implementar as funções de modo a descrever as transformações 
@@ -64,20 +59,20 @@ implementar as funções de modo a otimizar a comunicação entre o
 processador e memória.
 
 Determinar como os dados serão agrupados, alocados e acessados 
-na memória é o maior desafio da modelagem orientada a dados. Para 
+na memória é o maior desafio do projeto orientado a dados. Para 
 um desenvolvedor que já está familiarizado com a programação 
 orientada a objetos, a conversão de uma abordagem para a outra pode 
 não proporcionar os resultados desejados se as escolhas das 
-estruturas não forem adequadas. O problema da MOD para a escolha das 
+estruturas não forem adequadas. O problema do DOD para a escolha das 
 estruturas é que não há um padrão a se seguir, cada grupo de dados 
 requer uma análise separada, isso ainda é dificultado pelo fato de 
-que na MOD as estruturas não representam os objetos do mundo real 
+que no DOD as estruturas não representam os objetos do mundo real 
 de uma maneira tão direta quanto a programação orientada a objetos.
 
 Os dois padrões de alocação de dados visto nesse trabalho, o AoS e 
 o SoA, apresentaram vantagens e desvantagens nos resultados 
 apresentados no capítulo~\ref{resultscap}, por isso pode-se concluir 
-que nenhum destes é preferível à MOD, são necessários análises e 
+que nenhum destes é preferível ao DOD, são necessárias análises e 
 testes para determinar qual padrão é mais adequado para cada caso. A 
 tendência observada nos resultados foi que SoA tem seu desempenho 
 inversamente proporcional ao número de propriedades utilizadas de 
@@ -92,3 +87,28 @@ tempo de execução estável perante às mudanças na hierarquia dos
 objetos na cena no problema B, diferentemente da versão OO do motor, 
 na qual houve um aumento cerca de 51\% no tempo de execução em 
 relação ao problema A.
+
+\section{Sugestão de trabalhos futuros}
+
+As aplicações desenvolvidas demonstraram de maneira sucinta as 
+principais diferenças entre uma abordagem tradicional com 
+programação orientada a objetos e uma utilizando os conceitos 
+do projeto orientado a dados (DOD). Apesar de ter sido possível 
+realizar análises e conclusões a respeito de DOD e seu desempenho, 
+as aplicações são simples e não possuem muitas das funcionalidades 
+encontradas em motores de jogos comerciais modernos. A seguir serão 
+discutidos possíveis pontos de partida para uma extensão deste 
+trabalho.
+
+\subsection{Detecção de colisões entre objetos}
+
+Nas aplicações desenvolvidas a detecção de colisão é feita somente 
+entre os objetos e os limites da cena. Uma possível extensão do 
+trabalho seria aprimorar o componente físico para detectar e 
+processar também colisões entre os objetos da cena.
+
+\subsection{Adição de outros componentes}
+
+O modelo de motor de jogos desenvolvido possui apenas três 
+componentes 
+

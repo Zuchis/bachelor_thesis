@@ -8,7 +8,7 @@ a de processar as instruções e os dados de todos os programas presentes no compu
 Além de executar essas instruções, o microprocessador está constantemente lendo e escrevendo dados na 
 memória principal, a memória RAM (\textit{Random Access Memory})~\cite{Clements:2006:PCH:1214951}. Se
 os microprocessadores não fossem capazes de ler e escrever dados na memória, os programas de computador por si só não 
-teriam muitas utilidades, e sistemas complexos não poderiam existir.
+teriam muita utilidade, e sistemas complexos não poderiam existir.
 
 Porém, há um problema na comunicação entre o processador e a memória: ela não é instantânea. Um sistema no qual a memória 
 pode fornecer qualquer dado para o processador instantaneamente atualmente é inexistente. Por este motivo, sistemas de memória são 
@@ -71,12 +71,12 @@ aos dados, e este pode comprometer o uso destes dados, pois ao adicionar métodos
 de adicionar mais dados à classe, o que pode rapidamente levar à classes que contém diversos fragmentos de dados que não 
 estão relacionados entre si~\cite{fabiandod}.
 
-Com a premissa de amenizar o máximo possível estes problemas, a modelagem orientada a 
-dados (MOD), como o nome sugere, encoraja a mudança da perspectiva da programação dos 
+Com a premissa de amenizar o máximo possível estes problemas, o projeto orientado a 
+dados, (MOD), como o nome sugere, encoraja a mudança da perspectiva da programação dos 
 objetos para os dados, seus tipos, como estão armazenados na memória e como serão lidos e 
 processados~\cite{fabiandod}. Para alcançar esses objetivos, essa técnica sugere dividir 
 cada objeto em diferentes componentes, e agrupar componentes do mesmo tipo na memória, 
-sem se importar de qual objeto vieram. Isso resulta em largos blocos de dados homogêneos, 
+sem se importar de qual objeto vieram. Isso resulta em grandes blocos de dados homogêneos, 
 permitindo o processamento sequencial dos dados, e garantindo um aprimoramento 
 significativo no desempenho~\cite{fabiandod}.
 
@@ -84,8 +84,8 @@ Esta abordagem de modelagem é mais condizente com a realidade de muitos programa
 quantidade de objetos de um determinado tipo, sendo necessário o processamento de todos eles. Mas esta abordagem não traz a 
 solução para todos os problemas, e também possui suas desvantagens, sendo uma delas a falta de intuitividade para codificação 
 orientada a dados. Uma das vantagens da orientação a objetos é a similaridade do pensamento com o mundo real e os seus 
-problemas, deixando o código mais legível para os humanos. A modelagem orientada a dados 
-requer um raciocício menos natural comparado à modelagem orientada a objetos, tornando 
+problemas, deixando o código mais legível para os humanos. A projeto orientado a dados 
+requer um raciocício menos natural comparado à programação orientada a objetos, tornando 
 por vezes o código menos intuitivo.
 
 Para as aplicações na área de computação gráfica, esses problemas não seriam diferentes, principalmente levando em 
@@ -98,7 +98,7 @@ Um motor de jogos, apesar de não possuir uma definição absoluta, é geralmente en
 todos os módulos que juntos compõem um jogo eletrônico, como por exemplo, bibliotecas matemáticas (contendo operações de vetores, 
 matrizes, quaternions, métodos trigonométricos, etc.), gerência de memória, 
 estruturas de dados personalizadas, o motor de renderização, gerenciador de recursos, ferramentas para depuração e análise de desempenho, sistemas 
-de colisão e física, sistema de animações e partículas, sistema de detecção de inputs (mouse, teclado e outros controladores),
+de colisão e física, sistema de animações e partículas, sistema de detecção de \textit{inputs} (mouse, teclado e outros controladores),
 sistema de áudio, sistema de rede para jogos online, entre outros~\cite{gregory2009game}.
 
 Para complementar, um motor de jogos pode ser entendido como um conjunto de bibliotecas e ferramentas, os quais combinados 
@@ -143,7 +143,7 @@ outros~\cite{akenine2008real}.
 
 Considerando os problemas supracitados a respeito do gargalo de desempenho do processador-memória, e das desvantagens da 
 programação orientada a objetos, este trabalho propõe a implementação de um motor de jogos desde o princípio com o objetivo de 
-explorar o potencial da modelagem orientada a dados, um conceito pouco difundido entre a comunidade de programadores, 
+explorar o potencial da projeto orientado a dados, um conceito pouco difundido entre a comunidade de programadores, 
 e seus benefícios para aplicações gráficas, uma área na qual a orientação a objetos está fortemente impregnada. Uma vez
 que um motor de jogos completo é uma aplicação consideravelmente grande e complexa, neste trabalho concentrou-se na implementação
 do motor gráfico e suas otimizações.
@@ -151,7 +151,7 @@ do motor gráfico e suas otimizações.
 \section{Objetivos}
 \label{obj}
 
-\textbf{Objetivo geral}: Investigar o potencial da modelagem orientada a dados para o 
+\textbf{Objetivo geral}: Investigar o potencial da projeto orientado a dados para o 
 desenvolvimento de um motor de jogos e analisar sua eficiência e desempenho.\\
 
 \noindent\textbf{Objetivos específicos}: 
