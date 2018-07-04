@@ -6,14 +6,14 @@ essencial para os computadores modernos, que por vezes também é chamado de CPU (
 a de processar as instruções e os dados de todos os programas presentes no computador~\cite{Clements:2006:PCH:1214951}.
 
 Além de executar essas instruções, o microprocessador está constantemente lendo e escrevendo dados na 
-memória principal, a memória RAM (\textit{Random Access Memory})~\cite{Clements:2006:PCH:1214951}. Sem essa possibilidade 
-de leitura e escrita, os programas de computador por si só não teriam muitas utilidades, e sistemas complexos não poderiam 
-existir.
+memória principal, a memória RAM (\textit{Random Access Memory})~\cite{Clements:2006:PCH:1214951}. Se
+os microprocessadores não fossem capazes de ler e escrever dados na memória, os programas de computador por si só não 
+teriam muitas utilidades, e sistemas complexos não poderiam existir.
 
 Porém, há um problema na comunicação entre o processador e a memória: ela não é instantânea. Um sistema no qual a memória 
-pode fornecer qualquer dado para o processador instantaneamente não é factível. Por este motivo, sistemas de memória são 
+pode fornecer qualquer dado para o processador instantaneamente atualmente é inexistente. Por este motivo, sistemas de memória são 
 projetados utilizando uma hierarquia, na qual a memória é dividida em diferentes camadas, cada uma com uma capacidade de 
-armazenamento maior, porém com um tempo de acesso maior do processador~\cite{Mahapatra:1999:PBP:357783.331677}, a 
+armazenamento maior, porém com um tempo de acesso maior do processador~\cite{Mahapatra:1999:PBP:357783.331677}. A 
 figura~\ref{memhier} demonstra essa hierarquia em ordem decrescente de velocidade. 
 
 \begin{figure}[h!]
@@ -33,9 +33,9 @@ As camadas do sistema de memória estão descritas a seguir:
         fabricação, são localizados dentro do processador. Geralmente os programadores 
         não possuem controle sobre os registradores~\cite{Clements:2006:PCH:1214951}.
     \item Cache: localizado próximo ao processador, fornece velocidade de acesso rápida e armazena código e dados utilizados 
-        recentemente. Quando o processador tenta acessar algum dado presente no cache, ocorre um acerto do cache 
-        (\textit{cache hit}), quando o dado não se encontra no cache, ocorre um erro do cache (\textit{cache miss}), e o dado 
-        precisa ser buscado na memória principal~\cite{Mahapatra:1999:PBP:357783.331677}.
+        recentemente. Quando o processador tenta acessar dados no cache, ocorre um acerto do cache 
+        (\textit{cache hit}) caso os dados estejam presente. Quando os dados não se encontram no cache, ocorre um erro do cache 
+        (\textit{cache miss}), e os dados precisam ser buscados na memória principal~\cite{Mahapatra:1999:PBP:357783.331677}.
     \item Memória Principal, \textit{Dynamic Random Access Memory} (DRAM): em maior quantidade quando comparado ao cache,
         possui um custo menor, porém com um tempo de acesso 
         maior, é responsável por lidar com as operações de entrada e saída. Apesar de ser muito mais lenta do que o cache, sua 
@@ -55,7 +55,7 @@ estatísticas de crescimento não sofreram alterações nas décadas de 2000 e 2010.
 Essa disparidade de crescimento tem aumentado a lacuna de desempenho entre processador-memória, pois 
 a latência de acesso a memória pelo processador está cada vez maior. Sempre que ocorre um \textit{cache miss}, o processador 
 precisa ficar alguns ciclos ocioso enquanto aguarda o dado necessário ser buscado na memória 
-principal~\cite{Mahapatra:1999:PBP:357783.331677}, como a velocidade de 
+principal~\cite{Mahapatra:1999:PBP:357783.331677}. Como a velocidade de 
 acesso à memória é relativamente muito menor do que a velocidade de processamento, um processador mais rápido significa apenas 
 mais ciclos ociosos. Isso é conhecido como "Gargalo do Processador-Memória", e diante de tais limitações físicas, surge a 
 necessidade de boas práticas de programação para que ocorra a menor quantidade possível de \textit{cache misses}.
@@ -70,11 +70,6 @@ Quando uma classe de objetos possui dados, chamados de atributos, isto significa
 aos dados, e este pode comprometer o uso destes dados, pois ao adicionar métodos ao contexto, pode-se criar a necessidade 
 de adicionar mais dados à classe, o que pode rapidamente levar à classes que contém diversos fragmentos de dados que não 
 estão relacionados entre si~\cite{fabiandod}.
-
-Outra desvantagem do uso demasiado de programação orientada a objetos, está em sua própria definição, que opera sobre um único 
-objeto. Essa organização de dados não é benéfica ao processador, ao buscar objetos na memória para se realizar operações sobre 
-atributos específicos destes, todos os outros dados pertencentes à classe também precisam ser carregados, deixando os caches 
-poluídos com dados desnecessários e aumentando a incoerência de cache.
 
 Com a premissa de amenizar o máximo possível estes problemas, a modelagem orientada a 
 dados (MOD), como o nome sugere, encoraja a mudança da perspectiva da programação dos 
@@ -124,7 +119,7 @@ e, consequentemente, com a renderização de baixo nível. Uma das bibliotecas capa
 API gráfica para acessar os recursos da GPU, contendo um rico conjunto de comandos (mais de 500) que são utilizados para 
 especificar objetos, imagens e operações necessárias para a renderização de aplicações gráficas~\cite{shreiner2013opengl}.
 Existem outras alternativas ao OpenGL que também são populares no mercado, como por 
-exemplo o DirectX, desenvolvido pela Microsoft\textit{https://www.microsoft.com} e que ao 
+exemplo o DirectX, desenvolvido pela Microsoft\footnote{\textit{https://www.microsoft.com}} e que ao 
 longo dos anos foi também foi projetado para oferecer uma vasta gama de 
 funcionalidades~\cite{zink2016practical}.
 
@@ -177,16 +172,20 @@ Abaixo encontra-se uma lista dos principais objetivos a serem alcançados com est
 \label{met}
 
 Após a etapa de revisão bibliográfica sobre os conceitos necessários para 
-a implementação do motor de jogos, a aplicação foi desenvolvida em etapas 
-e o método utilizado foi a implementação dos componentes do motor sequencialmente, 
-no qual estes serão testados individualmente.
+a implementação do motor de jogos, este foi desenvolvido em duas versões 
+diferentes. Primeiramente foi feita a implementação de um motor de jogos seguindo 
+os conceitos tradicionais da programação orientada a objetos, este motor foi desenvolvido 
+em etapas separadas,
+onde em cada uma foi implementado um componente diferente. Depois de 
+ter todos os componentes implementados e funcionando devidamente, foi 
+desenvolvido o núcleo do motor, responsável por gerenciar as 
+relações entre os componentes e formar o \textit{loop} de jogo, conforme será 
+visto na seção~\ref{gameloopsec}.
 
-A etapa seguinte foi a integração dos componentes para a construção de um motor de 
-jogos utilizando programação orientada a objetos. Com o motor de jogos tendo todos 
-os seus componentes e características funcionando devidamente, uma segunda versão 
-do motor de jogos foi desenvolvida, utilizando os conceitos estudados da modelagem 
-orientada a dados. Com as duas versões implementadas, foram feitas análises e comparações 
-do desempenho e eficiência das duas versões.
+A segunda versão foi desenvolvida utilizando os conceitos estudados do projeto 
+orientado a dados a partir da primeira versão, realizando um processo de conversão 
+entre uma abordagem e outra. Com as duas versões implementadas, foram feitas análises e 
+comparações do desempenho e eficiência das duas versões.
 
 \section{Organização do Trabalho}
 \label{paperstructure}
